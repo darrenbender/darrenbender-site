@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<!--
+    Post-Quantum Risk Evaluator
+    Copyright © 2025 ProteQC Limited. All rights reserved.
+    Website: https://ProteQC.com
+    
+    LICENSE TERMS:
+    This tool is made available under the ProteQC Educational Use License.
+    
+    ✓ PERMITTED USES (No permission required):
+      - Educational and academic purposes
+      - Research and non-commercial analysis
+      - Personal risk assessment
+      - Sharing with attribution
+    
+    ✗ RESTRICTED USES (Written permission required):
+      - Commercial use or incorporation into commercial products
+      - Redistribution as part of paid services
+      - Removal or modification of attribution
+      - White-labeling or rebranding
+    
+    ATTRIBUTION REQUIREMENT:
+    If you use, modify, or share this tool, you must retain all copyright 
+    notices and provide clear attribution: "Developed by ProteQC Limited (ProteQC.com)"
+    
+    DISCLAIMER:
+    This tool is provided "AS IS" without warranty of any kind, express or implied.
+    Use at your own risk. This is an educational framework, not legal advice.
+    
+    For commercial licensing or questions: licensing@ProteQC.com
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Quantum Risk Evaluator | ProteQC</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #1a1a2e;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        .educational-note {
+            text-align: center;
+            color: #667eea;
+            font-size: 13px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .section-header {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2d3748;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .info-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .info-box-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 8px;
+        }
+        
+        .info-box-content {
+            color: #856404;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .formula-box {
+            text-align: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: #4a5568;
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #e0f2fe 0%, #ddd6fe 100%);
+            border-radius: 8px;
+            border: 2px solid #667eea;
+        }
+        
+        .variable-section {
+            margin: 25px 0;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .variable-label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .variable-description {
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+            margin: 10px 0;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+        }
+        
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #667eea;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .value-display {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .mosca-display {
+            background: #0ea5e9;
+        }
+        
+        .uncertainty-range {
+            display: inline-block;
+            color: #718096;
+            font-size: 13px;
+            font-weight: normal;
+            margin-left: 8px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .action-button {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .action-button:hover {
+            background: #5568d3;
+            border-color: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .action-button.secondary {
+            background: white;
+            color: #667eea;
+        }
+        
+        .action-button.secondary:hover {
+            background: #f7fafc;
+        }
+        
+        .currency-selector-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .currency-selector-container label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-right: 10px;
+        }
+        
+        .currency-selector-container select {
+            padding: 8px 15px;
+            border-radius: 6px;
+            border: 2px solid #667eea;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .probability-display {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #dc2626;
+        }
+        
+        .probability-calculation {
+            font-size: 16px;
+            color: #4a5568;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .probability-result {
+            font-size: 28px;
+            font-weight: bold;
+            color: #dc2626;
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        .comparison-bars {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 200px;
+            margin: 30px 0;
+            gap: 20px;
+            position: relative;
+            padding-bottom: 80px;
+        }
+        
+        .bar-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            position: relative;
+        }
+        
+        .bar {
+            width: 100%;
+            max-width: 120px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px 8px 0 0;
+            transition: height 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            padding-bottom: 10px;
+            text-align: center;
+            position: absolute;
+            bottom: 70px;
+        }
+        
+        .bar-label {
+            position: absolute;
+            bottom: 0;
+            font-weight: 600;
+            color: #2d3748;
+            text-align: center;
+            width: 100%;
+        }
+        
+        .comparison-symbol {
+            font-size: 48px;
+            font-weight: bold;
+            align-self: center;
+            margin: 0 20px;
+        }
+        
+        .verdict {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 8px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .high-risk {
+            background: #fed7d7;
+            color: #c53030;
+            border: 3px solid #fc8181;
+        }
+        
+        .lower-risk {
+            background: #c6f6d5;
+            color: #2f855a;
+            border: 3px solid #68d391;
+        }
+        
+        .explanation {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+        
+        .timeline-visual {
+            position: relative;
+            height: 80px;
+            background: #e2e8f0;
+            border-radius: 8px;
+            margin: 20px 0;
+            overflow: visible;
+        }
+        
+        .timeline-bar {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .x-bar {
+            left: 0;
+            background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+            z-index: 2;
+        }
+        
+        .y-bar {
+            background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%);
+            z-index: 1;
+        }
+        
+        .xy-marker {
+            position: absolute;
+            top: -35px;
+            height: calc(100% + 35px);
+            width: 3px;
+            background: #dc2626;
+            transition: left 0.3s ease;
+        }
+        
+        .xy-label {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #dc2626;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        .quantum-icon {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+        
+        .metric-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .metric-label {
+            color: #718096;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .preset-selector-container {
+            background: #f7fafc;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .preset-selector-container label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        
+        .preset-selector-container select {
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 2px solid #667eea;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+            min-width: 300px;
+        }
+        
+        .preset-description {
+            margin-top: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            color: #4a5568;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .feedback-section {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .feedback-question {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+        
+        .feedback-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .feedback-button {
+            padding: 8px 20px;
+            border-radius: 6px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .feedback-button:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .feedback-thanks {
+            color: #2f855a;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        .copyright-footer {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            margin-top: 20px;
+        }
+        
+        .expandable-section {
+            margin: 30px 0;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .expandable-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 18px;
+            user-select: none;
+        }
+        
+        .expandable-header:hover {
+            background: linear-gradient(135deg, #5568d3 0%, #653a91 100%);
+        }
+        
+        .expand-icon {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+        
+        .expand-icon.expanded {
+            transform: rotate(180deg);
+        }
+        
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+            background: white;
+        }
+        
+        .expandable-content.expanded {
+            max-height: 10000px;
+        }
+        
+        .expandable-inner {
+            padding: 30px;
+        }
+        
+        .mosca-chart-container {
+            position: relative;
+            height: 350px;
+            margin: 30px 0;
+        }
+        
+        .timeline-visual-mosca {
+            position: relative;
+            height: 120px;
+            background: #e2e8f0;
+            border-radius: 8px;
+            margin: 30px 0;
+            overflow: visible;
+        }
+        
+        .z-marker {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #dc2626;
+            transition: left 0.3s ease;
+            z-index: 10;
+        }
+        
+        .z-label {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #dc2626;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-color {
+            width: 30px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .urgent {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 3px solid #dc2626;
+        }
+        
+        .safe {
+            background: #d1fae5;
+            color: #065f46;
+            border: 3px solid #10b981;
+        }
+        
+        .resource-links {
+            background: #e0f2fe;
+            border-left: 4px solid #0ea5e9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .resource-links h3 {
+            color: #0369a1;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .resource-links ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        
+        .resource-links li {
+            color: #0369a1;
+            margin: 8px 0;
+        }
+        
+        .resource-links a {
+            color: #0284c7;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .resource-links a:hover {
+            text-decoration: underline;
+        }
+        
+        .attribution-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(102, 126, 234, 0.95);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .attribution-badge:hover {
+            background: rgba(102, 126, 234, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+        }
+        
+        @media screen and (max-width: 768px) {
+            body { padding: 10px; }
+            .container { padding: 20px; }
+            h1 { font-size: 24px; }
+            .formula-box { font-size: 32px; padding: 15px; }
+            .preset-selector-container select { min-width: 100%; width: 100%; }
+            .comparison-bars { height: 150px; gap: 10px; padding-bottom: 70px; }
+            .bar { max-width: 80px; font-size: 12px; bottom: 55px; }
+            .comparison-symbol { font-size: 32px; margin: 0 10px; }
+            .verdict { font-size: 20px; padding: 20px; }
+            .metric-grid { grid-template-columns: 1fr; }
+            .action-buttons { flex-direction: column; }
+            .action-button { width: 100%; justify-content: center; }
+            .attribution-badge { bottom: 10px; right: 10px; padding: 6px 12px; font-size: 11px; }
+        }
+        
+        @media print {
+            body { background: white; }
+            .action-buttons { display: none; }
+            .feedback-section { display: none; }
+            .attribution-badge { display: none; }
+            .expandable-content { max-height: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Attribution Badge - Required by License -->
+    <a href="https://ProteQC.com" target="_blank" class="attribution-badge" title="Developed by ProteQC Limited">
+        ⚡ ProteQC
+    </a>
+    
+    <div class="container">
+        <div class="quantum-icon">⚖️🔐💻</div>
+        <h1>Post-Quantum Risk Evaluator</h1>
+        <p class="subtitle">Learned Hand Formula Applied to HNDL and Mosca's Theorem</p>
+        <p class="educational-note">Educational Framework • Free for Non-Commercial Use • © 2025 ProteQC Limited</p>
+        
+        <div class="info-box">
+            <div class="info-box-title">⚠️ The Legal Risk of Post-Quantum Delay</div>
+            <div class="info-box-content">
+                The <strong>Learned Hand Formula</strong> (from U.S. v. Carroll Towing Co., 1947) states that negligence occurs when 
+                <strong>B &lt; PL</strong>, where B is the burden (cost) of prevention, P is the probability of harm, and L is the magnitude of loss. 
+                In the context of Post-Quantum Cryptography and the <strong>"Harvest Now, Decrypt Later" (HNDL)</strong> threat, this means: 
+                if the cost of implementing PQC now is less than the expected loss from quantum decryption (probability × damages), 
+                delaying PQC migration could create legal exposure.
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="action-button" onclick="shareResults()">
+                📤 Share Results
+            </button>
+            <button class="action-button secondary" onclick="window.print()">
+                📄 Export to PDF
+            </button>
+        </div>
+        
+        <div class="preset-selector-container">
+            <label for="industry-preset">📊 Industry Scenario:</label>
+            <select id="industry-preset">
+                <option value="custom">Custom (Manual Configuration)</option>
+                <optgroup label="Generic Risk Profiles">
+                    <option value="high-risk">High Risk - Long Retention Requirements</option>
+                    <option value="medium-risk">Medium Risk - Moderate Retention</option>
+                    <option value="low-risk">Low Risk - Minimal Retention</option>
+                </optgroup>
+                <optgroup label="Industry-Specific Scenarios">
+                    <option value="financial">Financial Institution (Bank/Credit Union)</option>
+                    <option value="fintech">FinTech / Payment Processor</option>
+                    <option value="healthcare">Healthcare / Hospital System</option>
+                    <option value="pharma">Pharmaceutical / Biotech</option>
+                    <option value="government">Government Agency / Defense</option>
+                    <option value="legal">Legal / Professional Services</option>
+                    <option value="technology">Technology / SaaS Company</option>
+                    <option value="retail">Retail / E-commerce</option>
+                    <option value="telecom">Telecommunications</option>
+                    <option value="energy">Energy / Critical Infrastructure</option>
+                </optgroup>
+            </select>
+            <div class="preset-description" id="preset-description">
+                Select an industry scenario to load typical values for that sector, or choose "Custom" to set your own parameters.
+            </div>
+        </div>
+        
+        <div class="currency-selector-container">
+            <label for="currency-selector">Currency:</label>
+            <select id="currency-selector">
+                <option value="USD">US Dollar ($)</option>
+                <option value="GBP">British Pound (£)</option>
+                <option value="EUR">Euro (€)</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="section-header">Step 1: Mosca's Theorem - Assess Your Timeline</div>
+        
+        <div class="info-box">
+            <div class="info-box-title">📊 Mosca's Quantum Threat Probabilities</div>
+            <div class="info-box-content">
+                Based on Dr. Michele Mosca's 2015 analysis: <strong>~14% probability by 2026</strong> (1 in 7 chance), 
+                <strong>~50% by 2031</strong> (1 in 2 chance), with projections of <strong>~70% by 2035</strong> and <strong>~85% by 2040</strong>.
+                <em>Note: These are estimates with significant uncertainty; actual timelines may vary.</em>
+            </div>
+        </div>
+        
+        <div class="variable-section">
+            <div class="variable-label">
+                <span style="color: #2563eb;">⟦</span>
+                X = Data Security Requirement
+                <span class="value-display mosca-display" id="x-value">5</span> years
+            </div>
+            <div class="variable-description">How long does your sensitive data need to remain confidential?</div>
+            <input type="range" id="x-slider" min="0" max="20" value="5" step="1">
+            <div style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 11px; color: #a0aec0;">
+                <span>0</span><span>5</span><span>10</span><span>15</span><span>20</span>
+            </div>
+        </div>
+        
+        <div class="variable-section">
+            <div class="variable-label">
+                <span style="color: #7c3aed;">⟦</span>
+                Y = PQC Migration Time
+                <span class="value-display mosca-display" id="y-value">3</span> years
+            </div>
+            <div class="variable-description">How long will it take to complete your migration to quantum-safe cryptography?</div>
+            <input type="range" id="y-slider" min="0" max="15" value="3" step="1">
+            <div style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 11px; color: #a0aec0;">
+                <span>0</span><span>3</span><span>6</span><span>9</span><span>12</span><span>15</span>
+            </div>
+        </div>
+        
+        <div class="timeline-visual">
+            <div class="timeline-bar x-bar" id="x-bar">X</div>
+            <div class="timeline-bar y-bar" id="y-bar">Y</div>
+            <div class="xy-marker" id="xy-marker">
+                <div class="xy-label" id="xy-label">X+Y: 8 years</div>
+            </div>
+        </div>
+        
+        <div class="probability-display">
+            <div class="probability-calculation">
+                <strong>Probability Calculation (P):</strong><br>
+                Your data needs protection for <span id="x-display-calc">5</span> years, and migration will take 
+                <span id="y-display-calc">3</span> years.<br>
+                Total exposure window: <strong><span id="xy-total">8</span> years</strong> (until year <span id="target-year">2033</span>)<br>
+                <br>
+                Based on Mosca's probability curve, the estimated chance that Q-Day arrives before <span id="target-year-2">2033</span> is:
+            </div>
+            <div class="probability-result">
+                <span id="probability-result">60%</span>
+                <span class="uncertainty-range" id="uncertainty-range">(±10-15%)</span>
+            </div>
+        </div>
+        
+        <div class="expandable-section">
+            <div class="expandable-header" onclick="toggleExpand('mosca-expand')">
+                <span>📚 Learn More: Deep Dive into Mosca's Theorem</span>
+                <span class="expand-icon" id="mosca-icon">▼</span>
+            </div>
+            <div class="expandable-content" id="mosca-expand">
+                <div class="expandable-inner">
+                    <h2>Mosca's Theorem: Quantum Security Preparedness</h2>
+                    <p style="color: #4a5568; line-height: 1.6; margin-bottom: 20px;">
+                        Mosca's Theorem provides a framework for determining when organizations must act to protect against 
+                        quantum computing threats. The inequality <strong>(X + Y) > Z</strong> helps assess quantum readiness.
+                    </p>
+                    
+                    <div style="margin: 40px 0; padding: 30px; background: #f7fafc; border-radius: 8px;">
+                        <div style="text-align: center; color: #2d3748; margin-bottom: 20px; font-size: 24px; font-weight: 600;">
+                            Quantum Threat Probability (Mosca 2015)
+                        </div>
+                        <p style="text-align: center; color: #718096; font-style: italic; margin-bottom: 25px;">
+                            "There is a 1 in 7 chance that some fundamental public-key crypto will be broken by quantum by 2026, 
+                            and a 1 in 2 chance of the same by 2031." — Dr. Michele Mosca
+                        </p>
+                        
+                        <div class="mosca-chart-container">
+                            <canvas id="moscaProbabilityChart" style="width:100%; height:100%; display:block;"></canvas>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 50px;">
+                            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border-left: 4px solid #10b981;">
+                                <div style="font-size: 32px; font-weight: bold; color: #10b981;">~14%</div>
+                                <div style="color: #718096; font-size: 14px;">by 2026</div>
+                                <div style="color: #718096; font-size: 12px;">(1 in 7)</div>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border-left: 4px solid #f59e0b;">
+                                <div style="font-size: 32px; font-weight: bold; color: #f59e0b;">~50%</div>
+                                <div style="color: #718096; font-size: 14px;">by 2031</div>
+                                <div style="color: #718096; font-size: 12px;">(1 in 2)</div>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border-left: 4px solid #ef4444;">
+                                <div style="font-size: 32px; font-weight: bold; color: #ef4444;">~70%</div>
+                                <div style="color: #718096; font-size: 14px;">by 2035</div>
+                                <div style="color: #718096; font-size: 12px;">(projected)</div>
+                            </div>
+                            <div style="background: white; padding: 15px; border-radius: 8px; text-align: center; border-left: 4px solid #dc2626;">
+                                <div style="font-size: 32px; font-weight: bold; color: #dc2626;">~85%</div>
+                                <div style="color: #718096; font-size: 14px;">by 2040</div>
+                                <div style="color: #718096; font-size: 12px;">(projected)</div>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                            <div style="font-weight: 600; color: #856404; margin-bottom: 8px;">⚠️ Uncertainty Note</div>
+                            <div style="color: #856404; font-size: 14px; line-height: 1.6;">
+                                These probabilities are <strong>estimates based on 2015 analysis</strong> and carry significant uncertainty. 
+                                Quantum computing development timelines remain unpredictable. Recent advances (or setbacks) may shift 
+                                these probabilities. Use these as general guidance, not precise predictions.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                        <div style="font-weight: 600; color: #856404; margin-bottom: 8px;">📌 Why X + Y Are Cumulative: The "Harvest Now, Decrypt Later" (HNDL) Threat</div>
+                        <div style="color: #856404; font-size: 14px; line-height: 1.6;">
+                            For <strong>HNDL-sensitive data</strong>, X and Y don't overlap because adversaries can steal encrypted data <strong>today</strong> 
+                            and store it until quantum computers become available to decrypt it. Even if you start migrating to quantum-safe cryptography 
+                            immediately, any HNDL-sensitive data encrypted with current algorithms during the Y-year migration period remains at risk. 
+                            If your data needs to stay secret for X years, and migration takes Y years, you need X + Y years total before all at-risk 
+                            data's confidentiality requirement expires.
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h3 style="color: #2d3748;">Interactive Timeline Visualization</h3>
+                        
+                        <div class="legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);"></div>
+                                <span>X: Data Security Period</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%);"></div>
+                                <span>Y: Migration Time</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background: #dc2626;"></div>
+                                <span>Z: Quantum Threat</span>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-visual-mosca">
+                            <div class="timeline-bar x-bar" id="mosca-x-bar" style="z-index: 2;">X</div>
+                            <div class="timeline-bar y-bar" id="mosca-y-bar" style="z-index: 1;">Y</div>
+                            <div class="z-marker" id="mosca-z-marker">
+                                <div class="z-label">⚠️ Q-Day (Z)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="variable-section">
+                            <div class="variable-label">
+                                <span style="color: #dc2626;">⟦</span>
+                                Z = Quantum Computer Arrival
+                                <span class="value-display mosca-display" id="mosca-z-value" style="background: #dc2626;">9</span> years
+                            </div>
+                            <div class="variable-description">When will quantum computers be able to break current encryption?</div>
+                            <input type="range" id="mosca-z-slider" min="0" max="15" value="9" step="1">
+                            <div style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 11px; color: #a0aec0;">
+                                <span>0</span><span>3</span><span>6</span><span>9</span><span>12</span><span>15</span>
+                            </div>
+                        </div>
+                        
+                        <div style="background: #f7fafc; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                            <div style="text-align: center; font-size: 36px; font-weight: bold; color: #2d3748; margin: 20px 0;">
+                                <span id="mosca-xy-value">8</span>
+                                <span id="mosca-comparison-symbol" style="margin: 0 15px; font-size: 48px;">≤</span>
+                                <span id="mosca-z-value-display">9</span>
+                            </div>
+                            
+                            <div class="verdict" id="mosca-verdict"></div>
+                            <div class="explanation" id="mosca-explanation"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="section-header">Step 2: Learned Hand Formula - Risk Analysis</div>
+        
+        <div class="formula-box">B &lt; PL</div>
+        
+        <div class="variable-section">
+            <div class="variable-label">
+                B = Burden of PQC Migration
+                <span class="value-display" id="b-value">$500,000</span>
+            </div>
+            <div class="variable-description">Total cost to implement post-quantum cryptography (technology, labor, consulting, testing)</div>
+            <input type="range" id="b-slider" min="100000" max="5000000" value="500000" step="50000">
+            <div style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 11px; color: #a0aec0;">
+                <span>$100K</span><span>$1.5M</span><span>$3M</span><span>$5M</span>
+            </div>
+        </div>
+        
+        <div class="variable-section">
+            <div class="variable-label">
+                P = Probability of Quantum Breach
+                <span class="value-display" id="p-value">60%</span>
+                <span class="uncertainty-range">(±10-15%)</span>
+            </div>
+            <div class="variable-description">Calculated from Mosca's probabilities based on your X+Y timeline above</div>
+            <div style="background: #e0f2fe; padding: 10px; border-radius: 6px; margin-top: 10px; font-size: 14px; color: #0369a1;">
+                This probability is automatically calculated based on your data security requirement (X) and migration time (Y). 
+                It represents the estimated likelihood that quantum computers will be able to decrypt data harvested today before your 
+                data's confidentiality requirement expires. <strong>Note: This is an estimate with significant uncertainty.</strong>
+            </div>
+        </div>
+        
+        <div class="variable-section">
+            <div class="variable-label">
+                L = Magnitude of Loss
+                <span class="value-display" id="l-value">$10,000,000</span>
+            </div>
+            <div class="variable-description">Total damages if sensitive data is decrypted (regulatory fines, litigation, reputation damage, IP theft, competitive harm)</div>
+            <input type="range" id="l-slider" min="1000000" max="100000000" value="10000000" step="1000000">
+            <div style="display: flex; justify-content: space-between; margin-top: 5px; font-size: 11px; color: #a0aec0;">
+                <span>$1M</span><span>$25M</span><span>$50M</span><span>$100M</span>
+            </div>
+        </div>
+        
+        <div style="background: #f7fafc; padding: 30px; border-radius: 8px; margin: 30px 0;">
+            <h3 style="text-align: center; color: #2d3748; margin-bottom: 20px;">Risk Comparison</h3>
+            
+            <div class="comparison-bars">
+                <div class="bar-container">
+                    <div class="bar" id="b-bar">$500,000</div>
+                    <div class="bar-label">B<br>Burden of<br>Prevention</div>
+                </div>
+                <div class="comparison-symbol" id="comparison-symbol">&lt;</div>
+                <div class="bar-container">
+                    <div class="bar" id="pl-bar">$6,000,000</div>
+                    <div class="bar-label">P × L<br>Expected<br>Loss</div>
+                </div>
+            </div>
+            
+            <div class="metric-grid">
+                <div class="metric-card">
+                    <div class="metric-value" id="b-metric">$500K</div>
+                    <div class="metric-label">Cost to Prevent</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="pl-metric">$6.0M</div>
+                    <div class="metric-label">Expected Loss (P×L)</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="ratio-metric">12.0x</div>
+                    <div class="metric-label">Risk/Cost Ratio</div>
+                </div>
+            </div>
+            
+            <div class="verdict" id="verdict"></div>
+            <div class="explanation" id="explanation"></div>
+        </div>
+        
+        <div class="expandable-section">
+            <div class="expandable-header" onclick="toggleExpand('limitations-expand')">
+                <span>⚠️ Important: Limitations of This Assessment</span>
+                <span class="expand-icon" id="limitations-icon">▼</span>
+            </div>
+            <div class="expandable-content" id="limitations-expand">
+                <div class="expandable-inner">
+                    <h2>What This Tool Does NOT Assess</h2>
+                    <p style="color: #4a5568; line-height: 1.6; margin-bottom: 20px;">
+                        This tool provides an educational framework for understanding post-quantum risk through Mosca's Theorem 
+                        and the Learned Hand Formula. However, it has important limitations.
+                    </p>
+                    
+                    <div style="background: #fee2e2; border-left: 4px solid #dc2626; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                        <h3 style="color: #991b1b; margin-top: 0;">Factors Not Modeled:</h3>
+                        <ul style="color: #991b1b; line-height: 1.8;">
+                            <li><strong>Regulatory compliance requirements</strong> – NIST, NSA, industry-specific mandates</li>
+                            <li><strong>Industry standards and peer behavior</strong> – what competitors are doing</li>
+                            <li><strong>Insurance coverage and availability</strong> – cyber insurance requirements</li>
+                            <li><strong>Vendor readiness</strong> – supply chain and ecosystem maturity</li>
+                            <li><strong>Technical feasibility</strong> – system compatibility and migration complexity</li>
+                            <li><strong>Data classification nuances</strong> – different data types may need different timelines</li>
+                            <li><strong>Operational impacts</strong> – business continuity during migration</li>
+                        </ul>
+                    </div>
+                    
+                    <h3 style="color: #2d3748; margin-top: 30px;">Recommended Next Steps:</h3>
+                    <ol style="color: #4a5568; line-height: 1.8;">
+                        <li><strong>Consult with legal counsel</strong> about your specific risk profile</li>
+                        <li><strong>Engage cybersecurity experts</strong> for technical feasibility assessment</li>
+                        <li><strong>Review regulatory requirements</strong> applicable to your industry</li>
+                        <li><strong>Conduct comprehensive data classification</strong> to identify HNDL-sensitive information</li>
+                        <li><strong>Document your decision-making process</strong> regardless of chosen timeline</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="resource-links">
+            <h3>📚 Learn More: Resources & References</h3>
+            <ul>
+                <li><a href="https://csrc.nist.gov/projects/post-quantum-cryptography" target="_blank">NIST Post-Quantum Cryptography Project</a></li>
+                <li><a href="https://media.defense.gov/2022/Sep/07/2003071834/-1/-1/0/CSI_CNSA_2.0_ALGORITHMS_.PDF" target="_blank">NSA's Cybersecurity Advisory (PDF)</a></li>
+                <li><strong>Mosca, M. (2015)</strong>. "Cybersecurity in an Era with Quantum Computers" – IEEE Security & Privacy</li>
+                <li><strong>United States v. Carroll Towing Co.</strong>, 159 F.2d 169 (2d Cir. 1947) – Learned Hand Formula</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="feedback-section">
+            <div class="feedback-question">Was this tool helpful for your risk assessment?</div>
+            <div class="feedback-buttons" id="feedback-buttons">
+                <button class="feedback-button" onclick="submitFeedback('yes')">👍 Yes, very helpful</button>
+                <button class="feedback-button" onclick="submitFeedback('somewhat')">👌 Somewhat helpful</button>
+                <button class="feedback-button" onclick="submitFeedback('no')">👎 Not helpful</button>
+            </div>
+            <div class="feedback-thanks" id="feedback-thanks" style="display: none;">
+                Thank you for your feedback! 🙏
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div style="background: #fee2e2; border-left: 4px solid #dc2626; padding: 15px; border-radius: 8px;">
+            <div style="font-weight: 600; color: #991b1b; margin-bottom: 8px;">⚖️ Legal Disclaimer</div>
+            <div style="color: #991b1b; font-size: 13px; line-height: 1.6;">
+                This tool is provided for <strong>educational and informational purposes only</strong> and does not constitute 
+                legal advice, professional consultation, or a guarantee of legal outcomes. <strong>Consult with qualified legal counsel</strong> 
+                before making decisions based on this analysis. No attorney-client relationship is created by use of this tool.
+            </div>
+        </div>
+    </div>
+    
+    <div class="copyright-footer">
+        <div style="font-size: 15px; font-weight: 600; margin-bottom: 15px;">
+            Developed by ProteQC Limited
+        </div>
+        
+        <div style="background: rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 20px; margin: 20px auto; text-align: left; max-width: 800px;">
+            <div style="font-weight: 600; margin-bottom: 10px; font-size: 14px;">📜 LICENSE TERMS</div>
+            <div style="font-size: 12px; line-height: 1.8;">
+                <strong>© 2025 ProteQC Limited. All rights reserved.</strong><br><br>
+                
+                <strong style="color: #68d391;">✓ FREE USE PERMITTED:</strong><br>
+                • Educational and academic purposes<br>
+                • Research and non-commercial analysis<br>
+                • Personal risk assessment<br>
+                • Sharing with proper attribution<br><br>
+                
+                <strong style="color: #fc8181;">✗ PERMISSION REQUIRED:</strong><br>
+                • Commercial use or paid services<br>
+                • White-labeling or rebranding<br>
+                • Removal of attribution<br><br>
+                
+                <strong>ATTRIBUTION:</strong> "Developed by ProteQC Limited (ProteQC.com)"<br><br>
+                
+                <strong>NO WARRANTY:</strong> Provided "AS IS" for educational purposes.
+            </div>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <strong>For commercial licensing:</strong> <a href="mailto:licensing@ProteQC.com" style="color: rgba(255, 255, 255, 0.9); text-decoration: underline;">licensing@ProteQC.com</a><br>
+            <strong>Website:</strong> <a href="https://ProteQC.com" target="_blank" style="color: rgba(255, 255, 255, 0.9); text-decoration: underline;">ProteQC.com</a>
+        </div>
+    </div>
+    <script>
+        /*
+         * Post-Quantum Risk Evaluator - Core Logic
+         * Copyright © 2025 ProteQC Limited. All rights reserved.
+         * 
+         * This code implements the integration of Mosca's Theorem with the
+         * Learned Hand Formula for post-quantum cryptography risk assessment.
+         * 
+         * For licensing information, see header comments or footer.
+         * Commercial use requires written permission: licensing@ProteQC.com
+         */
+        
+        // Industry-specific preset configurations
+        // © 2025 ProteQC Limited
+        const industryPresets = {
+            'high-risk': {
+                name: "High Risk - Long Retention Requirements",
+                description: "Organizations handling highly sensitive data with long-term confidentiality requirements. Examples include classified government data, long-term medical records, intellectual property with multi-decade value, or financial records with extended regulatory retention. Breaches would have severe, lasting consequences.",
+                x: 15, y: 5, b: 1000000, l: 50000000
+            },
+            'medium-risk': {
+                name: "Medium Risk - Moderate Retention Requirements",
+                description: "Typical organizations with standard data sensitivity and moderate retention needs. Examples include most mid-market financial services, healthcare providers, professional services firms, and technology companies. Data breaches would cause significant but manageable damage through regulatory fines, customer lawsuits, and reputation harm.",
+                x: 7, y: 3, b: 500000, l: 15000000
+            },
+            'low-risk': {
+                name: "Low Risk - Minimal Retention Requirements",
+                description: "Organizations with data that loses value quickly or has minimal confidentiality requirements. Examples include businesses with primarily transactional data, short-lived session information, or non-sensitive operational data. While security is important, the consequences of quantum decryption would be limited due to rapid data depreciation.",
+                x: 2, y: 2, b: 300000, l: 5000000
+            },
+            financial: {
+                name: "Financial Institution (Bank/Credit Union)",
+                description: "Banks and credit unions handle sensitive financial data subject to regulatory requirements (GLBA, PCI-DSS). Transaction records, account information, and customer data must remain confidential for extended periods. High regulatory and reputational risk.",
+                x: 10, y: 4, b: 700000, l: 40000000
+            },
+            fintech: {
+                name: "FinTech / Payment Processor",
+                description: "Payment processors and financial technology companies handle payment card data, transaction histories, and sensitive financial information. Subject to PCI-DSS and various financial regulations. High velocity of transactions with significant aggregated risk.",
+                x: 8, y: 3, b: 500000, l: 25000000
+            },
+            healthcare: {
+                name: "Healthcare / Hospital System",
+                description: "Healthcare organizations store protected health information (PHI) under HIPAA with strict confidentiality requirements. Medical records must be retained for decades. Breach penalties include OCR fines, lawsuits, and severe reputational harm.",
+                x: 12, y: 5, b: 1200000, l: 30000000
+            },
+            pharma: {
+                name: "Pharmaceutical / Biotech",
+                description: "Pharmaceutical companies protect valuable intellectual property including drug formulas, clinical trial data, and research findings. IP theft could cost significant competitive advantage. Long development cycles mean data must stay secret for many years.",
+                x: 15, y: 4, b: 1500000, l: 60000000
+            },
+            government: {
+                name: "Government Agency / Defense",
+                description: "Government agencies handle classified information, national security data, and sensitive citizen information. Extremely long confidentiality requirements (often 25+ years for classified data). Breach could compromise national security.",
+                x: 20, y: 6, b: 3000000, l: 100000000
+            },
+            legal: {
+                name: "Legal / Professional Services",
+                description: "Law firms and professional services firms hold attorney-client privileged information, trade secrets, and sensitive business strategy documents. Ethical obligations and malpractice liability create high stakes for confidentiality breaches.",
+                x: 10, y: 3, b: 400000, l: 20000000
+            },
+            technology: {
+                name: "Technology / SaaS Company",
+                description: "Technology companies store customer data, source code, and proprietary algorithms. SaaS providers are custodians of client information. Breaches damage reputation and customer trust, potentially destroying business model.",
+                x: 7, y: 3, b: 500000, l: 25000000
+            },
+            retail: {
+                name: "Retail / E-commerce",
+                description: "Retailers store payment card information, purchase histories, and customer personal data. Subject to PCI-DSS. While individual transactions may be lower value, aggregated customer data breaches can result in significant class actions and PCI penalties.",
+                x: 5, y: 3, b: 600000, l: 15000000
+            },
+            telecom: {
+                name: "Telecommunications",
+                description: "Telecom companies have access to communications metadata, location data, and calling records. Subject to CALEA and other telecommunications regulations. Large customer bases mean high aggregate exposure.",
+                x: 7, y: 4, b: 1500000, l: 35000000
+            },
+            energy: {
+                name: "Energy / Critical Infrastructure",
+                description: "Energy sector and critical infrastructure operators protect SCADA systems, grid control data, and operational technology. Breaches could enable physical attacks on infrastructure. Subject to NERC-CIP and other critical infrastructure regulations.",
+                x: 10, y: 5, b: 2500000, l: 60000000
+            }
+        };
+        
+        const currencySymbols = { 'USD': '$', 'GBP': '£', 'EUR': '€' };
+        
+        // Currency formatting utilities
+        // © 2025 ProteQC Limited
+        function formatCurrency(value, currency) {
+            const symbol = currencySymbols[currency] || '$';
+            const numValue = parseFloat(value);
+            if (isNaN(numValue)) return symbol + '0';
+            return symbol + Math.round(numValue).toLocaleString('en-US');
+        }
+        
+        function formatCurrencyShort(value, currency) {
+            const symbol = currencySymbols[currency] || '$';
+            const numValue = parseFloat(value);
+            if (isNaN(numValue)) return symbol + '0';
+            if (numValue >= 1000000) return symbol + (numValue / 1000000).toFixed(1) + 'M';
+            if (numValue >= 1000) return symbol + (numValue / 1000).toFixed(0) + 'K';
+            return symbol + Math.round(numValue).toLocaleString('en-US');
+        }
+        
+        /**
+         * Mosca Probability Calculation
+         * © 2025 ProteQC Limited
+         * 
+         * Calculates quantum threat probability based on Dr. Michele Mosca's
+         * 2015 estimates, with linear interpolation between known data points.
+         * 
+         * @param {number} years - Years from present (2025)
+         * @returns {number} - Probability percentage (0-100)
+         */
+        function getMoscaProbability(years) {
+            const currentYear = 2025;
+            const targetYear = currentYear + years;
+            const moscaData = [
+                { year: 2026, prob: 14 },
+                { year: 2031, prob: 50 },
+                { year: 2035, prob: 70 },
+                { year: 2040, prob: 85 }
+            ];
+            
+            if (targetYear <= 2026) return Math.min(14, (14 / 1) * years);
+            if (targetYear >= 2040) return Math.min(95, 85 + ((targetYear - 2040) * 1));
+            
+            for (let i = 0; i < moscaData.length - 1; i++) {
+                const current = moscaData[i];
+                const next = moscaData[i + 1];
+                if (targetYear >= current.year && targetYear <= next.year) {
+                    const yearRange = next.year - current.year;
+                    const probRange = next.prob - current.prob;
+                    const yearOffset = targetYear - current.year;
+                    return Math.round(current.prob + (probRange / yearRange) * yearOffset);
+                }
+            }
+            return 85;
+        }
+        
+        /**
+         * Share Results Functionality
+         * © 2025 ProteQC Limited
+         * 
+         * Generates shareable summary of risk assessment results
+         * for social media and professional networks.
+         */
+        function shareResults() {
+            const X = parseInt(document.getElementById('x-slider').value);
+            const Y = parseInt(document.getElementById('y-slider').value);
+            const XY = X + Y;
+            const P = getMoscaProbability(XY);
+            const B = parseFloat(document.getElementById('b-slider').value);
+            const L = parseFloat(document.getElementById('l-slider').value);
+            const PL = (P / 100) * L;
+            const ratio = B > 0 ? (PL / B).toFixed(1) : '∞';
+            const currency = document.getElementById('currency-selector').value;
+            
+            const shareText = `I assessed my organization's post-quantum cryptography risk using ProteQC's Risk Assessor:
+
+📊 Assessment Results:
+- Data security requirement: ${X} years
+- Migration timeline: ${Y} years
+- Quantum breach probability: ~${P}% (by ${2025 + XY})
+- Risk/Cost ratio: ${ratio}x
+- Assessment: ${B < PL ? 'Higher risk profile - consider immediate action' : 'Lower risk profile - monitor and plan'}
+
+Tool developed by ProteQC Limited (ProteQC.com)
+
+#PostQuantumCryptography #CyberSecurity #RiskManagement`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Post-Quantum Risk Assessment Results',
+                    text: shareText
+                }).catch(() => copyToClipboard(shareText));
+            } else {
+                copyToClipboard(shareText);
+            }
+        }
+        
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Results copied to clipboard! You can now paste this into your LinkedIn post.');
+            }).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                alert('Results copied to clipboard! You can now paste this into your LinkedIn post.');
+            });
+        }
+        
+        function submitFeedback(response) {
+            document.getElementById('feedback-buttons').style.display = 'none';
+            document.getElementById('feedback-thanks').style.display = 'block';
+            console.log('Feedback submitted:', response);
+        }
+        
+        function toggleExpand(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(id.replace('-expand', '-icon'));
+            content.classList.toggle('expanded');
+            icon.classList.toggle('expanded');
+        }
+        
+        /**
+         * Main Visualization Update Function
+         * © 2025 ProteQC Limited
+         * 
+         * Updates all visual elements and calculations based on user input.
+         * Integrates Mosca's Theorem timeline with Learned Hand Formula.
+         */
+        function updateVisualization() {
+            const presetSelector = document.getElementById('industry-preset');
+            if (presetSelector.value !== 'custom') {
+                const currentPreset = industryPresets[presetSelector.value];
+                const X = parseInt(document.getElementById('x-slider').value);
+                const Y = parseInt(document.getElementById('y-slider').value);
+                const B = parseFloat(document.getElementById('b-slider').value);
+                const L = parseFloat(document.getElementById('l-slider').value);
+                
+                if (currentPreset && (X !== currentPreset.x || Y !== currentPreset.y || 
+                    B !== currentPreset.b || L !== currentPreset.l)) {
+                    presetSelector.value = 'custom';
+                    document.getElementById('preset-description').textContent = 
+                        'Custom configuration (manually adjusted from preset).';
+                }
+            }
+            
+            const X = parseInt(document.getElementById('x-slider').value);
+            const Y = parseInt(document.getElementById('y-slider').value);
+            const B = parseFloat(document.getElementById('b-slider').value);
+            const L = parseFloat(document.getElementById('l-slider').value);
+            const currency = document.getElementById('currency-selector').value;
+            
+            const XY = X + Y;
+            const P = getMoscaProbability(XY);
+            const PDecimal = P / 100;
+            const PL = PDecimal * L;
+            const targetYear = 2025 + XY;
+            
+            document.getElementById('x-value').textContent = X;
+            document.getElementById('y-value').textContent = Y;
+            document.getElementById('b-value').textContent = formatCurrency(B, currency);
+            document.getElementById('p-value').textContent = P + '%';
+            document.getElementById('l-value').textContent = formatCurrency(L, currency);
+            
+            document.getElementById('x-display-calc').textContent = X;
+            document.getElementById('y-display-calc').textContent = Y;
+            document.getElementById('xy-total').textContent = XY;
+            document.getElementById('target-year').textContent = targetYear;
+            document.getElementById('target-year-2').textContent = targetYear;
+            document.getElementById('probability-result').textContent = P + '%';
+            
+            const maxTime = 20;
+            const xPercent = (X / maxTime) * 100;
+            const yPercent = (Y / maxTime) * 100;
+            const xyPercent = (XY / maxTime) * 100;
+            
+            document.getElementById('x-bar').style.width = xPercent + '%';
+            document.getElementById('x-bar').textContent = X > 0 ? `X (${X}y)` : '';
+            document.getElementById('y-bar').style.left = xPercent + '%';
+            document.getElementById('y-bar').style.width = yPercent + '%';
+            document.getElementById('y-bar').textContent = Y > 0 ? `Y (${Y}y)` : '';
+            document.getElementById('xy-marker').style.left = xyPercent + '%';
+            document.getElementById('xy-label').textContent = `X+Y: ${XY} years (${targetYear})`;
+            
+            const moscaMaxTime = 15;
+            const moscaXPercent = Math.min(100, (X / moscaMaxTime) * 100);
+            const moscaYPercent = Math.min(100, (Y / moscaMaxTime) * 100);
+            document.getElementById('mosca-x-bar').style.width = moscaXPercent + '%';
+            document.getElementById('mosca-x-bar').textContent = X > 0 ? `X (${X}y)` : '';
+            document.getElementById('mosca-y-bar').style.left = moscaXPercent + '%';
+            document.getElementById('mosca-y-bar').style.width = moscaYPercent + '%';
+            document.getElementById('mosca-y-bar').textContent = Y > 0 ? `Y (${Y}y)` : '';
+            
+            const Z = parseInt(document.getElementById('mosca-z-slider').value);
+            const moscaZPercent = (Z / moscaMaxTime) * 100;
+            document.getElementById('mosca-z-marker').style.left = moscaZPercent + '%';
+            document.getElementById('mosca-z-value').textContent = Z;
+            document.getElementById('mosca-xy-value').textContent = XY;
+            document.getElementById('mosca-z-value-display').textContent = Z;
+            updateMoscaVerdict(XY, Z);
+            
+            const maxValue = Math.max(B, PL, 1);
+            const bHeight = (B / maxValue) * 180;
+            const plHeight = (PL / maxValue) * 180;
+            
+            document.getElementById('b-bar').style.height = bHeight + 'px';
+            document.getElementById('pl-bar').style.height = plHeight + 'px';
+            document.getElementById('b-bar').textContent = formatCurrencyShort(B, currency);
+            document.getElementById('pl-bar').textContent = formatCurrencyShort(PL, currency);
+            document.getElementById('b-metric').textContent = formatCurrencyShort(B, currency);
+            document.getElementById('pl-metric').textContent = formatCurrencyShort(PL, currency);
+            
+            const ratio = B > 0 ? (PL / B).toFixed(1) : '∞';
+            document.getElementById('ratio-metric').textContent = ratio + 'x';
+            
+            const comparisonSymbol = document.getElementById('comparison-symbol');
+            const verdict = document.getElementById('verdict');
+            const explanation = document.getElementById('explanation');
+            
+            if (B < PL) {
+                comparisonSymbol.textContent = '<';
+                comparisonSymbol.style.color = '#c53030';
+                verdict.className = 'verdict high-risk';
+                verdict.textContent = '⚠️ HIGHER LEGAL RISK PROFILE';
+                
+                const riskAmount = PL - B;
+                explanation.innerHTML = `<strong>Based on the Learned Hand Formula framework, this scenario suggests a higher legal risk profile.</strong><br><br>
+                    The burden of implementing PQC (${formatCurrency(B, currency)}) is <strong>less than</strong> the expected loss 
+                    (${formatCurrency(PL, currency)}).<br><br>
+                    <strong>Analysis:</strong><br>
+                    • Estimated ${P}% probability (±10-15%) that quantum computers will break current encryption before ${targetYear}<br>
+                    • Your HNDL-sensitive data needs protection for ${X} years, plus ${Y} years for migration<br>
+                    • Potential loss if data is decrypted: ${formatCurrency(L, currency)}<br>
+                    • Expected loss (~${P}% × ${formatCurrency(L, currency)}): ${formatCurrency(PL, currency)}<br>
+                    • Cost to prevent: ${formatCurrency(B, currency)}<br>
+                    • Net risk exposure: ${formatCurrency(riskAmount, currency)}<br><br>
+                    <strong>Interpretation:</strong> Under the Learned Hand Formula, when prevention costs are significantly 
+                    lower than expected losses, a "reasonable person" standard may suggest taking preventive action. 
+                    Delaying PQC migration could create legal exposure, particularly given the HNDL threat where adversaries 
+                    may already be harvesting encrypted data for future decryption.<br><br>
+                    <strong>Recommendation:</strong> Consider immediate action to begin PQC migration planning and document 
+                    your decision-making process thoroughly.`;
+            } else {
+                comparisonSymbol.textContent = '≥';
+                comparisonSymbol.style.color = '#2f855a';
+                verdict.className = 'verdict lower-risk';
+                verdict.textContent = '✓ LOWER LEGAL RISK PROFILE (But Monitor Closely)';
+                
+                explanation.innerHTML = `<strong>Based on the Learned Hand Formula framework, current parameters suggest a lower legal risk profile.</strong><br><br>
+                    The burden of implementing PQC (${formatCurrency(B, currency)}) is <strong>greater than or equal to</strong> the 
+                    expected loss (${formatCurrency(PL, currency)}) based on current probability estimates.<br><br>
+                    <strong>Analysis:</strong><br>
+                    • Estimated probability of quantum breach before ${targetYear}: ~${P}% (±10-15%)<br>
+                    • Expected loss: ${formatCurrency(PL, currency)}<br>
+                    • Cost to prevent: ${formatCurrency(B, currency)}<br>
+                    • Cost/Risk ratio: ${ratio}x<br><br>
+                    <strong>Important Considerations:</strong><br>
+                    While current analysis suggests lower risk, several factors warrant continued evaluation:<br>
+                    • Mosca's probabilities carry significant uncertainty and may shift<br>
+                    • The HNDL threat means adversaries may already be harvesting your encrypted data<br>
+                    • Regulatory requirements may mandate PQC migration regardless of cost-benefit analysis<br>
+                    • Industry standards and peer actions may influence the "reasonable care" standard<br>
+                    • Early adoption may provide advantages and reduce implementation risks<br><br>
+                    <strong>Recommendation:</strong> Continue monitoring quantum developments and industry standards. 
+                    Document your decision rationale and consider phased migration strategies.`;
+            }
+        }
+        
+        /**
+         * Mosca Timeline Verdict Assessment
+         * © 2025 ProteQC Limited
+         * 
+         * Evaluates whether organization has sufficient time to migrate
+         * based on Mosca's Theorem: (X + Y) vs Z
+         */
+        function updateMoscaVerdict(XY, Z) {
+            const moscaSymbol = document.getElementById('mosca-comparison-symbol');
+            const moscaVerdict = document.getElementById('mosca-verdict');
+            const moscaExplanation = document.getElementById('mosca-explanation');
+            
+            if (XY > Z) {
+                moscaSymbol.textContent = '>';
+                moscaSymbol.style.color = '#dc2626';
+                moscaVerdict.className = 'verdict urgent';
+                moscaVerdict.textContent = '🚨 ACTION REQUIRED NOW';
+                
+                const shortfall = XY - Z;
+                moscaExplanation.innerHTML = `<strong>Timeline indicates immediate action needed!</strong><br><br>
+                    Your data needs to remain secure for ${parseInt(document.getElementById('x-slider').value)} years, and it will take ${parseInt(document.getElementById('y-slider').value)} years to migrate. 
+                    That's a total of <strong>${XY} years</strong>.<br><br>
+                    However, quantum computers capable of breaking current encryption are expected in approximately <strong>${Z} years</strong>.<br><br>
+                    You are <strong>${shortfall} years behind schedule</strong>. Consider beginning quantum-safe migration <strong>immediately</strong> 
+                    to address this timing gap.`;
+            } else if (XY === Z) {
+                moscaSymbol.textContent = '=';
+                moscaSymbol.style.color = '#d97706';
+                moscaVerdict.className = 'verdict urgent';
+                moscaVerdict.textContent = '⚠️ CRITICAL: ACT NOW';
+                moscaExplanation.innerHTML = `<strong>You are at the theoretical deadline!</strong><br><br>
+                    Your security requirements (${parseInt(document.getElementById('x-slider').value)} years) plus migration time (${parseInt(document.getElementById('y-slider').value)} years) equals exactly when quantum computers are expected (${Z} years).<br><br>
+                    Consider beginning quantum-safe migration <strong>immediately</strong>. Any delays may create vulnerability windows.`;
+            } else {
+                moscaSymbol.textContent = '≤';
+                moscaSymbol.style.color = '#10b981';
+                moscaVerdict.className = 'verdict safe';
+                moscaVerdict.textContent = '✓ SUFFICIENT TIME WINDOW';
+                
+                const buffer = Z - XY;
+                moscaExplanation.innerHTML = `<strong>Timeline analysis suggests adequate planning time.</strong><br><br>
+                    Your data needs to remain secure for ${parseInt(document.getElementById('x-slider').value)} years, and migration will take ${parseInt(document.getElementById('y-slider').value)} years (total: ${XY} years).<br><br>
+                    Quantum computers are expected in approximately ${Z} years, providing a buffer of <strong>${buffer} years</strong>.<br><br>
+                    While timing appears adequate, it's prudent to begin planning your quantum-safe migration strategy now to 
+                    avoid future pressure and ensure thorough implementation.`;
+            }
+        }
+        /**
+         * Mosca Probability Chart Visualization
+         * © 2025 ProteQC Limited
+         * 
+         * Renders interactive probability curve based on Mosca's 2015 estimates.
+         * Uses HTML5 Canvas for responsive, high-quality visualization.
+         */
+        function drawMoscaProbabilityChart() {
+            const canvas = document.getElementById('moscaProbabilityChart');
+            if (!canvas) return;
+            
+            const ctx = canvas.getContext('2d');
+            const dpr = Math.max(1, window.devicePixelRatio || 1);
+            const rect = canvas.getBoundingClientRect();
+            
+            if (rect.width === 0 || rect.height === 0) return;
+            
+            canvas.width = Math.floor(rect.width * dpr);
+            canvas.height = Math.floor(rect.height * dpr);
+            ctx.scale(dpr, dpr);
+            
+            const width = rect.width;
+            const height = rect.height;
+            
+            const isMobile = width < 600;
+            const padding = isMobile ? 40 : 60;
+            const chartWidth = width - padding * 2;
+            const chartHeight = height - padding * 2;
+            
+            ctx.clearRect(0, 0, width, height);
+            
+            // Grid
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            
+            const fontSize = isMobile ? 11 : 13;
+            
+            for (let i = 0; i <= 5; i++) {
+                const y = padding + (chartHeight / 5) * i;
+                ctx.beginPath();
+                ctx.moveTo(padding, y);
+                ctx.lineTo(width - padding, y);
+                ctx.stroke();
+                
+                const percentage = 100 - (i * 20);
+                ctx.fillStyle = '#718096';
+                ctx.font = `${fontSize}px sans-serif`;
+                ctx.textAlign = 'right';
+                ctx.fillText(percentage + '%', padding - 10, y + 5);
+            }
+            
+            const years = [2026, 2030, 2035, 2040];
+            years.forEach((year) => {
+                const x = padding + ((year - 2026) / 14) * chartWidth;
+                ctx.strokeStyle = '#e2e8f0';
+                ctx.beginPath();
+                ctx.moveTo(x, padding);
+                ctx.lineTo(x, height - padding);
+                ctx.stroke();
+                
+                ctx.fillStyle = '#718096';
+                ctx.font = `bold ${fontSize}px sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.fillText(year, x, height - padding + 20);
+            });
+            
+            const dataPoints = [
+                { year: 2026, prob: 14.3 }, { year: 2027, prob: 22 }, { year: 2028, prob: 30 },
+                { year: 2029, prob: 38 }, { year: 2030, prob: 45 }, { year: 2031, prob: 50 },
+                { year: 2032, prob: 55 }, { year: 2033, prob: 60 }, { year: 2034, prob: 65 },
+                { year: 2035, prob: 70 }, { year: 2036, prob: 74 }, { year: 2037, prob: 78 },
+                { year: 2038, prob: 81 }, { year: 2039, prob: 83 }, { year: 2040, prob: 85 }
+            ];
+            
+            const gradient = ctx.createLinearGradient(0, padding, 0, height - padding);
+            gradient.addColorStop(0, 'rgba(220, 38, 38, 0.3)');
+            gradient.addColorStop(0.5, 'rgba(245, 158, 11, 0.2)');
+            gradient.addColorStop(1, 'rgba(59, 130, 246, 0.1)');
+            
+            ctx.beginPath();
+            ctx.moveTo(padding, height - padding);
+            dataPoints.forEach(point => {
+                const x = padding + ((point.year - 2026) / 14) * chartWidth;
+                const y = padding + (1 - point.prob / 100) * chartHeight;
+                ctx.lineTo(x, y);
+            });
+            ctx.lineTo(padding + chartWidth, height - padding);
+            ctx.closePath();
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            
+            ctx.beginPath();
+            dataPoints.forEach((point, i) => {
+                const x = padding + ((point.year - 2026) / 14) * chartWidth;
+                const y = padding + (1 - point.prob / 100) * chartHeight;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.strokeStyle = '#dc2626';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+            
+            [
+                { year: 2026, prob: 14.3, color: '#10b981', label: '~1/7' },
+                { year: 2031, prob: 50, color: '#f59e0b', label: '~1/2' },
+                { year: 2035, prob: 70, color: '#ef4444', label: '~70%' },
+                { year: 2040, prob: 85, color: '#dc2626', label: '~85%' }
+            ].forEach(point => {
+                const x = padding + ((point.year - 2026) / 14) * chartWidth;
+                const y = padding + (1 - point.prob / 100) * chartHeight;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = point.color;
+                ctx.fill();
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                
+                ctx.fillStyle = point.color;
+                ctx.font = 'bold 12px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(point.label, x, y - 15);
+            });
+            
+            ctx.save();
+            ctx.translate(15, height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillStyle = '#2d3748';
+            ctx.font = 'bold 14px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Probability of Breaking Public-Key Crypto', 0, 0);
+            ctx.restore();
+            
+            ctx.fillStyle = '#2d3748';
+            ctx.font = 'bold 14px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('Year', width / 2, height - 5);
+        }
+        
+        // Event Listeners and Initialization
+        // © 2025 ProteQC Limited
+        
+        document.getElementById('x-slider').addEventListener('input', updateVisualization);
+        document.getElementById('y-slider').addEventListener('input', updateVisualization);
+        document.getElementById('b-slider').addEventListener('input', updateVisualization);
+        document.getElementById('l-slider').addEventListener('input', updateVisualization);
+        document.getElementById('currency-selector').addEventListener('change', updateVisualization);
+        
+        document.getElementById('mosca-z-slider').addEventListener('input', () => {
+            const X = parseInt(document.getElementById('x-slider').value);
+            const Y = parseInt(document.getElementById('y-slider').value);
+            const Z = parseInt(document.getElementById('mosca-z-slider').value);
+            const XY = X + Y;
+            
+            const moscaMaxTime = 15;
+            const moscaZPercent = (Z / moscaMaxTime) * 100;
+            document.getElementById('mosca-z-marker').style.left = moscaZPercent + '%';
+            document.getElementById('mosca-z-value').textContent = Z;
+            document.getElementById('mosca-z-value-display').textContent = Z;
+            
+            updateMoscaVerdict(XY, Z);
+        });
+        
+        document.getElementById('industry-preset').addEventListener('change', function() {
+            const selectedIndustry = this.value;
+            
+            if (selectedIndustry === 'custom') {
+                document.getElementById('preset-description').textContent = 
+                    'Custom configuration selected. Adjust all sliders below to match your specific situation.';
+                return;
+            }
+            
+            const preset = industryPresets[selectedIndustry];
+            if (preset) {
+                document.getElementById('x-slider').value = preset.x;
+                document.getElementById('y-slider').value = preset.y;
+                document.getElementById('b-slider').value = preset.b;
+                document.getElementById('l-slider').value = preset.l;
+                
+                document.getElementById('preset-description').innerHTML = 
+                    `<strong>${preset.name}:</strong> ${preset.description}`;
+                
+                updateVisualization();
+            }
+        });
+        
+        // Initialize visualization
+        updateVisualization();
+        
+        // Draw chart when Mosca section is expanded
+        const moscaExpandObserver = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.target.classList.contains('expanded')) {
+                    setTimeout(drawMoscaProbabilityChart, 100);
+                }
+            });
+        });
+        
+        moscaExpandObserver.observe(document.getElementById('mosca-expand'), {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+        
+        // Redraw chart on resize
+        window.addEventListener('resize', () => {
+            if (document.getElementById('mosca-expand').classList.contains('expanded')) {
+                drawMoscaProbabilityChart();
+            }
+        });
+        
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                if (document.getElementById('mosca-expand').classList.contains('expanded')) {
+                    drawMoscaProbabilityChart();
+                }
+            }, 200);
+        });
+        
+        /*
+         * End of Post-Quantum Risk Evaluator
+         * 
+         * Copyright © 2025 ProteQC Limited. All rights reserved.
+         * Website: https://ProteQC.com
+         * 
+         * This tool integrates Mosca's Theorem (quantum threat timeline assessment)
+         * with the Learned Hand Formula (negligence risk analysis) to provide a
+         * comprehensive framework for evaluating post-quantum cryptography migration
+         * decisions.
+         * 
+         * Methodology developed by ProteQC Limited.
+         * 
+         * FREE for educational and non-commercial use with attribution.
+         * Commercial licensing: licensing@ProteQC.com
+         * 
+         * Use of this tool constitutes acceptance of license terms.
+         */
+    </script>
+</body>
+</html>
