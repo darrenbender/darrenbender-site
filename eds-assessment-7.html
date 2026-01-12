@@ -660,49 +660,110 @@
             color: var(--sage-dark);
         }
 
-        .term-tip::after {
-            content: attr(data-tip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 0.5rem 0.75rem;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            white-space: normal;
-            width: max-content;
-            max-width: 280px;
-            line-height: 1.4;
-            z-index: 100;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s, visibility 0.2s;
-            pointer-events: none;
-            text-align: left;
-            font-style: normal;
+        /* Desktop: hover tooltips */
+        @media (hover: hover) and (pointer: fine) {
+            .term-tip::after {
+                content: attr(data-tip);
+                position: absolute;
+                bottom: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #333;
+                color: white;
+                padding: 0.5rem 0.75rem;
+                border-radius: 4px;
+                font-size: 0.8rem;
+                white-space: normal;
+                width: max-content;
+                max-width: 280px;
+                line-height: 1.4;
+                z-index: 100;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.2s, visibility 0.2s;
+                pointer-events: none;
+                text-align: left;
+                font-style: normal;
+            }
+
+            .term-tip::before {
+                content: '';
+                position: absolute;
+                bottom: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                border: 6px solid transparent;
+                border-top-color: #333;
+                margin-bottom: -12px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.2s, visibility 0.2s;
+                z-index: 101;
+            }
+
+            .term-tip:hover::after,
+            .term-tip:hover::before {
+                opacity: 1;
+                visibility: visible;
+            }
         }
 
-        .term-tip::before {
-            content: '';
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 6px solid transparent;
-            border-top-color: #333;
-            margin-bottom: -12px;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s, visibility 0.2s;
-            z-index: 101;
+        /* Mobile: tap to show modal */
+        .term-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
         }
 
-        .term-tip:hover::after,
-        .term-tip:hover::before {
-            opacity: 1;
-            visibility: visible;
+        .term-modal-overlay.visible {
+            display: flex;
+        }
+
+        .term-modal {
+            background: white;
+            border-radius: 8px;
+            padding: 1.25rem;
+            max-width: 320px;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .term-modal-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--sage-dark);
+            font-size: 1rem;
+        }
+
+        .term-modal-content {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--ink);
+        }
+
+        .term-modal-close {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.75rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--slate);
+            line-height: 1;
+        }
+
+        .term-modal-close:hover {
+            color: var(--ink);
         }
 
         /* hEDS Filter */
@@ -1303,17 +1364,6 @@
                 padding: 0.3rem 0.5rem;
             }
 
-            .term-tip::after {
-                left: 0;
-                transform: none;
-                max-width: 250px;
-            }
-
-            .term-tip::before {
-                left: 1rem;
-                transform: none;
-            }
-
             .response-btn {
                 width: 32px;
                 height: 32px;
@@ -1596,6 +1646,15 @@
 <body>
     <!-- Site Navigation Bar -->
     <nav class="site-nav">
+
+    <!-- Term Definition Modal (for mobile) -->
+    <div class="term-modal-overlay" id="term-modal" onclick="closeTermModal(event)">
+        <div class="term-modal" onclick="event.stopPropagation()">
+            <button class="term-modal-close" onclick="closeTermModal()">&times;</button>
+            <div class="term-modal-title" id="term-modal-title"></div>
+            <div class="term-modal-content" id="term-modal-content"></div>
+        </div>
+    </div>
         <div class="site-nav-brand">
             <a href="https://darrenbender.com">← darrenbender.com</a>
         </div>
@@ -2417,6 +2476,38 @@
                 toc.classList.remove('visible');
             }
         });
+
+        // Term tooltip modal functions (for mobile)
+        function showTermModal(term, definition) {
+            document.getElementById('term-modal-title').textContent = term;
+            document.getElementById('term-modal-content').textContent = definition;
+            document.getElementById('term-modal').classList.add('visible');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeTermModal(event) {
+            if (!event || event.target === event.currentTarget) {
+                document.getElementById('term-modal').classList.remove('visible');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Set up term-tip click handlers for touch devices
+        function setupTermTipHandlers() {
+            const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+            
+            if (isTouchDevice) {
+                document.querySelectorAll('.term-tip').forEach(tip => {
+                    tip.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const term = this.textContent;
+                        const definition = this.getAttribute('data-tip');
+                        showTermModal(term, definition);
+                    });
+                });
+            }
+        }
 
         function toggleReferenceSection(sectionId) {
             const section = document.getElementById(sectionId);
@@ -3817,6 +3908,7 @@
         }
 
         initializeApp();
+        setupTermTipHandlers(); // Enable mobile tap for term tooltips
     </script>
 </body>
 </html>
