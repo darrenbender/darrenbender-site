@@ -1,0 +1,2502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ehlers-Danlos Syndrome Symptom Assessment</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #faf8f5;
+            --ink: #1a1a1a;
+            --sage: #7d9980;
+            --sage-light: #e8f0e9;
+            --sage-dark: #5a7a5d;
+            --coral: #c4786c;
+            --coral-light: #f5e8e6;
+            --amber: #d4a84b;
+            --amber-light: #faf3e3;
+            --slate: #64748b;
+            --border: #e2e0dc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: var(--cream);
+            color: var(--ink);
+            line-height: 1.6;
+            font-size: 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab-nav {
+            display: flex;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 2rem;
+            gap: 0;
+        }
+
+        .tab-btn {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--slate);
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--sage-dark);
+        }
+
+        .tab-btn.active {
+            color: var(--sage-dark);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--sage);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .source-card {
+            background: white;
+            border: 1px solid var(--border);
+            margin-bottom: 1rem;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .source-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .source-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--ink);
+        }
+
+        .source-type {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.2rem 0.5rem;
+            border-radius: 2px;
+            white-space: nowrap;
+        }
+
+        .type-official {
+            background: var(--sage-light);
+            color: var(--sage-dark);
+        }
+
+        .type-medical {
+            background: var(--amber-light);
+            color: #8b6914;
+        }
+
+        .type-research {
+            background: #e8e4f0;
+            color: #5a4a7a;
+        }
+
+        .type-reference {
+            background: #e4ecf0;
+            color: #4a6a7a;
+        }
+
+        .source-url {
+            font-size: 0.85rem;
+            color: var(--sage-dark);
+            text-decoration: none;
+            word-break: break-all;
+            display: block;
+            margin-bottom: 0.75rem;
+        }
+
+        .source-url:hover {
+            text-decoration: underline;
+        }
+
+        .source-categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .source-category-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            color: var(--slate);
+        }
+
+        .sources-intro {
+            margin-bottom: 1.5rem;
+            color: var(--slate);
+            font-size: 0.95rem;
+        }
+
+        .sources-intro p {
+            margin-bottom: 0.75rem;
+        }
+
+        .age-section {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .age-label {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        #age-input {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            font-size: 1rem;
+            width: 120px;
+            font-family: 'Source Sans 3', sans-serif;
+        }
+
+        #age-input:focus {
+            outline: none;
+            border-color: var(--sage);
+        }
+
+        .age-note {
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--slate);
+            padding: 0.75rem;
+            background: var(--sage-light);
+            border-left: 3px solid var(--sage);
+            display: none;
+        }
+
+        .age-note.visible {
+            display: block;
+        }
+
+        .sex-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .sex-option {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .sex-option input[type="radio"] {
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 420px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        h1 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            color: var(--ink);
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--slate);
+            font-weight: 300;
+        }
+
+        .disclaimer {
+            background: var(--coral-light);
+            border-left: 3px solid var(--coral);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: #5a4a47;
+        }
+
+        .disclaimer strong {
+            display: block;
+            margin-bottom: 0.25rem;
+            color: var(--coral);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: white;
+            padding: 1rem 1.5rem;
+            border: 1px solid var(--border);
+            flex: 1;
+            min-width: 140px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.75rem;
+            color: var(--sage-dark);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--slate);
+        }
+
+        .category {
+            margin-bottom: 1.5rem;
+            background: white;
+            border: 1px solid var(--border);
+        }
+
+        .category-header {
+            padding: 1rem 1.5rem;
+            background: var(--sage-light);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .category-header:hover {
+            background: #dce8dd;
+        }
+
+        .category-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .category-count {
+            background: var(--sage);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 2px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .category-items {
+            padding: 0;
+            display: none;
+        }
+
+        .category.open .category-items {
+            display: block;
+        }
+
+        .category-header::after {
+            content: '+';
+            font-size: 1.25rem;
+            color: var(--sage-dark);
+            font-weight: 300;
+        }
+
+        .category.open .category-header::after {
+            content: '−';
+        }
+
+        .symptom-item {
+            padding: 0.875rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            transition: background 0.15s;
+        }
+
+        .symptom-item:last-child {
+            border-bottom: none;
+        }
+
+        .symptom-item:hover {
+            background: #fdfcfb;
+        }
+
+        .symptom-item.checked {
+            background: var(--sage-light);
+        }
+
+        .symptom-item input[type="checkbox"] {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border);
+            border-radius: 2px;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: all 0.15s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .symptom-item input[type="checkbox"]:checked {
+            background: var(--sage);
+            border-color: var(--sage);
+        }
+
+        .symptom-item input[type="checkbox"]:checked::after {
+            content: '✓';
+            display: block;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            line-height: 14px;
+        }
+
+        .symptom-label {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .symptom-name {
+            font-weight: 500;
+            display: block;
+        }
+
+        .symptom-desc {
+            font-size: 0.85rem;
+            color: var(--slate);
+            margin-top: 0.15rem;
+        }
+
+        .symptom-tag {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.15rem 0.4rem;
+            border-radius: 2px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .tag-criteria {
+            background: var(--amber-light);
+            color: #8b6914;
+        }
+
+        .tag-heds {
+            background: var(--sage-light);
+            color: var(--sage-dark);
+        }
+
+        .assessment-panel {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            border-top: 2px solid var(--sage);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .assessment-panel.collapsed {
+            padding: 1rem 1.5rem;
+        }
+
+        .assessment-panel.collapsed .assessment-content {
+            display: none;
+        }
+
+        .assessment-content {
+            transition: opacity 0.2s ease;
+        }
+
+        .collapse-btn {
+            background: none;
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: var(--slate);
+            transition: all 0.2s;
+            margin-right: 0.5rem;
+        }
+
+        .collapse-btn:hover {
+            border-color: var(--sage);
+            color: var(--sage-dark);
+        }
+
+        .assessment-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .assessment-panel.collapsed .assessment-title {
+            margin-bottom: 0;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--sage);
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .assessment-result {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+
+        .result-low {
+            background: var(--sage-light);
+            border: 1px solid var(--sage);
+        }
+
+        .result-moderate {
+            background: var(--amber-light);
+            border: 1px solid var(--amber);
+        }
+
+        .result-high {
+            background: var(--coral-light);
+            border: 1px solid var(--coral);
+        }
+
+        .result-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-text {
+            font-size: 0.9rem;
+            color: var(--slate);
+        }
+
+        .criteria-breakdown {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .criteria-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            font-size: 0.85rem;
+        }
+
+        .criteria-met {
+            color: var(--sage-dark);
+            font-weight: 500;
+        }
+
+        .criteria-unmet {
+            color: var(--slate);
+        }
+
+        .reset-btn {
+            background: none;
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: var(--slate);
+            transition: all 0.2s;
+        }
+
+        .reset-btn:hover {
+            border-color: var(--coral);
+            color: var(--coral);
+        }
+
+        .intro-text {
+            margin-bottom: 2rem;
+            color: var(--slate);
+            font-size: 0.95rem;
+        }
+
+        .intro-text p {
+            margin-bottom: 0.75rem;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem 1rem 200px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .stats-bar {
+                flex-direction: column;
+            }
+            
+            .stat {
+                min-width: 100%;
+            }
+
+            .category-header {
+                padding: 0.875rem 1rem;
+            }
+
+            .category-title {
+                font-size: 1rem;
+            }
+
+            .symptom-item {
+                padding: 0.75rem 1rem;
+            }
+
+            .symptom-name {
+                font-size: 0.95rem;
+            }
+
+            .symptom-desc {
+                font-size: 0.8rem;
+            }
+
+            .symptom-tag {
+                display: block;
+                margin-left: 0;
+                margin-top: 0.25rem;
+                width: fit-content;
+            }
+
+            .assessment-panel {
+                padding: 1rem;
+            }
+
+            .assessment-title {
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: flex-start;
+            }
+
+            .assessment-title > div {
+                display: flex;
+                gap: 0.5rem;
+                width: 100%;
+            }
+
+            .collapse-btn, .reset-btn {
+                flex: 1;
+                text-align: center;
+            }
+
+            .criteria-item {
+                font-size: 0.8rem;
+            }
+
+            .disclaimer {
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .intro-text {
+                font-size: 0.9rem;
+            }
+
+            .symptom-item input[type="checkbox"] {
+                width: 24px;
+                height: 24px;
+                margin-top: 0;
+            }
+
+            .symptom-item input[type="checkbox"]:checked::after {
+                font-size: 16px;
+                line-height: 20px;
+            }
+
+            .tab-btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .source-card {
+                padding: 1rem;
+            }
+
+            .source-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .source-title {
+                font-size: 0.95rem;
+            }
+
+            .source-category-tag {
+                font-size: 0.7rem;
+            }
+
+            .sex-options {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .filter-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            #source-filter {
+                width: 100%;
+            }
+
+            .monitoring-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .monitoring-item {
+                padding: 1rem;
+            }
+
+            .monitoring-title {
+                font-size: 0.95rem;
+            }
+
+            .export-buttons {
+                flex-direction: column;
+            }
+
+            .export-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .filter-section {
+            background: white;
+            border: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        #source-filter {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            font-size: 0.95rem;
+            font-family: 'Source Sans 3', sans-serif;
+            background: white;
+            cursor: pointer;
+            min-width: 200px;
+        }
+
+        #source-filter:focus {
+            outline: none;
+            border-color: var(--sage);
+        }
+
+        .filter-count {
+            font-size: 0.85rem;
+            color: var(--slate);
+        }
+
+        .source-card.hidden {
+            display: none;
+        }
+
+        .monitoring-section {
+            background: white;
+            border: 1px solid var(--border);
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .monitoring-header {
+            padding: 1.25rem 1.5rem;
+            background: var(--coral-light);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .monitoring-header h3 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--ink);
+            margin-bottom: 0.5rem;
+        }
+
+        .monitoring-header p {
+            font-size: 0.9rem;
+            color: var(--slate);
+        }
+
+        .monitoring-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1px;
+            background: var(--border);
+        }
+
+        .monitoring-item {
+            background: white;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .monitoring-title {
+            font-weight: 600;
+            color: var(--ink);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .monitoring-icon {
+            font-size: 1.1rem;
+        }
+
+        .monitoring-desc {
+            font-size: 0.85rem;
+            color: var(--slate);
+            margin-bottom: 0.5rem;
+        }
+
+        .monitoring-action {
+            font-size: 0.8rem;
+            color: var(--sage-dark);
+            font-weight: 500;
+        }
+
+        .export-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .export-label {
+            font-weight: 500;
+            color: var(--ink);
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .export-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .export-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.85rem;
+            color: var(--ink);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .export-btn:hover {
+            background: var(--sage-light);
+            border-color: var(--sage);
+        }
+
+        .export-btn:active {
+            transform: scale(0.98);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--ink);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .toast.visible {
+            opacity: 1;
+        }
+
+        @media print {
+            body {
+                background: white;
+                font-size: 12pt;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+
+            .tab-nav, .assessment-panel, .collapse-btn, .reset-btn, 
+            .export-section, .filter-section, .disclaimer {
+                display: none !important;
+            }
+
+            .tab-content {
+                display: block !important;
+            }
+
+            #tab-sources, #tab-monitoring {
+                display: none !important;
+            }
+
+            .print-header {
+                display: block !important;
+                margin-bottom: 1rem;
+                padding-bottom: 1rem;
+                border-bottom: 2px solid #333;
+            }
+
+            .print-summary {
+                display: block !important;
+                background: #f5f5f5;
+                padding: 1rem;
+                margin-bottom: 1rem;
+                border: 1px solid #ccc;
+            }
+
+            .category {
+                break-inside: avoid;
+                border: 1px solid #ccc;
+                margin-bottom: 0.5rem;
+            }
+
+            .category-header {
+                background: #f0f0f0 !important;
+                padding: 0.5rem 1rem;
+            }
+
+            .category-content {
+                display: block !important;
+                max-height: none !important;
+                padding: 0.5rem 1rem;
+            }
+
+            .symptom-item:not(.checked) {
+                display: none;
+            }
+
+            .symptom-item.checked {
+                padding: 0.25rem 0;
+                border: none;
+            }
+
+            .symptom-checkbox {
+                display: none;
+            }
+
+            .symptom-tag {
+                font-size: 9pt;
+                padding: 1px 4px;
+            }
+
+            header h1 {
+                font-size: 18pt;
+            }
+
+            .age-section {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        .print-header, .print-summary {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Ehlers-Danlos Syndrome</h1>
+            <p class="subtitle">Comprehensive Symptom Assessment Tool</p>
+        </header>
+
+        <div class="disclaimer">
+            <strong>Educational Purposes Only</strong>
+            This tool is provided for informational and educational purposes only. It is not a diagnostic instrument and cannot replace professional medical evaluation. Ehlers-Danlos syndromes require clinical assessment by qualified healthcare providers, often including geneticists and specialists familiar with connective tissue disorders. If you suspect you may have EDS, please consult with a medical professional.
+        </div>
+
+        <nav class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('checklist')">Symptom Checklist</button>
+            <button class="tab-btn" onclick="switchTab('sources')">Sources & References</button>
+            <button class="tab-btn" onclick="switchTab('monitoring')">Health Monitoring</button>
+        </nav>
+
+        <div id="tab-checklist" class="tab-content active">
+
+        <div class="intro-text">
+            <p>Ehlers-Danlos syndromes (EDS) are a group of inherited connective tissue disorders affecting collagen production and structure. This checklist focuses primarily on <strong>hypermobile EDS (hEDS)</strong>, the most common subtype, while including symptoms relevant to other EDS variants.</p>
+            <p>Symptoms marked with <span class="symptom-tag tag-criteria">2017 Criteria</span> are specifically referenced in the 2017 hEDS diagnostic criteria. Those marked <span class="symptom-tag tag-heds">hEDS Emphasis</span> are particularly prominent in hypermobile EDS.</p>
+        </div>
+
+        <div class="age-section">
+            <label for="age-input" class="age-label">Your Age (years)</label>
+            <input type="number" id="age-input" min="1" max="120" placeholder="Enter age" onchange="updateAgeContext()">
+            <p class="age-note" id="age-note"></p>
+        </div>
+
+        <div class="age-section">
+            <label class="age-label">Sex Assigned at Birth</label>
+            <div class="sex-options">
+                <label class="sex-option">
+                    <input type="radio" name="sex" value="female" onchange="updateSexContext()"> Female
+                </label>
+                <label class="sex-option">
+                    <input type="radio" name="sex" value="male" onchange="updateSexContext()"> Male
+                </label>
+                <label class="sex-option">
+                    <input type="radio" name="sex" value="intersex" onchange="updateSexContext()"> Intersex
+                </label>
+                <label class="sex-option">
+                    <input type="radio" name="sex" value="prefer-not" onchange="updateSexContext()"> Prefer not to say
+                </label>
+            </div>
+            <p class="age-note" id="sex-note"></p>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat">
+                <span class="stat-number" id="checked-count">0</span>
+                <span class="stat-label">Symptoms Checked</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number" id="total-count">0</span>
+                <span class="stat-label">Total Symptoms</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number" id="criteria-count">0/12</span>
+                <span class="stat-label">Criteria Features</span>
+            </div>
+        </div>
+
+        <div id="categories"></div>
+
+        <div class="assessment-panel collapsed" id="assessment-panel">
+            <div class="assessment-title">
+                <span>Assessment Summary</span>
+                <div>
+                    <button class="collapse-btn" onclick="togglePanel()">▲ Expand</button>
+                    <button class="reset-btn" onclick="resetAll()">Reset All</button>
+                </div>
+            </div>
+            <div class="assessment-content">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+                <div id="assessment-result"></div>
+                <div class="criteria-breakdown" id="criteria-breakdown"></div>
+                <div class="export-section">
+                    <div class="export-label">Export Your Results:</div>
+                    <div class="export-buttons">
+                        <button class="export-btn" onclick="exportToPDF()">📄 PDF Report</button>
+                        <button class="export-btn" onclick="exportToCSV()">📊 CSV Spreadsheet</button>
+                        <button class="export-btn" onclick="exportToEmail()">✉️ Email Summary</button>
+                        <button class="export-btn" onclick="copyToClipboard()">📋 Copy to Clipboard</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div><!-- end tab-checklist -->
+
+        <div id="tab-sources" class="tab-content">
+            <div class="sources-intro">
+                <p>The following sources were used to compile this symptom checklist. Each source has been mapped to the symptom categories it primarily addresses. These references provide authoritative information for those seeking to learn more about Ehlers-Danlos syndromes.</p>
+                <p>Sources are categorized by type: <span class="source-type type-official">Official EDS Organization</span> <span class="source-type type-medical">Medical Institution</span> <span class="source-type type-research">Research/Academic</span> <span class="source-type type-reference">Reference</span></p>
+            </div>
+
+            <div class="filter-section">
+                <label class="filter-label">Filter by Category:</label>
+                <select id="source-filter" onchange="filterSources()">
+                    <option value="all">All Categories</option>
+                    <option value="Musculoskeletal">Musculoskeletal Features</option>
+                    <option value="Skin">Skin & Soft Tissue</option>
+                    <option value="Cardiovascular">Cardiovascular & Autonomic</option>
+                    <option value="Gastrointestinal">Gastrointestinal</option>
+                    <option value="Genitourinary">Genitourinary & Pelvic</option>
+                    <option value="Neurological">Neurological & Pain</option>
+                    <option value="Orofacial">Orofacial & Dental</option>
+                    <option value="Eyes">Eyes & Vision</option>
+                    <option value="Allergic">Allergic & Immune Phenomena</option>
+                    <option value="Psychological">Psychological & Behavioral</option>
+                    <option value="Neurodevelopmental">Neurodevelopmental Comorbidities</option>
+                    <option value="Autism">Autism/ADHD Comorbidity</option>
+                    <option value="Genetics">Genetics & Inheritance</option>
+                    <option value="Gender">Sex/Gender Considerations</option>
+                    <option value="Criteria">2017 Diagnostic Criteria</option>
+                    <option value="POTS">POTS & Dysautonomia</option>
+                    <option value="MCAS">MCAS & Mast Cell</option>
+                    <option value="Monitoring">Health Monitoring</option>
+                </select>
+                <span class="filter-count" id="filter-count"></span>
+            </div>
+
+            <div id="sources-container">
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">NHS – Ehlers-Danlos Syndromes</span>
+                    <span class="source-type type-medical">Medical Institution</span>
+                </div>
+                <a class="source-url" href="https://www.nhs.uk/conditions/ehlers-danlos-syndromes/" target="_blank" rel="noopener">https://www.nhs.uk/conditions/ehlers-danlos-syndromes/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Musculoskeletal Features</span>
+                    <span class="source-category-tag">Skin & Soft Tissue</span>
+                    <span class="source-category-tag">Cardiovascular & Autonomic</span>
+                    <span class="source-category-tag">Gastrointestinal</span>
+                    <span class="source-category-tag">Genitourinary & Pelvic</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">Xcode Life – 23 Signs of Ehlers-Danlos Syndrome</span>
+                    <span class="source-type type-reference">Reference</span>
+                </div>
+                <a class="source-url" href="https://www.xcode.life/carrier-status/23-signs-ehlers-danlos-syndrome/" target="_blank" rel="noopener">https://www.xcode.life/carrier-status/23-signs-ehlers-danlos-syndrome/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Psychological & Behavioral</span>
+                    <span class="source-category-tag">Neurodevelopmental Comorbidities</span>
+                    <span class="source-category-tag">Allergic & Immune Phenomena</span>
+                    <span class="source-category-tag">Neurological & Pain</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">Dr. Jim Harris – 23 Signs of Ehlers-Danlos Syndrome</span>
+                    <span class="source-type type-medical">Medical Institution</span>
+                </div>
+                <a class="source-url" href="https://www.jimharrismd.com/articles/23-signs-ehlers-danlos-syndrome" target="_blank" rel="noopener">https://www.jimharrismd.com/articles/23-signs-ehlers-danlos-syndrome</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Musculoskeletal Features</span>
+                    <span class="source-category-tag">Skin & Soft Tissue</span>
+                    <span class="source-category-tag">Orofacial & Dental</span>
+                    <span class="source-category-tag">Other Features</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">Medical News Today – Ehlers-Danlos Syndrome</span>
+                    <span class="source-type type-reference">Reference</span>
+                </div>
+                <a class="source-url" href="https://www.medicalnewstoday.com/articles/325779" target="_blank" rel="noopener">https://www.medicalnewstoday.com/articles/325779</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Psychological & Behavioral</span>
+                    <span class="source-category-tag">Neurological & Pain</span>
+                    <span class="source-category-tag">Gastrointestinal</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">Weill Cornell Neurosurgery – EDS Symptoms and Signs</span>
+                    <span class="source-type type-medical">Medical Institution</span>
+                </div>
+                <a class="source-url" href="https://neurosurgery.weillcornell.org/condition/ehlers-danlos-syndrome-eds/symptoms-and-signs-ehlers-danlos-syndrome" target="_blank" rel="noopener">https://neurosurgery.weillcornell.org/condition/ehlers-danlos-syndrome-eds/symptoms-and-signs-ehlers-danlos-syndrome</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Musculoskeletal Features</span>
+                    <span class="source-category-tag">Skin & Soft Tissue</span>
+                    <span class="source-category-tag">Neurological & Pain</span>
+                    <span class="source-category-tag">Eyes & Vision</span>
+                    <span class="source-category-tag">Genitourinary & Pelvic</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">Wikipedia – Ehlers-Danlos Syndrome</span>
+                    <span class="source-type type-reference">Reference</span>
+                </div>
+                <a class="source-url" href="https://en.wikipedia.org/wiki/Ehlers%E2%80%93Danlos_syndrome" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Ehlers–Danlos_syndrome</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Musculoskeletal Features</span>
+                    <span class="source-category-tag">Skin & Soft Tissue</span>
+                    <span class="source-category-tag">Cardiovascular & Autonomic</span>
+                    <span class="source-category-tag">Gastrointestinal</span>
+                    <span class="source-category-tag">Allergic & Immune Phenomena</span>
+                    <span class="source-category-tag">Other Features</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">The Ehlers-Danlos Society – GP Toolkit</span>
+                    <span class="source-type type-official">Official EDS Organization</span>
+                </div>
+                <a class="source-url" href="https://gptoolkit.ehlers-danlos.org" target="_blank" rel="noopener">https://gptoolkit.ehlers-danlos.org</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Cardiovascular & Autonomic</span>
+                    <span class="source-category-tag">Musculoskeletal Features</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">GeneReviews (NCBI) – Hypermobile Ehlers-Danlos Syndrome</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <a class="source-url" href="https://www.ncbi.nlm.nih.gov/books/NBK1279/" target="_blank" rel="noopener">https://www.ncbi.nlm.nih.gov/books/NBK1279/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Musculoskeletal Features</span>
+                    <span class="source-category-tag">2017 Diagnostic Criteria</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">The Ehlers-Danlos Society – hEDS Information</span>
+                    <span class="source-type type-official">Official EDS Organization</span>
+                </div>
+                <a class="source-url" href="https://www.ehlers-danlos.com/heds/" target="_blank" rel="noopener">https://www.ehlers-danlos.com/heds/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Musculoskeletal Features</span>
+                    <span class="source-category-tag">Skin & Soft Tissue</span>
+                    <span class="source-category-tag">hEDS-Specific Features</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">Verywell Health – Ehlers-Danlos Syndrome Overview</span>
+                    <span class="source-type type-reference">Reference</span>
+                </div>
+                <a class="source-url" href="https://www.verywellhealth.com/ehlers-danlos-syndrome-overview-4782662" target="_blank" rel="noopener">https://www.verywellhealth.com/ehlers-danlos-syndrome-overview-4782662</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Skin & Soft Tissue</span>
+                    <span class="source-category-tag">General Overview</span>
+                </div>
+            </div>
+
+            <div class="source-card" style="border-left: 3px solid #5a4a7a;">
+                <div class="source-header">
+                    <span class="source-title">Autism/ADHD Comorbidity Research</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--slate); margin-bottom: 0.75rem;">The following sources document the established comorbidity between EDS/hEDS and neurodevelopmental conditions:</p>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">PMC – The Relationship between Autism and Ehlers-Danlos Syndromes/Hypermobility Spectrum Disorders</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <a class="source-url" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7711487/" target="_blank" rel="noopener">https://pmc.ncbi.nlm.nih.gov/articles/PMC7711487/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Autism Comorbidity</span>
+                    <span class="source-category-tag">Genetic Overlap</span>
+                    <span class="source-category-tag">Shared Phenotypes</span>
+                    <span class="source-category-tag">Immune Involvement</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">PMC – Prevalence of ADHD and Autism Spectrum Disorder in Children with HSD or hEDS</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <a class="source-url" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7882457/" target="_blank" rel="noopener">https://pmc.ncbi.nlm.nih.gov/articles/PMC7882457/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">ADHD Prevalence</span>
+                    <span class="source-category-tag">Autism Prevalence</span>
+                    <span class="source-category-tag">Pediatric Research</span>
+                    <span class="source-category-tag">Swedish Registry Study</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">PMC – Joint Hypermobility Links Neurodivergence to Dysautonomia and Pain</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <a class="source-url" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8847158/" target="_blank" rel="noopener">https://pmc.ncbi.nlm.nih.gov/articles/PMC8847158/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">ADHD Association</span>
+                    <span class="source-category-tag">Autism Association</span>
+                    <span class="source-category-tag">Dysautonomia</span>
+                    <span class="source-category-tag">Population Study (7.4x/5.6x Risk)</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">Autism Research Institute – EDS and Autism Relationship</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <a class="source-url" href="https://autism.org/researchers-have-identified-a-relationship-between-ehlers-danlos-syndrome-and-autism/" target="_blank" rel="noopener">https://autism.org/researchers-have-identified-a-relationship-between-ehlers-danlos-syndrome-and-autism/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Maternal EDS Risk Factor</span>
+                    <span class="source-category-tag">Autism Comorbidity</span>
+                    <span class="source-category-tag">Immune Factors</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">SEDS Connective – Ehlers-Danlos Syndromes Links to Autism and ADHD</span>
+                    <span class="source-type type-official">Official EDS Organization</span>
+                </div>
+                <a class="source-url" href="https://www.sedsconnective.org/post/ehlers-danlos-syndromes-links-to-autism-and-adhd" target="_blank" rel="noopener">https://www.sedsconnective.org/post/ehlers-danlos-syndromes-links-to-autism-and-adhd</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">7.4x Autism Risk</span>
+                    <span class="source-category-tag">5.6x ADHD Risk</span>
+                    <span class="source-category-tag">Sibling Risk Data</span>
+                    <span class="source-category-tag">Cederlöf 2016 Study</span>
+                </div>
+            </div>
+
+            <div class="source-card" style="border-left: 3px solid var(--amber);">
+                <div class="source-header">
+                    <span class="source-title">Genetics & Inheritance Sources</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--slate); margin-bottom: 0.75rem;">The following sources document EDS inheritance patterns and family history significance:</p>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">The Ehlers-Danlos Society – Genetics and Inheritance of EDS and HSD</span>
+                    <span class="source-type type-official">Official EDS Organization</span>
+                </div>
+                <a class="source-url" href="https://www.ehlers-danlos.com/genetics-and-inheritance/" target="_blank" rel="noopener">https://www.ehlers-danlos.com/genetics-and-inheritance/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Inheritance Patterns</span>
+                    <span class="source-category-tag">Genetic Testing</span>
+                    <span class="source-category-tag">hEDS Genetics</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">GeneReviews (NCBI) – Hypermobile Ehlers-Danlos Syndrome (Updated 2024)</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <a class="source-url" href="https://www.ncbi.nlm.nih.gov/books/NBK1279/" target="_blank" rel="noopener">https://www.ncbi.nlm.nih.gov/books/NBK1279/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Autosomal Dominant Inheritance</span>
+                    <span class="source-category-tag">50% Inheritance Risk</span>
+                    <span class="source-category-tag">2017 Diagnostic Criteria</span>
+                    <span class="source-category-tag">Family History Criterion</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">MedlinePlus Genetics – Ehlers-Danlos Syndrome</span>
+                    <span class="source-type type-medical">Medical Institution</span>
+                </div>
+                <a class="source-url" href="https://medlineplus.gov/genetics/condition/ehlers-danlos-syndrome/" target="_blank" rel="noopener">https://medlineplus.gov/genetics/condition/ehlers-danlos-syndrome/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Inheritance Patterns by Type</span>
+                    <span class="source-category-tag">Genetic Causes</span>
+                    <span class="source-category-tag">De Novo Mutations</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">Medscape – Genetics of Ehlers-Danlos Syndrome</span>
+                    <span class="source-type type-medical">Medical Institution</span>
+                </div>
+                <a class="source-url" href="https://emedicine.medscape.com/article/943567-overview" target="_blank" rel="noopener">https://emedicine.medscape.com/article/943567-overview</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Genetic Counseling</span>
+                    <span class="source-category-tag">Family Screening</span>
+                    <span class="source-category-tag">Recurrence Risks</span>
+                </div>
+            </div>
+
+            <div class="source-card" style="border-left: 3px solid var(--coral);">
+                <div class="source-header">
+                    <span class="source-title">Sex/Gender Considerations Research</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--slate); margin-bottom: 0.75rem;">The following sources document sex and gender disparities in EDS diagnosis and presentation:</p>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">The Ehlers-Danlos Society – Accelerating Action for Women with EDS and HSD</span>
+                    <span class="source-type type-official">Official EDS Organization</span>
+                </div>
+                <a class="source-url" href="https://www.ehlers-danlos.com/iwd2025/" target="_blank" rel="noopener">https://www.ehlers-danlos.com/iwd2025/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">70% Female Prevalence</span>
+                    <span class="source-category-tag">Estrogen Influence</span>
+                    <span class="source-category-tag">Diagnostic Delay</span>
+                    <span class="source-category-tag">Gender Bias in Healthcare</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">BMJ Open – Diagnosed Prevalence of EDS and HSD in Wales, UK</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <a class="source-url" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6858200/" target="_blank" rel="noopener">https://pmc.ncbi.nlm.nih.gov/articles/PMC6858200/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">70/30 Female/Male Split</span>
+                    <span class="source-category-tag">9-Year Diagnostic Gap</span>
+                    <span class="source-category-tag">Population Study</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">Orphanet Journal – Gynecologic Symptoms in 386 Women with hEDS</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <a class="source-url" href="https://link.springer.com/article/10.1186/s13023-016-0511-2" target="_blank" rel="noopener">https://link.springer.com/article/10.1186/s13023-016-0511-2</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Menorrhagia (76%)</span>
+                    <span class="source-category-tag">Dysmenorrhea (72%)</span>
+                    <span class="source-category-tag">Dyspareunia (43%)</span>
+                    <span class="source-category-tag">Hormonal Modulation</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">PMC – Prevalence of hEDS at a Gender-Affirming Primary Care Clinic</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <a class="source-url" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11755520/" target="_blank" rel="noopener">https://pmc.ncbi.nlm.nih.gov/articles/PMC11755520/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">2.7% Prevalence in TGD Population</span>
+                    <span class="source-category-tag">Gender-Diverse Research</span>
+                    <span class="source-category-tag">Comorbidity Data</span>
+                </div>
+            </div>
+
+            <div class="source-card" style="border-left: 3px solid #64748b;">
+                <div class="source-header">
+                    <span class="source-title">Health Monitoring & Comorbidity Sources</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--slate); margin-bottom: 0.75rem;">The following sources inform the Health Monitoring recommendations:</p>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">NCBI StatPearls – Ehlers-Danlos Syndrome</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <a class="source-url" href="https://www.ncbi.nlm.nih.gov/books/NBK549814/" target="_blank" rel="noopener">https://www.ncbi.nlm.nih.gov/books/NBK549814/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Cardiovascular Screening</span>
+                    <span class="source-category-tag">Monitoring Recommendations</span>
+                    <span class="source-category-tag">Surgical Considerations</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">PMC – Cardiovascular Manifestations of hEDS and HSD</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <a class="source-url" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9677229/" target="_blank" rel="noopener">https://pmc.ncbi.nlm.nih.gov/articles/PMC9677229/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Cardiovascular</span>
+                    <span class="source-category-tag">Mitral Valve Prolapse</span>
+                    <span class="source-category-tag">Aortic Dilation</span>
+                    <span class="source-category-tag">Echocardiogram</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">The EDS Clinic – EDS and Comorbid Conditions</span>
+                    <span class="source-type type-medical">Medical Institution</span>
+                </div>
+                <a class="source-url" href="https://www.eds.clinic/articles/ehlers-danlos-syndrome-comorbidities" target="_blank" rel="noopener">https://www.eds.clinic/articles/ehlers-danlos-syndrome-comorbidities</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Comorbidities</span>
+                    <span class="source-category-tag">Thyroid</span>
+                    <span class="source-category-tag">Gastrointestinal</span>
+                    <span class="source-category-tag">Neurological</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">The EDS Clinic – EDS and POTS</span>
+                    <span class="source-type type-medical">Medical Institution</span>
+                </div>
+                <a class="source-url" href="https://www.eds.clinic/articles/the-link-betwen-eds-and-pots" target="_blank" rel="noopener">https://www.eds.clinic/articles/the-link-betwen-eds-and-pots</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">POTS</span>
+                    <span class="source-category-tag">Dysautonomia</span>
+                    <span class="source-category-tag">Cardiovascular Screening</span>
+                    <span class="source-category-tag">MCAS</span>
+                </div>
+            </div>
+
+            <div class="source-card">
+                <div class="source-header">
+                    <span class="source-title">AGA Clinical Practice Update – GI Manifestations in hEDS</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <a class="source-url" href="https://pubmed.ncbi.nlm.nih.gov/40387691/" target="_blank" rel="noopener">https://pubmed.ncbi.nlm.nih.gov/40387691/</a>
+                <div class="source-categories">
+                    <span class="source-category-tag">Gastrointestinal</span>
+                    <span class="source-category-tag">POTS Testing</span>
+                    <span class="source-category-tag">MCAS Testing</span>
+                    <span class="source-category-tag">Best Practice</span>
+                </div>
+            </div>
+
+            <div class="source-card" style="border-left: 3px solid var(--sage); background: var(--sage-light);">
+                <div class="source-header">
+                    <span class="source-title">Additional Supplementary Sources</span>
+                    <span class="source-type type-research">Research/Academic</span>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--slate); margin-bottom: 0.75rem;">The following symptom additions were supplemented based on current clinical literature and EDS specialist consensus:</p>
+                <div class="source-categories">
+                    <span class="source-category-tag">Raynaud's Phenomenon</span>
+                    <span class="source-category-tag">Tinnitus</span>
+                    <span class="source-category-tag">Sleep Disorders</span>
+                    <span class="source-category-tag">Dental Manifestations</span>
+                    <span class="source-category-tag">Vocal Cord Issues</span>
+                    <span class="source-category-tag">Interstitial Cystitis</span>
+                    <span class="source-category-tag">Dyspraxia/DCD</span>
+                </div>
+            </div>
+            </div><!-- end sources-container -->
+        </div><!-- end tab-sources -->
+
+        <div id="tab-monitoring" class="tab-content">
+            <div class="sources-intro">
+                <p>An EDS diagnosis provides valuable clinical context that can guide proactive health monitoring. While hEDS itself is not life-threatening, awareness of associated conditions allows for earlier detection and intervention. Discuss these considerations with your healthcare providers.</p>
+            </div>
+
+            <div class="monitoring-section">
+                <div class="monitoring-header">
+                    <h3>Cardiovascular Monitoring</h3>
+                    <p>Connective tissue abnormalities can affect heart valves and blood vessels</p>
+                </div>
+                <div class="monitoring-grid">
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">🫀</span> Baseline Echocardiogram</div>
+                        <div class="monitoring-desc">Mitral valve prolapse occurs in ~7-20% of hEDS patients; mild aortic root dilation in ~15-20%. Most findings are mild and don't require intervention.</div>
+                        <div class="monitoring-action">→ Consider baseline echo, especially with family history of cardiac issues or symptoms like palpitations</div>
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">💓</span> POTS Screening</div>
+                        <div class="monitoring-desc">Approximately 80% of hEDS patients experience POTS symptoms. Diagnosis involves heart rate increase ≥30 bpm upon standing.</div>
+                        <div class="monitoring-action">→ If experiencing dizziness, palpitations, or fainting, request tilt table test or active stand test</div>
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">🩺</span> Blood Pressure Monitoring</div>
+                        <div class="monitoring-desc">Labile blood pressure and orthostatic hypotension are common. Hypertension should be managed aggressively given vessel fragility.</div>
+                        <div class="monitoring-action">→ Regular BP monitoring; consider home monitoring if symptomatic</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="monitoring-section">
+                <div class="monitoring-header">
+                    <h3>Gastrointestinal Monitoring</h3>
+                    <p>GI dysfunction is extremely common in hEDS and often underdiagnosed</p>
+                </div>
+                <div class="monitoring-grid">
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">🔬</span> Functional GI Disorders</div>
+                        <div class="monitoring-desc">IBS, GERD, gastroparesis, and dysmotility are frequently reported. Symptoms may be attributed to anxiety if EDS is unknown.</div>
+                        <div class="monitoring-action">→ Consider gastric emptying study if early satiety/nausea; endoscopy if refractory GERD</div>
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">⚠️</span> Hiatal Hernia Risk</div>
+                        <div class="monitoring-desc">Connective tissue weakness increases hernia risk throughout the body, including hiatal hernias contributing to reflux.</div>
+                        <div class="monitoring-action">→ Upper GI series or endoscopy if persistent reflux despite treatment</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="monitoring-section">
+                <div class="monitoring-header">
+                    <h3>Neurological & Mental Health</h3>
+                    <p>Both structural and functional neurological concerns occur at elevated rates</p>
+                </div>
+                <div class="monitoring-grid">
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">🧠</span> ADHD & Autism Screening</div>
+                        <div class="monitoring-desc">EDS patients are 7.4x more likely to be autistic and 5.6x more likely to have ADHD than the general population.</div>
+                        <div class="monitoring-action">→ If experiencing attention, executive function, or social communication difficulties, consider neuropsychological evaluation</div>
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">💭</span> Anxiety & Depression</div>
+                        <div class="monitoring-desc">Elevated rates of anxiety disorders, depression, and health anxiety—often linked to chronic pain and diagnostic delays.</div>
+                        <div class="monitoring-action">→ Mental health screening; consider therapy approaches that address chronic illness</div>
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">😴</span> Sleep Disorders</div>
+                        <div class="monitoring-desc">Insomnia, sleep apnea, and unrefreshing sleep are common. Sleep issues compound fatigue and pain.</div>
+                        <div class="monitoring-action">→ Sleep study if snoring, apnea witnessed, or persistent fatigue despite adequate sleep time</div>
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">🤕</span> Craniocervical Considerations</div>
+                        <div class="monitoring-desc">A subset of patients experience craniocervical instability (CCI) or Chiari malformation. Symptoms include severe headaches, neurological deficits.</div>
+                        <div class="monitoring-action">→ Upright MRI if severe positional headaches, numbness, or coordination changes</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="monitoring-section">
+                <div class="monitoring-header">
+                    <h3>Immune & Allergic Considerations</h3>
+                    <p>Mast cell activation and immune dysfunction are increasingly recognized</p>
+                </div>
+                <div class="monitoring-grid">
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">🔴</span> MCAS Screening</div>
+                        <div class="monitoring-desc">Mast Cell Activation Syndrome causes flushing, hives, GI upset, and multi-system reactions. Present in ~31% of those with both POTS and hEDS.</div>
+                        <div class="monitoring-action">→ Serum tryptase during symptom flare vs. baseline; referral to allergist/immunologist if suspected</div>
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">🦋</span> Thyroid Disorders</div>
+                        <div class="monitoring-desc">Hypothyroidism, hyperthyroidism, and Hashimoto's thyroiditis are frequently reported in EDS, exacerbating fatigue.</div>
+                        <div class="monitoring-action">→ Thyroid panel (TSH, free T4, thyroid antibodies) if fatigue, temperature intolerance, or weight changes</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="monitoring-section">
+                <div class="monitoring-header">
+                    <h3>Musculoskeletal & Surgical Considerations</h3>
+                    <p>Tissue fragility affects injury risk, healing, and surgical planning</p>
+                </div>
+                <div class="monitoring-grid">
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">🦴</span> Early Osteoarthritis</div>
+                        <div class="monitoring-desc">Joint instability leads to accelerated wear. Degenerative changes may appear decades earlier than typical.</div>
+                        <div class="monitoring-action">→ X-rays or MRI for persistent joint pain; physical therapy for joint protection</div>
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">🏥</span> Surgical Planning</div>
+                        <div class="monitoring-desc">Tissue fragility, slow healing, and anesthesia resistance require special surgical considerations. Outcomes are generally good with proper precautions.</div>
+                        <div class="monitoring-action">→ Always inform surgeons of EDS diagnosis; request experienced anesthesiologist</div>
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">🦷</span> Dental Considerations</div>
+                        <div class="monitoring-desc">Local anesthetics may wear off quickly or be ineffective. TMJ dysfunction, gum disease, and jaw subluxation are common.</div>
+                        <div class="monitoring-action">→ Inform dentist of EDS; may need additional anesthetic; consider TMJ evaluation</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="monitoring-section">
+                <div class="monitoring-header">
+                    <h3>Reproductive & Pelvic Health</h3>
+                    <p>Hormonal influences and pelvic floor dysfunction require specialized attention</p>
+                </div>
+                <div class="monitoring-grid">
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">🤰</span> Pregnancy Planning</div>
+                        <div class="monitoring-desc">Pregnancy is possible but considered higher risk. Premature rupture of membranes, rapid labor, and pelvic instability are more common.</div>
+                        <div class="monitoring-action">→ Consult high-risk OB before conception; genetic counseling for inheritance discussion</div>
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">🏋️</span> Pelvic Floor Therapy</div>
+                        <div class="monitoring-desc">Pelvic floor dysfunction, prolapse, and incontinence occur more frequently due to tissue laxity.</div>
+                        <div class="monitoring-action">→ Pelvic floor PT referral, especially before/after pregnancy or if symptomatic</div>
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">📅</span> Menstrual Symptoms</div>
+                        <div class="monitoring-desc">Heavy bleeding (76%) and severe cramps (72%) are very common in women with hEDS; may worsen at puberty and with hormonal changes.</div>
+                        <div class="monitoring-action">→ Gynecological evaluation; discuss hormonal management options</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="monitoring-section">
+                <div class="monitoring-header">
+                    <h3>Family Screening</h3>
+                    <p>Autosomal dominant inheritance means first-degree relatives have 50% risk</p>
+                </div>
+                <div class="monitoring-grid">
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">👨‍👩‍👧</span> Screen Family Members</div>
+                        <div class="monitoring-desc">Parents, siblings, and children of diagnosed individuals should be evaluated for subtle signs even without obvious symptoms.</div>
+                        <div class="monitoring-action">→ Clinical evaluation of first-degree relatives; genetic counseling for family planning</div>
+                    </div>
+                    <div class="monitoring-item">
+                        <div class="monitoring-title"><span class="monitoring-icon">🧬</span> Genetic Testing Considerations</div>
+                        <div class="monitoring-desc">While hEDS has no identified gene, testing can rule out other EDS types (vascular, classical) with more serious implications.</div>
+                        <div class="monitoring-action">→ Genetics referral if atypical features, arterial events, or significant family history</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="disclaimer" style="margin-top: 1.5rem;">
+                <strong>Important Note</strong>
+                These monitoring recommendations are based on clinical literature and expert consensus. Not all individuals with hEDS will develop these conditions. Work with your healthcare team to determine which screenings are appropriate for your specific situation and symptom profile.
+            </div>
+        </div><!-- end tab-monitoring -->
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById('tab-' + tabName).classList.add('active');
+            
+            // Show/hide assessment panel based on tab
+            const assessmentPanel = document.getElementById('assessment-panel');
+            if (tabName === 'checklist') {
+                assessmentPanel.style.display = 'block';
+            } else {
+                assessmentPanel.style.display = 'none';
+            }
+        }
+
+        function filterSources() {
+            const filterValue = document.getElementById('source-filter').value.toLowerCase();
+            const sourceCards = document.querySelectorAll('#sources-container .source-card');
+            let visibleCount = 0;
+
+            sourceCards.forEach(card => {
+                // Get all category tags within the card
+                const categoryTags = card.querySelectorAll('.source-category-tag');
+                let categoriesText = '';
+                categoryTags.forEach(tag => {
+                    categoriesText += ' ' + tag.textContent.toLowerCase();
+                });
+                
+                // Also check the source title for section headers
+                const titleEl = card.querySelector('.source-title');
+                if (titleEl) {
+                    categoriesText += ' ' + titleEl.textContent.toLowerCase();
+                }
+                
+                if (filterValue === 'all' || categoriesText.includes(filterValue)) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            document.getElementById('filter-count').textContent = `Showing ${visibleCount} source${visibleCount !== 1 ? 's' : ''}`;
+        }
+
+        // Initialize filter count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const sourceCards = document.querySelectorAll('#sources-container .source-card');
+            document.getElementById('filter-count').textContent = `Showing ${sourceCards.length} sources`;
+        });
+
+        function updateAgeContext() {
+            const age = parseInt(document.getElementById('age-input').value);
+            const noteEl = document.getElementById('age-note');
+            
+            if (isNaN(age) || age < 1) {
+                noteEl.classList.remove('visible');
+                return;
+            }
+
+            let note = '';
+            
+            if (age < 18) {
+                note = '<strong>Pediatric Considerations:</strong> Research shows particularly high rates of ADHD in children/adolescents with hEDS (35% in ages 15-16, 46% in ages 17-18). Joint hypermobility criteria are age-adjusted—children naturally have greater flexibility. Beighton score cutoffs are higher for children (≥6) than adults (≥5). Delayed motor milestones and hypotonia are especially relevant indicators in pediatric assessment.';
+            } else if (age >= 18 && age <= 30) {
+                note = '<strong>Young Adult Considerations:</strong> This is when many individuals first seek diagnosis as childhood hypermobility begins causing functional problems. The 2017 hEDS criteria use a Beighton score cutoff of ≥5 for adults under 50. Symptom onset in adolescence/early adulthood is typical for hEDS-related pain and autonomic dysfunction.';
+            } else if (age > 30 && age <= 50) {
+                note = '<strong>Adult Considerations:</strong> Joint hypermobility naturally decreases with age, so current Beighton scores may underestimate lifetime hypermobility. Historical hypermobility (could you do the splits, bend thumb to wrist as a child?) is diagnostically relevant. The 2017 criteria use Beighton ≥5 for this age group.';
+            } else if (age > 50) {
+                note = '<strong>Older Adult Considerations:</strong> The 2017 hEDS criteria use a lower Beighton threshold (≥4) for individuals over 50, recognizing age-related stiffening. Historical hypermobility becomes increasingly important. Degenerative changes may mask underlying hypermobility. Many in this age group were never diagnosed despite lifelong symptoms.';
+            }
+
+            noteEl.innerHTML = note;
+            noteEl.classList.add('visible');
+        }
+
+        function updateSexContext() {
+            const sexValue = document.querySelector('input[name="sex"]:checked')?.value;
+            const noteEl = document.getElementById('sex-note');
+            
+            if (!sexValue || sexValue === 'prefer-not') {
+                noteEl.classList.remove('visible');
+                return;
+            }
+
+            let note = '';
+            
+            if (sexValue === 'female') {
+                note = '<strong>Female-Specific Considerations:</strong> Approximately 70% of diagnosed EDS/HSD cases are in females. However, women face significant diagnostic delays—on average 9 years longer than men to receive diagnosis. Research suggests estrogen influences symptom severity: over 70% of women with hEDS report symptoms before puberty, with more than half experiencing worsening at puberty, during menstrual cycles, and during/after pregnancy. Pelvic floor dysfunction, dysmenorrhea (72%), menorrhagia (76%), and dyspareunia (43%) are common. Women are also more likely to be misdiagnosed with fibromyalgia or psychiatric conditions.';
+            } else if (sexValue === 'male') {
+                note = '<strong>Male-Specific Considerations:</strong> Males represent approximately 30% of diagnosed EDS/HSD cases. While diagnosis tends to occur earlier in males, EDS may be underdiagnosed in men due to clinical bias expecting the condition primarily in females. The 2017 hEDS criteria use the same Beighton thresholds regardless of sex, though some research suggests males naturally have less joint laxity. Males may present with more sports injuries and less autonomic dysfunction initially.';
+            } else if (sexValue === 'intersex') {
+                note = '<strong>Intersex Considerations:</strong> Limited research exists on EDS presentation in intersex individuals. Hormonal variations may influence connective tissue symptoms in complex ways. Individual assessment should consider developmental and hormonal history. Seek providers experienced with both EDS and intersex health.';
+            }
+
+            noteEl.innerHTML = note;
+            noteEl.classList.add('visible');
+        }
+
+        const symptomData = {
+            "Musculoskeletal Features": {
+                symptoms: [
+                    { name: "Generalized Joint Hypermobility", desc: "Excessive flexibility in multiple large and small joints (Beighton score ≥5 for adults)", criteria: true, heds: true },
+                    { name: "Recurrent Joint Subluxations", desc: "Partial dislocations occurring spontaneously or with minimal trauma", criteria: true, heds: true },
+                    { name: "Full Joint Dislocations", desc: "Complete displacement of joint surfaces, may occur repeatedly", criteria: true, heds: true },
+                    { name: "Chronic Joint Pain (Arthralgia)", desc: "Persistent pain in joints, often widespread and disproportionate to findings", heds: true },
+                    { name: "Widespread Musculoskeletal Pain", desc: "Diffuse pain affecting muscles, tendons, and ligaments", heds: true },
+                    { name: "Joint Clicking/Popping/Crepitus", desc: "Audible or palpable sounds during joint movement" },
+                    { name: "Joint Instability or 'Giving Way'", desc: "Sensation of joints buckling or being unreliable", heds: true },
+                    { name: "Frequent Soft Tissue Injuries", desc: "Recurring sprains, strains, and tendinitis with minimal provocation" },
+                    { name: "Early Degenerative Joint Disease", desc: "Osteoarthritis or joint degeneration before age 40" },
+                    { name: "Chronic Back Pain", desc: "Persistent spinal pain, often with disc or vertebral involvement" },
+                    { name: "Degenerative Disc Disease", desc: "Premature breakdown of intervertebral discs" },
+                    { name: "Scoliosis or Kyphosis", desc: "Abnormal curvature of the spine" },
+                    { name: "Poor Proprioception", desc: "Difficulty sensing body position in space", heds: true },
+                    { name: "Clumsiness/Poor Coordination", desc: "Frequent bumping into things, dropping objects, tripping" },
+                    { name: "Motor Planning Difficulties", desc: "Trouble executing coordinated movement sequences" },
+                    { name: "Low Muscle Tone (Hypotonia)", desc: "Reduced baseline muscle tension, especially evident in childhood" },
+                    { name: "Delayed Motor Milestones", desc: "Late walking, delayed gross motor skill development" },
+                    { name: "Reduced Physical Endurance", desc: "Rapid fatigue with physical activity, poor stamina" },
+                    { name: "Muscle Weakness", desc: "Reduced strength disproportionate to muscle mass" },
+                    { name: "Flat Feet (Pes Planus)", desc: "Collapsed arches, overpronation", criteria: true },
+                    { name: "Foot Pain in Unsupported Shoes", desc: "Discomfort when walking barefoot or in flat shoes" }
+                ]
+            },
+            "Skin & Soft Tissue": {
+                symptoms: [
+                    { name: "Soft, Velvety Skin Texture", desc: "Unusually smooth, supple skin quality", criteria: true, heds: true },
+                    { name: "Mildly Hyperextensible Skin", desc: "Skin stretches beyond normal but returns (less dramatic than classical EDS)", heds: true },
+                    { name: "Easy Bruising", desc: "Bruises appearing with minimal or unrecalled trauma", criteria: true, heds: true },
+                    { name: "Fragile Skin", desc: "Skin that tears or damages easily" },
+                    { name: "Delayed Wound Healing", desc: "Cuts and wounds taking longer than expected to close" },
+                    { name: "Abnormal or Atrophic Scarring", desc: "Thin, papery 'cigarette paper' scars", criteria: true },
+                    { name: "Widened Scars", desc: "Scars that spread or stretch over time" },
+                    { name: "Unexplained Stretch Marks (Striae)", desc: "Striae appearing without significant weight change, often at young age", criteria: true, heds: true },
+                    { name: "Thin or Translucent Skin", desc: "Visible veins, skin appears delicate" },
+                    { name: "Piezogenic Papules", desc: "Herniations of fat through heel tissue visible on standing", criteria: true },
+                    { name: "Inguinal Hernia", desc: "Bulging in the groin area" },
+                    { name: "Umbilical Hernia", desc: "Bulging at the navel" },
+                    { name: "Hiatal Hernia", desc: "Stomach protruding through diaphragm" },
+                    { name: "Pelvic Organ Prolapse", desc: "Descent of bladder, uterus, or rectum", criteria: true },
+                    { name: "Rectal Prolapse", desc: "Protrusion of rectal tissue" },
+                    { name: "Early Varicose Veins", desc: "Visible, enlarged veins appearing before age 30" }
+                ]
+            },
+            "Cardiovascular & Autonomic": {
+                symptoms: [
+                    { name: "Postural Orthostatic Tachycardia (POTS)", desc: "Excessive heart rate increase upon standing (≥30 bpm)", heds: true },
+                    { name: "Orthostatic Intolerance", desc: "Difficulty tolerating upright position", heds: true },
+                    { name: "Near-Syncope (Pre-Fainting)", desc: "Frequent feeling of almost passing out", heds: true },
+                    { name: "Syncope (Fainting)", desc: "Loss of consciousness, especially with standing" },
+                    { name: "Palpitations", desc: "Awareness of heart beating, racing, or skipping", heds: true },
+                    { name: "Dizziness/Lightheadedness", desc: "Frequent sensation of unsteadiness or head spinning" },
+                    { name: "Exercise Intolerance", desc: "Abnormal cardiovascular response to physical exertion", heds: true },
+                    { name: "Temperature Dysregulation", desc: "Difficulty maintaining normal body temperature" },
+                    { name: "Heat Intolerance", desc: "Excessive symptoms or distress in warm environments" },
+                    { name: "Cold Extremities", desc: "Chronically cold hands and feet" },
+                    { name: "Raynaud's Phenomenon", desc: "Color changes in fingers/toes with cold or stress" },
+                    { name: "Labile Blood Pressure", desc: "Blood pressure fluctuating unpredictably" },
+                    { name: "Labile Heart Rate", desc: "Heart rate varying significantly at rest" },
+                    { name: "Excessive Sweating", desc: "Hyperhidrosis, disproportionate sweating" },
+                    { name: "Mitral Valve Prolapse", desc: "Heart valve abnormality, often asymptomatic", criteria: true },
+                    { name: "Aortic Root Dilation", desc: "Mild enlargement of the aorta (more significant in vascular EDS)", criteria: true }
+                ]
+            },
+            "Gastrointestinal": {
+                symptoms: [
+                    { name: "Functional Dyspepsia", desc: "Upper GI discomfort without structural cause", heds: true },
+                    { name: "Gastroparesis/Delayed Gastric Emptying", desc: "Slow stomach emptying causing nausea and early fullness" },
+                    { name: "Irritable Bowel Syndrome (IBS)", desc: "Chronic abdominal pain with altered bowel habits", heds: true },
+                    { name: "Chronic Abdominal Pain", desc: "Persistent stomach or intestinal discomfort" },
+                    { name: "Bloating", desc: "Abdominal distension, often post-meal", heds: true },
+                    { name: "Chronic Nausea", desc: "Persistent or recurrent nausea" },
+                    { name: "Gastroesophageal Reflux (GERD)", desc: "Acid reflux, heartburn, regurgitation" },
+                    { name: "Chronic Constipation", desc: "Infrequent or difficult bowel movements" },
+                    { name: "Chronic Diarrhea", desc: "Frequent loose stools" },
+                    { name: "Alternating Bowel Habits", desc: "Cycling between constipation and diarrhea" },
+                    { name: "Food Intolerances", desc: "Adverse reactions to multiple foods" },
+                    { name: "Dysphagia", desc: "Difficulty swallowing" }
+                ]
+            },
+            "Genitourinary & Pelvic": {
+                symptoms: [
+                    { name: "Pelvic Floor Dysfunction", desc: "Weakness or incoordination of pelvic muscles", heds: true },
+                    { name: "Urinary Incontinence", desc: "Involuntary urine leakage" },
+                    { name: "Urinary Urgency", desc: "Sudden, compelling need to urinate" },
+                    { name: "Urinary Frequency", desc: "Needing to urinate more often than normal" },
+                    { name: "Interstitial Cystitis Symptoms", desc: "Bladder pain and pressure without infection" },
+                    { name: "Dysmenorrhea", desc: "Severe menstrual cramps" },
+                    { name: "Menorrhagia", desc: "Heavy menstrual bleeding" },
+                    { name: "Dyspareunia", desc: "Pain during intercourse" },
+                    { name: "Premature Rupture of Membranes", desc: "Water breaking early in pregnancy" },
+                    { name: "Pregnancy-Related Pelvic Instability", desc: "Severe pelvic girdle pain during pregnancy" },
+                    { name: "Rapid Labor/Precipitous Delivery", desc: "Unusually fast childbirth" }
+                ]
+            },
+            "Neurological & Pain": {
+                symptoms: [
+                    { name: "Chronic Widespread Pain", desc: "Persistent pain affecting multiple body regions", heds: true },
+                    { name: "Fibromyalgia or Fibromyalgia-Like Pain", desc: "Widespread musculoskeletal pain with tender points" },
+                    { name: "Chronic Headaches", desc: "Frequent or daily headaches" },
+                    { name: "Migraines", desc: "Severe headaches often with aura, nausea, light sensitivity" },
+                    { name: "Cervicogenic Headaches", desc: "Headaches originating from neck problems" },
+                    { name: "Neck Pain", desc: "Chronic cervical discomfort" },
+                    { name: "Craniocervical Instability Symptoms", desc: "Neck-skull junction problems causing neurological symptoms" },
+                    { name: "Numbness or Tingling", desc: "Paresthesias in extremities" },
+                    { name: "Nerve Entrapment Symptoms", desc: "Carpal tunnel, thoracic outlet syndrome, etc." },
+                    { name: "Small Fiber Neuropathy Symptoms", desc: "Burning pain, allodynia, autonomic symptoms" },
+                    { name: "Chronic Fatigue", desc: "Persistent, profound tiredness disproportionate to activity", criteria: true, heds: true },
+                    { name: "Post-Exertional Malaise", desc: "Worsening of symptoms after physical or mental exertion" },
+                    { name: "Brain Fog", desc: "Cognitive difficulties, poor concentration, mental cloudiness", heds: true },
+                    { name: "Sleep Disorders", desc: "Insomnia, unrefreshing sleep, or sleep apnea" },
+                    { name: "Tinnitus", desc: "Ringing or buzzing in the ears" }
+                ]
+            },
+            "Orofacial & Dental": {
+                symptoms: [
+                    { name: "Temporomandibular Joint Dysfunction (TMJ/TMD)", desc: "Jaw pain, clicking, locking, or limited opening" },
+                    { name: "Dental Crowding", desc: "Teeth too large for jaw, overlapping teeth", criteria: true },
+                    { name: "High or Narrow Palate", desc: "Unusual palate shape", criteria: true },
+                    { name: "Gum Disease/Periodontal Issues", desc: "Receding gums, gingivitis despite good hygiene" },
+                    { name: "Frequent Dental Cavities", desc: "Caries despite adequate oral care" },
+                    { name: "Tooth Fragility", desc: "Teeth that chip or break easily" },
+                    { name: "Jaw Subluxation", desc: "Jaw slipping out of place" },
+                    { name: "Difficulty with Dental Anesthesia", desc: "Local anesthetics wearing off quickly or being ineffective" }
+                ]
+            },
+            "Eyes & Vision": {
+                symptoms: [
+                    { name: "Myopia (Nearsightedness)", desc: "Difficulty seeing distant objects" },
+                    { name: "Blue Sclerae", desc: "Bluish tint to whites of eyes" },
+                    { name: "Dry Eyes", desc: "Inadequate tear production or quality" },
+                    { name: "Ocular Discomfort", desc: "Eye strain, pain, or irritation" },
+                    { name: "Light Sensitivity (Photophobia)", desc: "Discomfort in bright light" },
+                    { name: "Lens Subluxation/Dislocation", desc: "Displacement of eye lens (more common in certain subtypes)" },
+                    { name: "Retinal Issues", desc: "Retinal detachment risk or other retinal problems" }
+                ]
+            },
+            "Allergic & Immune Phenomena": {
+                symptoms: [
+                    { name: "Multiple Drug Sensitivities", desc: "Adverse reactions to numerous medications", heds: true },
+                    { name: "Multiple Food Intolerances", desc: "Reactions to various foods not explained by allergy testing" },
+                    { name: "Environmental Sensitivities", desc: "Reactions to fragrances, chemicals, cleaning products" },
+                    { name: "Mast Cell Activation Symptoms", desc: "Flushing, hives, GI upset, and hypersensitivity episodes", heds: true },
+                    { name: "Chronic Urticaria", desc: "Recurrent hives without clear trigger" },
+                    { name: "Flushing", desc: "Episodes of skin reddening, especially face/chest" },
+                    { name: "Histamine Intolerance Symptoms", desc: "Reactions to histamine-rich foods" },
+                    { name: "Sensory Hypersensitivities", desc: "Heightened sensitivity to light, sound, touch, textures", heds: true },
+                    { name: "Clothing/Fabric Intolerance", desc: "Discomfort from tags, seams, certain materials" }
+                ]
+            },
+            "Psychological & Behavioral": {
+                symptoms: [
+                    { name: "Generalized Anxiety Disorder", desc: "Persistent, excessive worry", heds: true },
+                    { name: "Panic Disorder", desc: "Recurrent panic attacks" },
+                    { name: "Health Anxiety", desc: "Excessive worry about having or developing illness" },
+                    { name: "Depression", desc: "Persistent low mood, loss of interest", heds: true },
+                    { name: "Social Anxiety", desc: "Fear of social situations and scrutiny" },
+                    { name: "Phobias", desc: "Intense, irrational fears" },
+                    { name: "Hypervigilance to Body Sensations", desc: "Heightened awareness of internal body states" },
+                    { name: "Fear of Movement (Kinesiophobia)", desc: "Avoidance of activity due to pain/injury fear" },
+                    { name: "Perfectionism", desc: "Excessive self-standards, often as coping mechanism" },
+                    { name: "High Self-Monitoring", desc: "Constant awareness of symptoms and body" }
+                ]
+            },
+            "Neurodevelopmental Comorbidities": {
+                symptoms: [
+                    { name: "ADHD (Any Subtype)", desc: "Attention deficit, hyperactivity, or combined presentation", heds: true },
+                    { name: "Autism Spectrum Traits/ASD", desc: "Social communication differences, restricted interests, sensory issues", heds: true },
+                    { name: "Dyspraxia/DCD", desc: "Developmental coordination disorder" },
+                    { name: "Dyslexia", desc: "Reading and language processing difficulties" },
+                    { name: "Sensory Processing Differences", desc: "Over- or under-responsiveness to sensory input" }
+                ]
+            },
+            "Other Features": {
+                symptoms: [
+                    { name: "Positive Family History of Hypermobility", desc: "First-degree relative with similar symptoms", criteria: true },
+                    { name: "Positive Family History of EDS Diagnosis", desc: "Family member formally diagnosed with EDS" },
+                    { name: "Arm Span > Height Ratio", desc: "Arm span exceeding height (marfanoid habitus)", criteria: true },
+                    { name: "Ability to Touch Tongue to Nose (Gorlin Sign)", desc: "Unusual tissue elasticity" },
+                    { name: "Spontaneous Pneumothorax", desc: "Collapsed lung without trauma" },
+                    { name: "Voice/Vocal Cord Issues", desc: "Hoarseness, vocal fatigue, laryngeal problems" },
+                    { name: "Chronic Rhinitis", desc: "Persistent nasal congestion/drainage" },
+                    { name: "Easy Sunburning", desc: "Skin burning quickly in sun" },
+                    { name: "Slow Recovery from Illness", desc: "Taking longer than expected to recover from infections" }
+                ]
+            }
+        };
+
+        let checkedSymptoms = new Set();
+        let criteriaSymptoms = new Set();
+
+        function initializeApp() {
+            const container = document.getElementById('categories');
+            let totalSymptoms = 0;
+
+            for (const [category, data] of Object.entries(symptomData)) {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category';
+                
+                const categoryCount = data.symptoms.length;
+                totalSymptoms += categoryCount;
+
+                categoryDiv.innerHTML = `
+                    <div class="category-header" onclick="toggleCategory(this)">
+                        <span class="category-title">${category}</span>
+                        <span class="category-count" data-category="${category}">0/${categoryCount}</span>
+                    </div>
+                    <div class="category-items">
+                        ${data.symptoms.map((symptom, index) => {
+                            const id = `${category}-${index}`.replace(/\s+/g, '-').replace(/[&()]/g, '');
+                            const tags = [];
+                            if (symptom.criteria) tags.push('<span class="symptom-tag tag-criteria">2017 Criteria</span>');
+                            if (symptom.heds) tags.push('<span class="symptom-tag tag-heds">hEDS Emphasis</span>');
+                            return `
+                                <div class="symptom-item" data-id="${id}" data-criteria="${symptom.criteria || false}">
+                                    <input type="checkbox" id="${id}" onchange="toggleSymptom('${id}', '${category}', ${symptom.criteria || false})">
+                                    <label class="symptom-label" for="${id}">
+                                        <span class="symptom-name">${symptom.name}${tags.join('')}</span>
+                                        <span class="symptom-desc">${symptom.desc}</span>
+                                    </label>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+                container.appendChild(categoryDiv);
+            }
+
+            document.getElementById('total-count').textContent = totalSymptoms;
+            updateAssessment();
+        }
+
+        function toggleCategory(header) {
+            header.parentElement.classList.toggle('open');
+        }
+
+        function toggleSymptom(id, category, isCriteria) {
+            const checkbox = document.getElementById(id);
+            const item = checkbox.closest('.symptom-item');
+            
+            if (checkbox.checked) {
+                checkedSymptoms.add(id);
+                if (isCriteria) criteriaSymptoms.add(id);
+                item.classList.add('checked');
+            } else {
+                checkedSymptoms.delete(id);
+                criteriaSymptoms.delete(id);
+                item.classList.remove('checked');
+            }
+
+            updateCategoryCount(category);
+            updateAssessment();
+        }
+
+        function updateCategoryCount(category) {
+            const categoryData = symptomData[category];
+            const total = categoryData.symptoms.length;
+            let checked = 0;
+
+            categoryData.symptoms.forEach((_, index) => {
+                const id = `${category}-${index}`.replace(/\s+/g, '-').replace(/[&()]/g, '');
+                if (checkedSymptoms.has(id)) checked++;
+            });
+
+            document.querySelector(`[data-category="${category}"]`).textContent = `${checked}/${total}`;
+        }
+
+        function updateAssessment() {
+            const total = Object.values(symptomData).reduce((sum, cat) => sum + cat.symptoms.length, 0);
+            const checked = checkedSymptoms.size;
+            const criteriaCount = criteriaSymptoms.size;
+            const percentage = (checked / total) * 100;
+
+            document.getElementById('checked-count').textContent = checked;
+            document.getElementById('criteria-count').textContent = `${criteriaCount}/12`;
+            document.getElementById('progress-fill').style.width = `${percentage}%`;
+
+            const resultDiv = document.getElementById('assessment-result');
+            const breakdownDiv = document.getElementById('criteria-breakdown');
+
+            // Determine assessment level
+            let level, title, text;
+
+            if (criteriaCount >= 5 || checked >= 25) {
+                level = 'high';
+                title = 'Significant Symptom Burden';
+                text = 'Your responses indicate a substantial number of symptoms commonly associated with hEDS. This pattern suggests that evaluation by a healthcare provider familiar with Ehlers-Danlos syndromes would be appropriate. Consider seeking referral to a geneticist, rheumatologist, or EDS-knowledgeable specialist.';
+            } else if (criteriaCount >= 3 || checked >= 12) {
+                level = 'moderate';
+                title = 'Moderate Symptom Correlation';
+                text = 'You have endorsed several symptoms that can be associated with hypermobile EDS and related conditions. While not necessarily indicative of EDS, discussing these symptoms with your healthcare provider may be worthwhile, particularly if they impact your daily functioning.';
+            } else {
+                level = 'low';
+                title = 'Lower Symptom Correlation';
+                text = 'Based on your responses, you have endorsed relatively few symptoms commonly associated with hEDS. However, if you have concerns about joint hypermobility or connective tissue issues, consultation with a healthcare provider is always appropriate.';
+            }
+
+            resultDiv.className = `assessment-result result-${level}`;
+            resultDiv.innerHTML = `
+                <div class="result-title">${title}</div>
+                <div class="result-text">${text}</div>
+            `;
+
+            // Criteria breakdown
+            const criteriaFeatures = [
+                'Generalized Joint Hypermobility',
+                'Recurrent Joint Subluxations',
+                'Full Joint Dislocations',
+                'Soft, Velvety Skin Texture',
+                'Easy Bruising',
+                'Abnormal or Atrophic Scarring',
+                'Unexplained Stretch Marks (Striae)',
+                'Piezogenic Papules',
+                'Flat Feet (Pes Planus)',
+                'Pelvic Organ Prolapse',
+                'Mitral Valve Prolapse',
+                'Chronic Fatigue'
+            ];
+
+            breakdownDiv.innerHTML = `
+                <strong style="font-size: 0.85rem; color: var(--slate);">2017 hEDS Criteria Features Checked:</strong>
+                ${criteriaFeatures.map(feature => {
+                    const isMet = Array.from(criteriaSymptoms).some(id => {
+                        return document.getElementById(id)?.closest('.symptom-item')?.querySelector('.symptom-name')?.textContent.includes(feature);
+                    });
+                    return `<div class="criteria-item ${isMet ? 'criteria-met' : 'criteria-unmet'}">
+                        <span>${feature}</span>
+                        <span>${isMet ? '✓' : '—'}</span>
+                    </div>`;
+                }).join('')}
+            `;
+        }
+
+        function togglePanel() {
+            const panel = document.getElementById('assessment-panel');
+            const btn = document.querySelector('.collapse-btn');
+            panel.classList.toggle('collapsed');
+            btn.textContent = panel.classList.contains('collapsed') ? '▲ Expand' : '▼ Collapse';
+        }
+
+        function resetAll() {
+            checkedSymptoms.clear();
+            criteriaSymptoms.clear();
+            
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+            
+            document.querySelectorAll('.symptom-item').forEach(item => {
+                item.classList.remove('checked');
+            });
+
+            for (const category of Object.keys(symptomData)) {
+                updateCategoryCount(category);
+            }
+
+            document.querySelectorAll('.category').forEach(cat => {
+                cat.classList.remove('open');
+            });
+
+            // Reset age input
+            document.getElementById('age-input').value = '';
+            document.getElementById('age-note').classList.remove('visible');
+
+            // Reset sex input
+            document.querySelectorAll('input[name="sex"]').forEach(radio => {
+                radio.checked = false;
+            });
+            document.getElementById('sex-note').classList.remove('visible');
+
+            updateAssessment();
+        }
+
+        function generateResultsSummary() {
+            const age = document.getElementById('age-input').value;
+            const sexEl = document.querySelector('input[name="sex"]:checked');
+            const sex = sexEl ? sexEl.value : 'Not specified';
+            const totalSymptoms = checkedSymptoms.size;
+            const criteriaCount = criteriaSymptoms.size;
+            const date = new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', month: 'long', day: 'numeric' 
+            });
+
+            let level = 'lower';
+            if (totalSymptoms >= 25 || criteriaCount >= 5) {
+                level = 'significant';
+            } else if (totalSymptoms >= 12 || criteriaCount >= 3) {
+                level = 'moderate';
+            }
+
+            const levelText = {
+                'lower': 'Lower Correlation',
+                'moderate': 'Moderate Correlation', 
+                'significant': 'Significant Correlation'
+            };
+
+            // Get checked symptoms by category
+            const symptomsByCategory = {};
+            for (const [category, data] of Object.entries(symptomData)) {
+                const symptoms = data.symptoms || [];
+                const checked = symptoms.filter(s => {
+                    const id = s.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+                    return checkedSymptoms.has(id);
+                });
+                if (checked.length > 0) {
+                    symptomsByCategory[category] = checked.map(s => ({
+                        text: s.name,
+                        desc: s.desc,
+                        criteria: s.criteria || false,
+                        heds: s.heds || false
+                    }));
+                }
+            }
+
+            // Get criteria symptom names
+            const criteriaSymptomNames = [];
+            for (const [category, data] of Object.entries(symptomData)) {
+                const symptoms = data.symptoms || [];
+                symptoms.forEach(s => {
+                    const id = s.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+                    if (criteriaSymptoms.has(id)) {
+                        criteriaSymptomNames.push(s.name);
+                    }
+                });
+            }
+
+            return {
+                date,
+                age: age || 'Not specified',
+                sex,
+                totalSymptoms,
+                criteriaCount,
+                level,
+                levelText: levelText[level],
+                symptomsByCategory,
+                checkedSymptoms: Array.from(checkedSymptoms),
+                criteriaSymptoms: criteriaSymptomNames
+            };
+        }
+
+        function exportToPDF() {
+            const summary = generateResultsSummary();
+            
+            // Create print-friendly content
+            const printWindow = window.open('', '_blank');
+            
+            let symptomsHTML = '';
+            for (const [category, symptoms] of Object.entries(summary.symptomsByCategory)) {
+                symptomsHTML += `<div class="print-category">
+                    <h3>${category} (${symptoms.length})</h3>
+                    <ul>
+                        ${symptoms.map(s => `<li>${s.text}${s.criteria ? ' <span class="criteria-badge">2017 Criteria</span>' : ''}${s.heds ? ' <span class="heds-badge">hEDS Emphasis</span>' : ''}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            let criteriaHTML = '';
+            if (summary.criteriaSymptoms.length > 0) {
+                criteriaHTML = `<div class="criteria-section">
+                    <h3>2017 Diagnostic Criteria Features Present (${summary.criteriaCount}/12)</h3>
+                    <ul>
+                        ${summary.criteriaSymptoms.map(s => `<li>${s}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>EDS Symptom Assessment Report - ${summary.date}</title>
+                    <style>
+                        body { font-family: Georgia, serif; max-width: 800px; margin: 0 auto; padding: 2rem; line-height: 1.6; }
+                        h1 { font-size: 1.5rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; }
+                        h2 { font-size: 1.2rem; color: #444; margin-top: 1.5rem; }
+                        h3 { font-size: 1rem; color: #555; margin: 1rem 0 0.5rem; }
+                        .summary-box { background: #f5f5f5; padding: 1rem; border: 1px solid #ddd; margin: 1rem 0; }
+                        .summary-row { display: flex; justify-content: space-between; padding: 0.25rem 0; border-bottom: 1px solid #eee; }
+                        .summary-row:last-child { border-bottom: none; }
+                        .level-significant { color: #b45309; font-weight: bold; }
+                        .level-moderate { color: #0369a1; font-weight: bold; }
+                        .level-lower { color: #166534; }
+                        ul { margin: 0; padding-left: 1.5rem; }
+                        li { margin: 0.25rem 0; }
+                        .criteria-badge { background: #7d9980; color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.75rem; }
+                        .heds-badge { background: #d4a84b; color: white; padding: 1px 6px; border-radius: 3px; font-size: 0.75rem; }
+                        .disclaimer { font-size: 0.85rem; color: #666; margin-top: 2rem; padding: 1rem; border: 1px solid #ddd; background: #fafafa; }
+                        .print-category { margin-bottom: 1rem; }
+                        .criteria-section { background: #e8f0e9; padding: 1rem; margin: 1rem 0; }
+                        @media print { body { padding: 0; } }
+                    </style>
+                </head>
+                <body>
+                    <h1>Ehlers-Danlos Syndrome Symptom Assessment Report</h1>
+                    <p><strong>Date:</strong> ${summary.date}</p>
+                    
+                    <div class="summary-box">
+                        <div class="summary-row"><span>Age:</span><span>${summary.age}</span></div>
+                        <div class="summary-row"><span>Sex Assigned at Birth:</span><span>${summary.sex}</span></div>
+                        <div class="summary-row"><span>Total Symptoms Identified:</span><span>${summary.totalSymptoms}</span></div>
+                        <div class="summary-row"><span>2017 Criteria Features:</span><span>${summary.criteriaCount} of 12</span></div>
+                        <div class="summary-row"><span>Assessment Level:</span><span class="level-${summary.level}">${summary.levelText}</span></div>
+                    </div>
+
+                    ${criteriaHTML}
+
+                    <h2>Symptoms by Category</h2>
+                    ${symptomsHTML || '<p>No symptoms selected.</p>'}
+
+                    <div class="disclaimer">
+                        <strong>Important Disclaimer:</strong> This report is for educational and informational purposes only. It is not a diagnostic instrument and cannot replace professional medical evaluation. Ehlers-Danlos syndromes require clinical assessment by qualified healthcare providers. Please consult with a medical professional if you suspect you may have EDS.
+                    </div>
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            printWindow.focus();
+            
+            // Give time for content to render
+            setTimeout(() => {
+                printWindow.print();
+            }, 250);
+        }
+
+        function exportToCSV() {
+            const summary = generateResultsSummary();
+            
+            let csvContent = 'EDS Symptom Assessment Export\n';
+            csvContent += `Date,${summary.date}\n`;
+            csvContent += `Age,${summary.age}\n`;
+            csvContent += `Sex Assigned at Birth,${summary.sex}\n`;
+            csvContent += `Total Symptoms,${summary.totalSymptoms}\n`;
+            csvContent += `2017 Criteria Features,${summary.criteriaCount}\n`;
+            csvContent += `Assessment Level,${summary.levelText}\n\n`;
+            
+            csvContent += 'Category,Symptom,2017 Criteria,hEDS Emphasis\n';
+            
+            for (const [category, symptoms] of Object.entries(summary.symptomsByCategory)) {
+                for (const symptom of symptoms) {
+                    const escapedText = symptom.text.replace(/"/g, '""');
+                    csvContent += `"${category}","${escapedText}",${symptom.criteria ? 'Yes' : 'No'},${symptom.heds ? 'Yes' : 'No'}\n`;
+                }
+            }
+
+            // Create and trigger download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `eds-assessment-${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showToast('CSV file downloaded');
+        }
+
+        function exportToEmail() {
+            const summary = generateResultsSummary();
+            
+            let body = `EDS SYMPTOM ASSESSMENT SUMMARY\n`;
+            body += `================================\n\n`;
+            body += `Date: ${summary.date}\n`;
+            body += `Age: ${summary.age}\n`;
+            body += `Sex Assigned at Birth: ${summary.sex}\n\n`;
+            body += `RESULTS\n`;
+            body += `-------\n`;
+            body += `Total Symptoms Identified: ${summary.totalSymptoms}\n`;
+            body += `2017 Criteria Features: ${summary.criteriaCount} of 12\n`;
+            body += `Assessment Level: ${summary.levelText}\n\n`;
+            
+            if (summary.criteriaSymptoms.length > 0) {
+                body += `2017 CRITERIA FEATURES PRESENT\n`;
+                body += `------------------------------\n`;
+                summary.criteriaSymptoms.forEach(s => {
+                    body += `• ${s}\n`;
+                });
+                body += `\n`;
+            }
+
+            body += `SYMPTOMS BY CATEGORY\n`;
+            body += `--------------------\n`;
+            for (const [category, symptoms] of Object.entries(summary.symptomsByCategory)) {
+                body += `\n${category.toUpperCase()} (${symptoms.length})\n`;
+                symptoms.forEach(s => {
+                    let tags = '';
+                    if (s.criteria) tags += ' [2017 Criteria]';
+                    if (s.heds) tags += ' [hEDS]';
+                    body += `• ${s.text}${tags}\n`;
+                });
+            }
+
+            body += `\n================================\n`;
+            body += `DISCLAIMER: This is for educational purposes only and is not a diagnostic instrument. Please consult with a qualified healthcare provider.\n`;
+            body += `\nGenerated from: EDS Symptom Assessment Tool\n`;
+
+            const subject = encodeURIComponent(`EDS Symptom Assessment - ${summary.date}`);
+            const encodedBody = encodeURIComponent(body);
+            
+            window.location.href = `mailto:?subject=${subject}&body=${encodedBody}`;
+            
+            showToast('Opening email client...');
+        }
+
+        function copyToClipboard() {
+            const summary = generateResultsSummary();
+            
+            let text = `EDS SYMPTOM ASSESSMENT SUMMARY\n`;
+            text += `Date: ${summary.date}\n`;
+            text += `Age: ${summary.age} | Sex: ${summary.sex}\n\n`;
+            text += `Results: ${summary.totalSymptoms} symptoms, ${summary.criteriaCount}/12 criteria features\n`;
+            text += `Level: ${summary.levelText}\n\n`;
+            
+            if (summary.criteriaSymptoms.length > 0) {
+                text += `Criteria Features:\n`;
+                summary.criteriaSymptoms.forEach(s => {
+                    text += `✓ ${s}\n`;
+                });
+                text += `\n`;
+            }
+
+            text += `All Symptoms:\n`;
+            for (const [category, symptoms] of Object.entries(summary.symptomsByCategory)) {
+                text += `\n${category} (${symptoms.length}):\n`;
+                symptoms.forEach(s => {
+                    text += `• ${s.text}\n`;
+                });
+            }
+
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Results copied to clipboard!');
+            }).catch(err => {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('Results copied to clipboard!');
+            });
+        }
+
+        function showToast(message) {
+            // Remove existing toast if any
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            // Trigger animation
+            setTimeout(() => toast.classList.add('visible'), 10);
+            
+            // Remove after delay
+            setTimeout(() => {
+                toast.classList.remove('visible');
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        initializeApp();
+    </script>
+</body>
+</html>
