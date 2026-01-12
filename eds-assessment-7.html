@@ -9,17 +9,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --cream: #faf8f5;
-            --ink: #1a1a1a;
-            --sage: #7d9980;
-            --sage-light: #e8f0e9;
-            --sage-dark: #5a7a5d;
-            --coral: #c4786c;
-            --coral-light: #f5e8e6;
-            --amber: #d4a84b;
-            --amber-light: #faf3e3;
-            --slate: #64748b;
-            --border: #e2e0dc;
+            /* High-contrast readable color scheme */
+            --cream: #fafafa;          /* Very subtle off-white - easier on eyes */
+            --ink: #111827;            /* Slightly softer than pure black */
+            --sage: #047857;           /* Accessible green (WCAG AA) */
+            --sage-light: #ecfdf5;     /* Light green background */
+            --sage-dark: #065f46;      /* Dark green for emphasis */
+            --coral: #b91c1c;          /* Accessible red */
+            --coral-light: #fef2f2;    /* Light red background */
+            --amber: #92400e;          /* Dark amber - WCAG AA compliant */
+            --amber-light: #fffbeb;    /* Light amber background */
+            --slate: #374151;          /* Dark gray - high contrast */
+            --border: #d1d5db;         /* Neutral gray border */
         }
 
         * {
@@ -128,7 +129,7 @@
             letter-spacing: 0.05em;
             color: var(--slate);
             padding: 0.5rem 1rem 0.25rem;
-            background: #f8f8f6;
+            background: #f9fafb;
         }
 
         .tab-nav {
@@ -229,7 +230,7 @@
         .copyright-notice {
             margin-top: 2rem;
             padding: 1.5rem;
-            background: #f8f8f6;
+            background: #f9fafb;
             border: 1px solid var(--border);
             text-align: center;
         }
@@ -353,13 +354,13 @@
         }
 
         .input-help-text {
-            font-size: 0.8rem;
-            color: var(--slate);
+            font-size: 0.875rem;
+            color: #374151;
             margin: 0 0 0.75rem 0;
-            line-height: 1.5;
-            padding: 0.5rem 0.75rem;
-            background: #f8f8f6;
-            border-left: 2px solid var(--border);
+            line-height: 1.6;
+            padding: 0.625rem 0.875rem;
+            background: #f3f4f6;
+            border-left: 3px solid #9ca3af;
         }
 
         #age-input {
@@ -476,7 +477,7 @@
             padding: 1.25rem 1.5rem;
             margin-bottom: 1rem;
             font-size: 0.9rem;
-            color: #5a4a47;
+            color: #7f1d1d;
         }
 
         .disclaimer strong {
@@ -489,18 +490,18 @@
         }
 
         .privacy-notice {
-            background: #f0f4f8;
-            border-left: 3px solid #5a7d8c;
+            background: #f0f9ff;
+            border-left: 3px solid #0369a1;
             padding: 1rem 1.5rem;
             margin-bottom: 2rem;
             font-size: 0.85rem;
-            color: #4a5568;
+            color: #1e3a5f;
         }
 
         .privacy-notice strong:first-child {
             display: block;
             margin-bottom: 0.25rem;
-            color: #5a7d8c;
+            color: #0369a1;
             text-transform: uppercase;
             font-size: 0.7rem;
             letter-spacing: 0.1em;
@@ -774,7 +775,7 @@
             flex-wrap: wrap;
             margin-bottom: 1rem;
             padding: 0.75rem 1rem;
-            background: #f8f8f6;
+            background: #f9fafb;
             border: 1px solid var(--border);
         }
 
@@ -905,19 +906,19 @@
         }
 
         .symptom-desc {
-            font-size: 0.85rem;
-            color: var(--slate);
+            font-size: 0.875rem;
+            color: #4b5563;
             margin-top: 0.15rem;
         }
 
         .response-legend {
             display: flex;
             gap: 1rem;
-            font-size: 0.8rem;
-            color: var(--slate);
+            font-size: 0.85rem;
+            color: #374151;
             margin-bottom: 1rem;
             padding: 0.75rem 1rem;
-            background: #f8f8f6;
+            background: #f9fafb;
             border: 1px solid var(--border);
             flex-wrap: wrap;
         }
@@ -990,13 +991,15 @@
         }
 
         .tag-criteria {
-            background: var(--amber-light);
-            color: #8b6914;
+            background: #fef3c7;
+            color: #78350f;
+            font-weight: 600;
         }
 
         .tag-heds {
-            background: var(--sage-light);
-            color: var(--sage-dark);
+            background: #d1fae5;
+            color: #064e3b;
+            font-weight: 600;
         }
 
         .assessment-panel {
@@ -1023,7 +1026,7 @@
             display: flex;
             gap: 0.5rem;
             padding: 0.75rem 1rem;
-            background: #f8f8f6;
+            background: #f9fafb;
             border-bottom: 1px solid var(--border);
             flex-wrap: wrap;
         }
@@ -3188,29 +3191,67 @@
             const resultDiv = document.getElementById('assessment-result');
             const breakdownDiv = document.getElementById('criteria-breakdown');
 
+            // Count criteria-only symptoms (have criteria: true but NOT heds: true)
+            let criteriaOnlyYes = 0;
+            let criteriaOnlyMaybe = 0;
+            for (const [category, data] of Object.entries(symptomData)) {
+                data.symptoms.forEach((symptom, index) => {
+                    const id = `${category}-${index}`.replace(/\s+/g, '-').replace(/[&()]/g, '');
+                    if (symptom.criteria && !symptom.heds) {
+                        if (checkedSymptoms.has(id)) criteriaOnlyYes++;
+                        if (maybeSymptoms.has(id)) criteriaOnlyMaybe++;
+                    }
+                });
+            }
+
             // Determine assessment level with ranges
+            // Use hEDS-specific count for hEDS assessment, criteria count for general EDS
             let levelMin, levelMax, title, text;
 
-            function getLevel(symptoms, criteria) {
-                if (criteria >= 5 || symptoms >= 25) return 'high';
-                if (criteria >= 3 || symptoms >= 12) return 'moderate';
+            function getLevel(hedsCount, criteriaCount) {
+                // High: significant hEDS symptoms OR many criteria features
+                if (hedsCount >= 12 || criteriaCount >= 8) return 'high';
+                // Moderate: moderate hEDS symptoms OR several criteria features
+                if (hedsCount >= 6 || criteriaCount >= 4) return 'moderate';
                 return 'low';
             }
 
-            levelMin = getLevel(minCount, criteriaMin);
-            levelMax = getLevel(maxCount, criteriaMax);
+            levelMin = getLevel(hedsYes, criteriaYes);
+            levelMax = getLevel(hedsYes + hedsMaybe, criteriaMax);
+
+            // Determine what type of assessment to show based on what was checked
+            // Check if the pattern is primarily hEDS or primarily criteria-only
+            const hedsRatio = yesCount > 0 ? hedsYes / yesCount : 0;
+            const isHedsDominant = hedsYes >= 6 && hedsRatio >= 0.5; // At least 6 hEDS symptoms AND >50% of checked are hEDS
+            const isCriteriaOnlyDominant = criteriaOnlyYes >= 4 && criteriaOnlyYes > hedsYes; // More criteria-only than hEDS
 
             if (levelMin === levelMax) {
                 // No range needed
                 if (levelMin === 'high') {
-                    title = 'Significant Symptom Burden';
-                    text = 'Your responses indicate a substantial number of symptoms commonly associated with hEDS. This pattern suggests that evaluation by a healthcare provider familiar with Ehlers-Danlos syndromes would be appropriate. Consider seeking referral to a geneticist, rheumatologist, or EDS-knowledgeable specialist.';
+                    if (isHedsDominant) {
+                        title = 'Significant hEDS Symptom Pattern';
+                        text = 'Your responses indicate a substantial number of symptoms commonly associated with hypermobile EDS (hEDS). This pattern suggests that evaluation by a healthcare provider familiar with Ehlers-Danlos syndromes would be appropriate. Consider seeking referral to a geneticist, rheumatologist, or EDS-knowledgeable specialist.';
+                    } else if (isCriteriaOnlyDominant) {
+                        title = 'Significant EDS Criteria Features';
+                        text = 'Your responses indicate several features from the 2017 EDS diagnostic criteria. These findings may warrant evaluation by a healthcare provider familiar with connective tissue disorders to determine if further assessment is appropriate.';
+                    } else {
+                        title = 'Significant Symptom Pattern';
+                        text = 'Your responses indicate a substantial number of symptoms that may be associated with EDS or related connective tissue conditions. Evaluation by a healthcare provider familiar with these conditions would be appropriate.';
+                    }
                 } else if (levelMin === 'moderate') {
-                    title = 'Moderate Symptom Correlation';
-                    text = 'You have endorsed several symptoms that can be associated with hypermobile EDS and related conditions. While not necessarily indicative of EDS, discussing these symptoms with your healthcare provider may be worthwhile, particularly if they impact your daily functioning.';
+                    if (isHedsDominant) {
+                        title = 'Moderate hEDS Symptom Correlation';
+                        text = 'You have endorsed several symptoms particularly associated with hypermobile EDS. While not necessarily indicative of hEDS, discussing these symptoms with your healthcare provider may be worthwhile, particularly if they impact your daily functioning.';
+                    } else if (isCriteriaOnlyDominant) {
+                        title = 'Moderate EDS Criteria Correlation';
+                        text = 'You have endorsed several features from the 2017 EDS diagnostic criteria. Discussing these findings with your healthcare provider may be worthwhile to determine if further evaluation is appropriate.';
+                    } else {
+                        title = 'Moderate Symptom Correlation';
+                        text = 'You have endorsed several symptoms that can be associated with connective tissue variations. Discussing these symptoms with your healthcare provider may be worthwhile if they impact your daily functioning.';
+                    }
                 } else {
                     title = 'Lower Symptom Correlation';
-                    text = 'Based on your responses, you have endorsed relatively few symptoms commonly associated with hEDS. However, if you have concerns about joint hypermobility or connective tissue issues, consultation with a healthcare provider is always appropriate.';
+                    text = 'Based on your responses, you have endorsed relatively few symptoms commonly associated with EDS. However, if you have concerns about joint hypermobility or connective tissue issues, consultation with a healthcare provider is always appropriate.';
                 }
             } else {
                 // Show range
@@ -3218,7 +3259,7 @@
                 title = `${levelNames[levelMin]} to ${levelNames[levelMax]} Correlation`;
                 
                 if (maybeCount > 0) {
-                    text = `You marked ${maybeCount} symptom${maybeCount > 1 ? 's' : ''} as "Maybe/Unsure." Your assessment ranges from ${levelNames[levelMin].toLowerCase()} (if uncertain items are not EDS-related) to ${levelNames[levelMax].toLowerCase()} (if they are). Consider reviewing the uncertain items—the info button (ℹ) on each symptom can help clarify what each symptom means.`;
+                    text = `You marked ${maybeCount} symptom${maybeCount > 1 ? 's' : ''} as "Maybe/Unsure." Your assessment ranges from ${levelNames[levelMin].toLowerCase()} (if uncertain items are not EDS-related) to ${levelNames[levelMax].toLowerCase()} (if they are). Clarifying these uncertain responses may help refine your assessment.`;
                 } else {
                     text = 'Your responses show a range of symptom correlation.';
                 }
@@ -3232,7 +3273,7 @@
             let rangeHTML = '';
             if (maybeCount > 0) {
                 rangeHTML = `
-                    <div class="assessment-range" style="margin-bottom: 0.75rem; padding: 0.5rem; background: #f8f8f6; border-radius: 4px;">
+                    <div class="assessment-range" style="margin-bottom: 0.75rem; padding: 0.5rem; background: #f9fafb; border-radius: 4px;">
                         <div style="font-size: 0.8rem; color: var(--slate);">
                             <strong>Score Range:</strong> 
                             <span style="color: var(--sage-dark);">${minCount} confirmed</span> to 
