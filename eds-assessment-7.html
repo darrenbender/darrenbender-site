@@ -2261,34 +2261,35 @@
                 'significant': 'Significant Correlation'
             };
 
-            // Get checked symptoms by category
+            // Get checked symptoms by category - match how IDs are generated in initializeApp
             const symptomsByCategory = {};
-            for (const [category, data] of Object.entries(symptomData)) {
-                const symptoms = data.symptoms || [];
-                const checked = symptoms.filter(s => {
-                    const id = s.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
-                    return checkedSymptoms.has(id);
-                });
-                if (checked.length > 0) {
-                    symptomsByCategory[category] = checked.map(s => ({
-                        text: s.name,
-                        desc: s.desc,
-                        criteria: s.criteria || false,
-                        heds: s.heds || false
-                    }));
-                }
-            }
-
-            // Get criteria symptom names
             const criteriaSymptomNames = [];
+            
             for (const [category, data] of Object.entries(symptomData)) {
                 const symptoms = data.symptoms || [];
-                symptoms.forEach(s => {
-                    const id = s.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
-                    if (criteriaSymptoms.has(id)) {
-                        criteriaSymptomNames.push(s.name);
+                const checkedInCategory = [];
+                
+                symptoms.forEach((s, index) => {
+                    // Match the ID generation from initializeApp
+                    const id = `${category}-${index}`.replace(/\s+/g, '-').replace(/[&()]/g, '');
+                    
+                    if (checkedSymptoms.has(id)) {
+                        checkedInCategory.push({
+                            text: s.name,
+                            desc: s.desc || '',
+                            criteria: s.criteria || false,
+                            heds: s.heds || false
+                        });
+                        
+                        if (s.criteria) {
+                            criteriaSymptomNames.push(s.name);
+                        }
                     }
                 });
+                
+                if (checkedInCategory.length > 0) {
+                    symptomsByCategory[category] = checkedInCategory;
+                }
             }
 
             return {
@@ -2311,19 +2312,33 @@
             // Create print-friendly content
             const printWindow = window.open('', '_blank');
             
+            // Build complete symptom list showing all symptoms with check marks for selected ones
             let symptomsHTML = '';
-            for (const [category, symptoms] of Object.entries(summary.symptomsByCategory)) {
-                symptomsHTML += `<div class="print-category">
-                    <h3>${category} (${symptoms.length} symptoms)</h3>
+            let categoryIndex = 0;
+            for (const [category, data] of Object.entries(symptomData)) {
+                const symptoms = data.symptoms || [];
+                const checkedInCategory = summary.symptomsByCategory[category] || [];
+                const checkedNames = checkedInCategory.map(s => s.text);
+                const checkedCount = checkedNames.length;
+                
+                symptomsHTML += `<div class="print-category ${categoryIndex > 0 ? 'page-break-avoid' : ''}">
+                    <h3>${category} <span class="category-stats">(${checkedCount} of ${symptoms.length} selected)</span></h3>
                     <div class="symptom-list">
-                        ${symptoms.map(s => `
-                            <div class="symptom-entry">
-                                <div class="symptom-name">${s.text}${s.criteria ? ' <span class="criteria-badge">2017 Criteria</span>' : ''}${s.heds ? ' <span class="heds-badge">hEDS Emphasis</span>' : ''}</div>
-                                ${s.desc ? `<div class="symptom-desc">${s.desc}</div>` : ''}
-                            </div>
-                        `).join('')}
+                        ${symptoms.map(s => {
+                            const isChecked = checkedNames.includes(s.name);
+                            return `
+                                <div class="symptom-entry ${isChecked ? 'checked' : 'unchecked'}">
+                                    <div class="symptom-checkbox">${isChecked ? '☑' : '☐'}</div>
+                                    <div class="symptom-content">
+                                        <div class="symptom-name">${s.name}${s.criteria ? ' <span class="criteria-badge">2017 Criteria</span>' : ''}${s.heds ? ' <span class="heds-badge">hEDS</span>' : ''}</div>
+                                        <div class="symptom-desc">${s.desc}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
                     </div>
                 </div>`;
+                categoryIndex++;
             }
 
             let criteriaHTML = '';
@@ -2374,46 +2389,54 @@
                 <head>
                     <title>EDS Symptom Assessment Report - ${summary.date}</title>
                     <style>
-                        body { font-family: Georgia, serif; max-width: 800px; margin: 0 auto; padding: 2rem; line-height: 1.6; color: #1a1a1a; }
-                        h1 { font-size: 1.5rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; }
-                        h2 { font-size: 1.2rem; color: #444; margin-top: 1.5rem; }
-                        h3 { font-size: 1rem; color: #555; margin: 1rem 0 0.5rem; border-bottom: 1px solid #ddd; padding-bottom: 0.25rem; }
-                        .summary-box { background: #f5f5f5; padding: 1rem 1.25rem; border: 1px solid #ddd; margin: 1rem 0; }
-                        .summary-row { display: flex; justify-content: space-between; padding: 0.35rem 0; border-bottom: 1px solid #eee; }
+                        body { font-family: Georgia, serif; max-width: 800px; margin: 0 auto; padding: 2rem; line-height: 1.5; color: #1a1a1a; font-size: 11pt; }
+                        h1 { font-size: 1.4rem; border-bottom: 2px solid #333; padding-bottom: 0.5rem; margin-bottom: 0.5rem; }
+                        h2 { font-size: 1.15rem; color: #444; margin-top: 1.25rem; margin-bottom: 0.75rem; }
+                        h3 { font-size: 1rem; color: #333; margin: 0.75rem 0 0.5rem; border-bottom: 1px solid #ddd; padding-bottom: 0.25rem; }
+                        .category-stats { font-weight: normal; color: #666; font-size: 0.9rem; }
+                        .summary-box { background: #f5f5f5; padding: 0.75rem 1rem; border: 1px solid #ddd; margin: 0.75rem 0; }
+                        .summary-row { display: flex; justify-content: space-between; padding: 0.25rem 0; border-bottom: 1px solid #eee; font-size: 0.95rem; }
                         .summary-row:last-child { border-bottom: none; }
                         .level-significant { color: #b45309; font-weight: bold; }
                         .level-moderate { color: #0369a1; font-weight: bold; }
                         .level-lower { color: #166534; }
                         ul { margin: 0.5rem 0; padding-left: 1.5rem; }
-                        li { margin: 0.25rem 0; }
-                        .criteria-badge { background: #7d9980; color: white; padding: 2px 6px; border-radius: 3px; font-size: 0.7rem; font-family: sans-serif; }
-                        .heds-badge { background: #d4a84b; color: white; padding: 2px 6px; border-radius: 3px; font-size: 0.7rem; font-family: sans-serif; }
-                        .disclaimer { font-size: 0.85rem; color: #666; margin-top: 2rem; padding: 1rem; border: 1px solid #ddd; background: #fafafa; }
-                        .print-category { margin-bottom: 1.25rem; }
-                        .symptom-list { margin-left: 0.5rem; }
-                        .symptom-entry { margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px dotted #e0e0e0; }
+                        li { margin: 0.2rem 0; }
+                        .criteria-badge { background: #7d9980; color: white; padding: 1px 5px; border-radius: 3px; font-size: 0.65rem; font-family: sans-serif; vertical-align: middle; }
+                        .heds-badge { background: #d4a84b; color: white; padding: 1px 5px; border-radius: 3px; font-size: 0.65rem; font-family: sans-serif; vertical-align: middle; }
+                        .disclaimer { font-size: 0.8rem; color: #666; margin-top: 1.5rem; padding: 0.75rem; border: 1px solid #ddd; background: #fafafa; }
+                        .print-category { margin-bottom: 1rem; }
+                        .symptom-list { margin-left: 0; }
+                        .symptom-entry { display: flex; gap: 0.5rem; padding: 0.35rem 0; border-bottom: 1px dotted #e8e8e8; align-items: flex-start; }
                         .symptom-entry:last-child { border-bottom: none; }
-                        .symptom-name { font-weight: 600; margin-bottom: 0.2rem; }
-                        .symptom-desc { font-size: 0.9rem; color: #555; font-style: italic; margin-left: 0.5rem; }
-                        .criteria-section { background: #e8f0e9; padding: 1rem; margin: 1rem 0; border-left: 3px solid #7d9980; }
-                        .criteria-note { font-size: 0.85rem; color: #666; margin-top: 0.75rem; font-style: italic; }
-                        .monitoring-section { background: #fff8e6; padding: 1rem; margin: 1.5rem 0; border-left: 3px solid #d4a84b; }
+                        .symptom-entry.checked { background: #f0f7f0; margin: 0 -0.5rem; padding-left: 0.5rem; padding-right: 0.5rem; }
+                        .symptom-entry.unchecked { opacity: 0.7; }
+                        .symptom-checkbox { font-size: 1.1rem; line-height: 1; min-width: 1.2rem; }
+                        .symptom-entry.checked .symptom-checkbox { color: #166534; }
+                        .symptom-entry.unchecked .symptom-checkbox { color: #999; }
+                        .symptom-content { flex: 1; }
+                        .symptom-name { font-weight: 500; font-size: 0.9rem; }
+                        .symptom-entry.checked .symptom-name { font-weight: 600; }
+                        .symptom-desc { font-size: 0.8rem; color: #555; margin-top: 0.1rem; }
+                        .criteria-section { background: #e8f0e9; padding: 0.75rem; margin: 0.75rem 0; border-left: 3px solid #7d9980; }
+                        .criteria-note { font-size: 0.8rem; color: #666; margin-top: 0.5rem; font-style: italic; }
+                        .monitoring-section { background: #fff8e6; padding: 0.75rem; margin: 1rem 0; border-left: 3px solid #d4a84b; }
                         .monitoring-section h3 { border-bottom: none; margin-top: 0; }
-                        .page-break { page-break-before: always; }
+                        .page-break-avoid { page-break-inside: avoid; }
                         @media print { 
-                            body { padding: 0.5rem; } 
-                            .page-break { page-break-before: always; }
+                            body { padding: 0.5rem; font-size: 10pt; } 
+                            .print-category { page-break-inside: avoid; }
                         }
                     </style>
                 </head>
                 <body>
                     <h1>Ehlers-Danlos Syndrome Symptom Assessment Report</h1>
-                    <p><strong>Generated:</strong> ${summary.date}</p>
+                    <p style="margin-top: 0; color: #666;"><strong>Generated:</strong> ${summary.date}</p>
                     
                     <div class="summary-box">
                         <div class="summary-row"><span>Age:</span><span>${summary.age}</span></div>
                         <div class="summary-row"><span>Sex Assigned at Birth:</span><span>${summary.sex}</span></div>
-                        <div class="summary-row"><span>Total Symptoms Identified:</span><span><strong>${summary.totalSymptoms}</strong></span></div>
+                        <div class="summary-row"><span>Total Symptoms Selected:</span><span><strong>${summary.totalSymptoms}</strong></span></div>
                         <div class="summary-row"><span>2017 Criteria Features:</span><span><strong>${summary.criteriaCount}</strong> of 12</span></div>
                         <div class="summary-row"><span>Assessment Level:</span><span class="level-${summary.level}">${summary.levelText}</span></div>
                     </div>
@@ -2422,9 +2445,9 @@
 
                     ${monitoringHTML}
 
-                    <h2>Detailed Symptom Report</h2>
-                    <p>The following ${summary.totalSymptoms} symptoms were identified across ${Object.keys(summary.symptomsByCategory).length} categories:</p>
-                    ${symptomsHTML || '<p>No symptoms selected.</p>'}
+                    <h2>Complete Symptom Checklist</h2>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">☑ = Selected by user &nbsp;&nbsp; ☐ = Not selected</p>
+                    ${symptomsHTML}
 
                     <div class="disclaimer">
                         <strong>Important Disclaimer:</strong> This report is for educational and informational purposes only. It is not a diagnostic instrument and cannot replace professional medical evaluation. Ehlers-Danlos syndromes require clinical assessment by qualified healthcare providers, often including geneticists and specialists familiar with connective tissue disorders. Please consult with a medical professional if you suspect you may have EDS.
@@ -2447,36 +2470,67 @@
         function exportToCSV() {
             const summary = generateResultsSummary();
             
-            let csvContent = 'EDS Symptom Assessment Export\n';
-            csvContent += `Date,${summary.date}\n`;
-            csvContent += `Age,${summary.age}\n`;
-            csvContent += `Sex Assigned at Birth,${summary.sex}\n`;
-            csvContent += `Total Symptoms,${summary.totalSymptoms}\n`;
-            csvContent += `2017 Criteria Features,${summary.criteriaCount}\n`;
-            csvContent += `Assessment Level,${summary.levelText}\n\n`;
+            // Create comprehensive CSV content
+            let csvContent = '';
             
-            // Criteria features section
+            // Header section
+            csvContent += 'EDS SYMPTOM ASSESSMENT EXPORT\n';
+            csvContent += '==============================\n\n';
+            
+            // Summary info
+            csvContent += 'ASSESSMENT SUMMARY\n';
+            csvContent += 'Field,Value\n';
+            csvContent += `Date,"${summary.date}"\n`;
+            csvContent += `Age,"${summary.age}"\n`;
+            csvContent += `Sex Assigned at Birth,"${summary.sex}"\n`;
+            csvContent += `Total Symptoms Selected,${summary.totalSymptoms}\n`;
+            csvContent += `2017 Criteria Features,${summary.criteriaCount} of 12\n`;
+            csvContent += `Assessment Level,"${summary.levelText}"\n\n`;
+            
+            // 2017 Criteria features section
             if (summary.criteriaSymptoms.length > 0) {
-                csvContent += '2017 CRITERIA FEATURES PRESENT\n';
+                csvContent += '2017 DIAGNOSTIC CRITERIA FEATURES PRESENT\n';
+                csvContent += 'Feature\n';
                 summary.criteriaSymptoms.forEach(s => {
-                    csvContent += `"${s}"\n`;
+                    csvContent += `"${s.replace(/"/g, '""')}"\n`;
                 });
                 csvContent += '\n';
             }
 
-            csvContent += 'DETAILED SYMPTOM LIST\n';
-            csvContent += 'Category,Symptom,Description,2017 Criteria,hEDS Emphasis\n';
+            // Category summary
+            csvContent += 'SYMPTOM COUNT BY CATEGORY\n';
+            csvContent += 'Category,Selected,Total,Percentage\n';
+            for (const [category, data] of Object.entries(symptomData)) {
+                const checkedCount = summary.symptomsByCategory[category]?.length || 0;
+                const totalCount = data.symptoms.length;
+                const percentage = totalCount > 0 ? Math.round((checkedCount / totalCount) * 100) : 0;
+                csvContent += `"${category}",${checkedCount},${totalCount},${percentage}%\n`;
+            }
+            csvContent += '\n';
+
+            // Complete symptom checklist by category
+            csvContent += 'COMPLETE SYMPTOM CHECKLIST\n';
+            csvContent += 'Category,Selected,Symptom Name,Description,2017 Criteria,hEDS Emphasis\n';
             
-            for (const [category, symptoms] of Object.entries(summary.symptomsByCategory)) {
+            for (const [category, data] of Object.entries(symptomData)) {
+                const symptoms = data.symptoms || [];
+                const checkedInCategory = summary.symptomsByCategory[category] || [];
+                const checkedNames = checkedInCategory.map(s => s.text);
+                
                 for (const symptom of symptoms) {
-                    const escapedText = symptom.text.replace(/"/g, '""');
+                    const isChecked = checkedNames.includes(symptom.name);
+                    const escapedName = symptom.name.replace(/"/g, '""');
                     const escapedDesc = (symptom.desc || '').replace(/"/g, '""');
-                    csvContent += `"${category}","${escapedText}","${escapedDesc}",${symptom.criteria ? 'Yes' : 'No'},${symptom.heds ? 'Yes' : 'No'}\n`;
+                    csvContent += `"${category}",${isChecked ? 'YES' : 'no'},"${escapedName}","${escapedDesc}",${symptom.criteria ? 'Yes' : 'No'},${symptom.heds ? 'Yes' : 'No'}\n`;
                 }
             }
 
-            csvContent += '\nDISCLAIMER\n';
-            csvContent += '"This report is for educational purposes only and is not a diagnostic instrument. Please consult with a qualified healthcare provider."\n';
+            csvContent += '\n';
+            csvContent += 'DISCLAIMER\n';
+            csvContent += '"This report is for educational purposes only and is not a diagnostic instrument. Please consult with a qualified healthcare provider for proper evaluation."\n';
+            csvContent += '\n';
+            csvContent += 'SOURCES\n';
+            csvContent += '"Full source references available in the EDS Symptom Assessment Tool Sources & References section."\n';
 
             // Create and trigger download
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -2502,7 +2556,7 @@
             body += `Sex Assigned at Birth: ${summary.sex}\n\n`;
             body += `RESULTS\n`;
             body += `-------\n`;
-            body += `Total Symptoms Identified: ${summary.totalSymptoms}\n`;
+            body += `Total Symptoms Selected: ${summary.totalSymptoms}\n`;
             body += `2017 Criteria Features: ${summary.criteriaCount} of 12\n`;
             body += `Assessment Level: ${summary.levelText}\n\n`;
             
@@ -2510,24 +2564,30 @@
                 body += `2017 CRITERIA FEATURES PRESENT\n`;
                 body += `------------------------------\n`;
                 summary.criteriaSymptoms.forEach(s => {
-                    body += `• ${s}\n`;
+                    body += `[x] ${s}\n`;
                 });
                 body += `\n`;
             }
 
-            body += `DETAILED SYMPTOMS BY CATEGORY\n`;
-            body += `-----------------------------\n`;
-            for (const [category, symptoms] of Object.entries(summary.symptomsByCategory)) {
-                body += `\n${category.toUpperCase()} (${symptoms.length})\n`;
-                body += `${'─'.repeat(Math.min(category.length + 10, 40))}\n`;
+            body += `COMPLETE SYMPTOM CHECKLIST\n`;
+            body += `==========================\n`;
+            body += `[x] = Selected    [ ] = Not selected\n`;
+            
+            for (const [category, data] of Object.entries(symptomData)) {
+                const symptoms = data.symptoms || [];
+                const checkedInCategory = summary.symptomsByCategory[category] || [];
+                const checkedNames = checkedInCategory.map(s => s.text);
+                const checkedCount = checkedNames.length;
+                
+                body += `\n${category.toUpperCase()} (${checkedCount}/${symptoms.length})\n`;
+                body += `${'─'.repeat(Math.min(category.length + 15, 50))}\n`;
+                
                 symptoms.forEach(s => {
+                    const isChecked = checkedNames.includes(s.name);
                     let tags = '';
-                    if (s.criteria) tags += ' [2017 Criteria]';
-                    if (s.heds) tags += ' [hEDS]';
-                    body += `\n• ${s.text}${tags}\n`;
-                    if (s.desc) {
-                        body += `  ${s.desc}\n`;
-                    }
+                    if (s.criteria) tags += ' *Criteria*';
+                    if (s.heds) tags += ' *hEDS*';
+                    body += `${isChecked ? '[x]' : '[ ]'} ${s.name}${tags}\n`;
                 });
             }
 
@@ -2547,29 +2607,35 @@
         function copyToClipboard() {
             const summary = generateResultsSummary();
             
-            let text = `EDS SYMPTOM ASSESSMENT SUMMARY\n`;
+            let text = `EDS SYMPTOM ASSESSMENT\n`;
             text += `Date: ${summary.date}\n`;
             text += `Age: ${summary.age} | Sex: ${summary.sex}\n\n`;
-            text += `Results: ${summary.totalSymptoms} symptoms, ${summary.criteriaCount}/12 criteria features\n`;
+            text += `Results: ${summary.totalSymptoms} symptoms selected\n`;
+            text += `2017 Criteria: ${summary.criteriaCount}/12 features\n`;
             text += `Level: ${summary.levelText}\n\n`;
             
             if (summary.criteriaSymptoms.length > 0) {
-                text += `2017 Criteria Features Present:\n`;
+                text += `Criteria Features Present:\n`;
                 summary.criteriaSymptoms.forEach(s => {
                     text += `✓ ${s}\n`;
                 });
                 text += `\n`;
             }
 
-            text += `Detailed Symptoms:\n`;
+            text += `Complete Checklist:\n`;
             text += `==================\n`;
-            for (const [category, symptoms] of Object.entries(summary.symptomsByCategory)) {
-                text += `\n${category} (${symptoms.length}):\n`;
+            text += `✓ = Selected  ○ = Not selected\n`;
+            
+            for (const [category, data] of Object.entries(symptomData)) {
+                const symptoms = data.symptoms || [];
+                const checkedInCategory = summary.symptomsByCategory[category] || [];
+                const checkedNames = checkedInCategory.map(s => s.text);
+                const checkedCount = checkedNames.length;
+                
+                text += `\n${category} (${checkedCount}/${symptoms.length})\n`;
                 symptoms.forEach(s => {
-                    text += `• ${s.text}\n`;
-                    if (s.desc) {
-                        text += `  └ ${s.desc}\n`;
-                    }
+                    const isChecked = checkedNames.includes(s.name);
+                    text += `${isChecked ? '✓' : '○'} ${s.name}\n`;
                 });
             }
 
