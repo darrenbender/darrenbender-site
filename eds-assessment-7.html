@@ -83,6 +83,78 @@
             display: block;
         }
 
+        /* Collapsible Reference Sections */
+        .reference-section {
+            margin-top: 1.5rem;
+            background: white;
+            border: 1px solid var(--border);
+        }
+
+        .reference-section-header {
+            padding: 1rem 1.5rem;
+            background: var(--sage-light);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .reference-section-header:hover {
+            background: #dce8dd;
+        }
+
+        .reference-section-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--ink);
+        }
+
+        .reference-section-toggle {
+            font-size: 1.25rem;
+            color: var(--sage-dark);
+            transition: transform 0.2s;
+        }
+
+        .reference-section.open .reference-section-toggle {
+            transform: rotate(180deg);
+        }
+
+        .reference-section-content {
+            display: none;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .reference-section.open .reference-section-content {
+            display: block;
+        }
+
+        /* Copyright Notice */
+        .copyright-notice {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8f8f6;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .copyright-notice p {
+            margin: 0.5rem 0;
+            font-size: 0.85rem;
+            color: var(--slate);
+        }
+
+        .copyright-notice p:first-child {
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .copyright-notice a {
+            color: var(--sage-dark);
+        }
+
         .source-card {
             background: white;
             border: 1px solid var(--border);
@@ -186,6 +258,16 @@
             margin-bottom: 0.5rem;
         }
 
+        .input-help-text {
+            font-size: 0.8rem;
+            color: var(--slate);
+            margin: 0 0 0.75rem 0;
+            line-height: 1.5;
+            padding: 0.5rem 0.75rem;
+            background: #f8f8f6;
+            border-left: 2px solid var(--border);
+        }
+
         #age-input {
             padding: 0.5rem 0.75rem;
             border: 1px solid var(--border);
@@ -265,7 +347,7 @@
             background: var(--coral-light);
             border-left: 3px solid var(--coral);
             padding: 1.25rem 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
             font-size: 0.9rem;
             color: #5a4a47;
         }
@@ -279,34 +361,22 @@
             letter-spacing: 0.1em;
         }
 
-        .stats-bar {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .stat {
-            background: white;
+        .privacy-notice {
+            background: #f0f4f8;
+            border-left: 3px solid #5a7d8c;
             padding: 1rem 1.5rem;
-            border: 1px solid var(--border);
-            flex: 1;
-            min-width: 140px;
-            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 0.85rem;
+            color: #4a5568;
         }
 
-        .stat-number {
-            font-family: 'Libre Baskerville', serif;
-            font-size: 1.75rem;
-            color: var(--sage-dark);
+        .privacy-notice strong:first-child {
             display: block;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
+            color: #5a7d8c;
             text-transform: uppercase;
+            font-size: 0.7rem;
             letter-spacing: 0.1em;
-            color: var(--slate);
         }
 
         .category {
@@ -324,6 +394,7 @@
             justify-content: space-between;
             align-items: center;
             transition: background 0.2s;
+            gap: 1rem;
         }
 
         .category-header:hover {
@@ -334,6 +405,7 @@
             font-family: 'Libre Baskerville', serif;
             font-size: 1.1rem;
             font-weight: 400;
+            flex: 1;
         }
 
         .category-count {
@@ -343,6 +415,17 @@
             border-radius: 2px;
             font-size: 0.75rem;
             font-weight: 500;
+            min-width: 4.5rem;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .category-expand-icon {
+            font-size: 1.25rem;
+            color: var(--sage-dark);
+            font-weight: 300;
+            width: 1.25rem;
+            text-align: center;
         }
 
         .category-items {
@@ -354,15 +437,12 @@
             display: block;
         }
 
-        .category-header::after {
-            content: '+';
-            font-size: 1.25rem;
-            color: var(--sage-dark);
-            font-weight: 300;
-        }
-
-        .category.open .category-header::after {
-            content: '−';
+        /* Sticky header when category is open */
+        .category.open .category-header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .symptom-item {
@@ -382,51 +462,333 @@
             background: #fdfcfb;
         }
 
-        .symptom-item.checked {
+        .symptom-item.response-yes {
             background: var(--sage-light);
         }
 
-        .symptom-item input[type="checkbox"] {
-            appearance: none;
-            width: 18px;
-            height: 18px;
-            border: 2px solid var(--border);
-            border-radius: 2px;
-            cursor: pointer;
+        .symptom-item.response-maybe {
+            background: var(--amber-light);
+        }
+
+        .symptom-response {
+            display: flex;
+            gap: 0.2rem;
             flex-shrink: 0;
-            margin-top: 2px;
+            margin-top: 1px;
+        }
+
+        .response-btn {
+            width: 26px;
+            height: 26px;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--slate);
             transition: all 0.15s;
-            -webkit-tap-highlight-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Source Sans 3', sans-serif;
         }
 
-        .symptom-item input[type="checkbox"]:checked {
-            background: var(--sage);
+        .response-btn:hover {
             border-color: var(--sage);
+            background: #fafafa;
         }
 
-        .symptom-item input[type="checkbox"]:checked::after {
-            content: '✓';
-            display: block;
-            text-align: center;
+        .response-btn.active-yes {
+            background: var(--sage);
+            border-color: var(--sage-dark);
             color: white;
-            font-size: 12px;
-            line-height: 14px;
+        }
+
+        .response-btn.active-maybe {
+            background: var(--amber);
+            border-color: #b8922e;
+            color: white;
         }
 
         .symptom-label {
             flex: 1;
-            cursor: pointer;
+            cursor: default;
         }
 
         .symptom-name {
             font-weight: 500;
+            display: inline;
+        }
+
+        /* Term tooltips for clarifying subjective language */
+        .term-tip {
+            position: relative;
+            border-bottom: 1px dotted var(--sage);
+            cursor: help;
+            color: var(--ink);
+        }
+
+        .term-tip:hover {
+            color: var(--sage-dark);
+        }
+
+        .term-tip::after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: normal;
+            width: max-content;
+            max-width: 280px;
+            line-height: 1.4;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s;
+            pointer-events: none;
+            text-align: left;
+            font-style: normal;
+        }
+
+        .term-tip::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: #333;
+            margin-bottom: -12px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s;
+            z-index: 101;
+        }
+
+        .term-tip:hover::after,
+        .term-tip:hover::before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* hEDS Filter */
+        .filter-controls {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            background: #f8f8f6;
+            border: 1px solid var(--border);
+        }
+
+        .filter-label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--ink);
+            margin-right: 0.5rem;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+        }
+
+        .filter-option input[type="radio"] {
+            display: none;
+        }
+
+        .filter-option label {
+            padding: 0.35rem 0.75rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            user-select: none;
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--slate);
+            transition: all 0.15s;
+        }
+
+        .filter-option:first-child label {
+            border-radius: 3px 0 0 3px;
+        }
+
+        .filter-option:last-child label {
+            border-radius: 0 3px 3px 0;
+        }
+
+        .filter-option input[type="radio"]:checked + label {
+            background: var(--sage);
+            border-color: var(--sage-dark);
+            color: white;
+        }
+
+        .filter-option label:hover {
+            border-color: var(--sage);
+        }
+
+        .filter-info {
+            font-size: 0.8rem;
+            color: var(--slate);
+            margin-left: auto;
+        }
+
+        .filter-help-btn {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: white;
+            color: var(--slate);
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+
+        .filter-help-btn:hover {
+            background: var(--sage-light);
+            border-color: var(--sage);
+            color: var(--sage-dark);
+        }
+
+        .filter-help-panel {
+            display: none;
+            background: white;
+            border: 1px solid var(--border);
+            border-top: none;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            margin-top: -1rem;
+        }
+
+        .filter-help-panel.visible {
             display: block;
+        }
+
+        .filter-help-item {
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filter-help-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .filter-help-item strong {
+            color: var(--sage-dark);
+            font-size: 0.9rem;
+        }
+
+        .filter-help-item p {
+            font-size: 0.8rem;
+            color: var(--slate);
+            margin: 0.25rem 0 0 0;
+            line-height: 1.5;
+        }
+
+        .symptom-item.hidden-by-filter {
+            display: none;
+        }
+
+        .category.hidden-by-filter {
+            display: none;
         }
 
         .symptom-desc {
             font-size: 0.85rem;
             color: var(--slate);
             margin-top: 0.15rem;
+        }
+
+        .response-legend {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: var(--slate);
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            background: #f8f8f6;
+            border: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .legend-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .legend-box.yes { background: var(--sage); }
+        .legend-box.maybe { background: var(--amber); }
+        .legend-box.blank { background: white; border: 1px solid var(--border); color: var(--slate); }
+
+        .assessment-range {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .range-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .range-fill-yes {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: var(--sage);
+            border-radius: 4px 0 0 4px;
+            transition: width 0.3s;
+        }
+
+        .range-fill-maybe {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            background: var(--amber);
+            transition: left 0.3s, width 0.3s;
         }
 
         .symptom-tag {
@@ -454,33 +816,80 @@
             bottom: 0;
             background: white;
             border-top: 2px solid var(--sage);
-            padding: 1.5rem;
+            padding: 0;
             margin-top: 1rem;
             box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
+            z-index: 100;
         }
 
         .assessment-panel.collapsed {
-            padding: 1rem 1.5rem;
+            padding: 0;
         }
 
         .assessment-panel.collapsed .assessment-content {
             display: none;
         }
 
+        .assessment-stats {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: #f8f8f6;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+
+        .assessment-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.25rem 0.75rem;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            font-size: 0.8rem;
+        }
+
+        .assessment-stat-value {
+            font-weight: 600;
+            color: var(--sage-dark);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .assessment-stat-label {
+            color: var(--slate);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .assessment-header {
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            background: white;
+        }
+
         .assessment-content {
+            max-height: 50vh;
+            overflow-y: auto;
+            padding: 1rem;
             transition: opacity 0.2s ease;
         }
 
         .collapse-btn {
             background: none;
             border: 1px solid var(--border);
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.75rem;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--slate);
             transition: all 0.2s;
             margin-right: 0.5rem;
+            border-radius: 3px;
         }
 
         .collapse-btn:hover {
@@ -490,11 +899,11 @@
 
         .assessment-title {
             font-family: 'Libre Baskerville', serif;
-            font-size: 1rem;
-            margin-bottom: 1rem;
+            font-size: 0.95rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin: 0;
         }
 
         .assessment-panel.collapsed .assessment-title {
@@ -566,6 +975,11 @@
             font-weight: 500;
         }
 
+        .criteria-maybe {
+            color: var(--amber);
+            font-weight: 500;
+        }
+
         .criteria-unmet {
             color: var(--slate);
         }
@@ -603,14 +1017,6 @@
             h1 {
                 font-size: 1.5rem;
             }
-            
-            .stats-bar {
-                flex-direction: column;
-            }
-            
-            .stat {
-                min-width: 100%;
-            }
 
             .category-header {
                 padding: 0.875rem 1rem;
@@ -639,25 +1045,38 @@
                 width: fit-content;
             }
 
-            .assessment-panel {
-                padding: 1rem;
+            .assessment-stats {
+                gap: 0.4rem;
+                padding: 0.5rem 0.75rem;
+            }
+
+            .assessment-stat {
+                padding: 0.2rem 0.5rem;
+                font-size: 0.75rem;
+            }
+
+            .assessment-stat-label {
+                font-size: 0.6rem;
+            }
+
+            .assessment-header {
+                padding: 0.5rem 0.75rem;
+                flex-wrap: wrap;
+                gap: 0.5rem;
             }
 
             .assessment-title {
-                flex-direction: column;
-                gap: 0.75rem;
-                align-items: flex-start;
+                font-size: 0.85rem;
             }
 
-            .assessment-title > div {
-                display: flex;
-                gap: 0.5rem;
-                width: 100%;
+            .assessment-content {
+                padding: 0.75rem;
+                max-height: 45vh;
             }
 
             .collapse-btn, .reset-btn {
-                flex: 1;
-                text-align: center;
+                padding: 0.35rem 0.6rem;
+                font-size: 0.7rem;
             }
 
             .criteria-item {
@@ -669,19 +1088,13 @@
                 font-size: 0.85rem;
             }
 
+            .privacy-notice {
+                padding: 0.875rem 1rem;
+                font-size: 0.8rem;
+            }
+
             .intro-text {
                 font-size: 0.9rem;
-            }
-
-            .symptom-item input[type="checkbox"] {
-                width: 24px;
-                height: 24px;
-                margin-top: 0;
-            }
-
-            .symptom-item input[type="checkbox"]:checked::after {
-                font-size: 16px;
-                line-height: 20px;
             }
 
             .tab-btn {
@@ -711,6 +1124,10 @@
                 gap: 0.75rem;
             }
 
+            .input-help-text {
+                font-size: 0.75rem;
+            }
+
             .filter-section {
                 flex-direction: column;
                 align-items: flex-start;
@@ -730,6 +1147,38 @@
 
             .monitoring-title {
                 font-size: 0.95rem;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .filter-options {
+                width: 100%;
+            }
+
+            .filter-option label {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.5rem;
+            }
+
+            .term-tip::after {
+                left: 0;
+                transform: none;
+                max-width: 250px;
+            }
+
+            .term-tip::before {
+                left: 1rem;
+                transform: none;
+            }
+
+            .response-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.8rem;
             }
 
             .export-buttons {
@@ -935,15 +1384,9 @@
             }
 
             .tab-nav, .assessment-panel, .collapse-btn, .reset-btn, 
-            .export-section, .filter-section, .disclaimer {
-                display: none !important;
-            }
-
-            .tab-content {
-                display: block !important;
-            }
-
-            #tab-sources, #tab-monitoring {
+            .export-section, .filter-section, .disclaimer, .privacy-notice,
+            .filter-controls, .response-legend, .assessment-stats, .assessment-header,
+            .reference-section, .copyright-notice, .filter-help-panel {
                 display: none !important;
             }
 
@@ -1023,27 +1466,26 @@
             This tool is provided for informational and educational purposes only. It is not a diagnostic instrument and cannot replace professional medical evaluation. Ehlers-Danlos syndromes require clinical assessment by qualified healthcare providers, often including geneticists and specialists familiar with connective tissue disorders. If you suspect you may have EDS, please consult with a medical professional.
         </div>
 
-        <nav class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab('checklist')">Symptom Checklist</button>
-            <button class="tab-btn" onclick="switchTab('sources')">Sources & References</button>
-            <button class="tab-btn" onclick="switchTab('monitoring')">Health Monitoring</button>
-        </nav>
-
-        <div id="tab-checklist" class="tab-content active">
+        <div class="privacy-notice">
+            <strong>🔒 Your Privacy</strong>
+            This tool runs entirely in your browser. <strong>No data is collected, stored, or transmitted.</strong> No cookies are used. No account is required. Your responses are not saved anywhere—when you close or refresh this page, all entries are cleared. Any exports you create (PDF, CSV, etc.) are generated locally on your device. Your health information remains completely private.
+        </div>
 
         <div class="intro-text">
-            <p>Ehlers-Danlos syndromes (EDS) are a group of inherited connective tissue disorders affecting collagen production and structure. This checklist focuses primarily on <strong>hypermobile EDS (hEDS)</strong>, the most common subtype, while including symptoms relevant to other EDS variants.</p>
-            <p>Symptoms marked with <span class="symptom-tag tag-criteria">2017 Criteria</span> are specifically referenced in the 2017 hEDS diagnostic criteria. Those marked <span class="symptom-tag tag-heds">hEDS Emphasis</span> are particularly prominent in hypermobile EDS.</p>
+            <p>Ehlers-Danlos syndromes (EDS) are a group of inherited connective tissue disorders affecting collagen production and structure. This checklist focuses primarily on <strong><span class="term-tip" data-tip="Hypermobile Ehlers-Danlos Syndrome: The most common EDS subtype, characterized by joint hypermobility, chronic pain, fatigue, and soft/stretchy skin. Unlike other EDS types, hEDS has no identified genetic marker and is diagnosed clinically. It affects an estimated 1 in 3,100-5,000 people.">hypermobile EDS (hEDS)</span></strong>, the most common subtype, while including symptoms relevant to other EDS variants.</p>
+            <p>Symptoms marked with <span class="symptom-tag tag-criteria">2017 Criteria</span> are specifically referenced in the <span class="term-tip" data-tip="The 2017 International Classification of EDS established standardized diagnostic criteria for hEDS, requiring: (1) Generalized joint hypermobility (Beighton score), (2) Two or more systemic features from a defined list, and (3) Exclusion of other connective tissue disorders. This replaced the older Brighton criteria.">2017 hEDS diagnostic criteria</span>. Those marked <span class="symptom-tag tag-heds">hEDS Emphasis</span> are particularly prominent in hypermobile EDS.</p>
         </div>
 
         <div class="age-section">
             <label for="age-input" class="age-label">Your Age (years)</label>
+            <p class="input-help-text">Age affects how hypermobility is assessed. The <span class="term-tip" data-tip="A 9-point clinical test measuring joint flexibility: (1) pinky fingers bending back >90° (1 pt each), (2) thumbs touching forearms (1 pt each), (3) elbows hyperextending >10° (1 pt each), (4) knees hyperextending >10° (1 pt each), (5) palms flat on floor with straight legs (1 pt). Score ≥5 in adults or ≥6 in children indicates generalized hypermobility.">Beighton score</span> threshold is higher for children (≥6) than adults (≥5), and joint flexibility naturally decreases with age. Some symptoms like early-onset arthritis or premature osteoporosis are age-dependent findings.</p>
             <input type="number" id="age-input" min="1" max="120" placeholder="Enter age" onchange="updateAgeContext()">
             <p class="age-note" id="age-note"></p>
         </div>
 
         <div class="age-section">
             <label class="age-label">Sex Assigned at Birth</label>
+            <p class="input-help-text">Biological sex influences EDS presentation. Females are diagnosed ~3:1 over males, possibly due to hormonal effects on connective tissue. Some symptoms (pelvic organ prolapse, endometriosis, menstrual irregularities) are sex-specific, while others (like joint hypermobility) may present differently.</p>
             <div class="sex-options">
                 <label class="sex-option">
                     <input type="radio" name="sex" value="female" onchange="updateSexContext()"> Female
@@ -1061,26 +1503,29 @@
             <p class="age-note" id="sex-note"></p>
         </div>
 
-        <div class="stats-bar">
-            <div class="stat">
-                <span class="stat-number" id="checked-count">0</span>
-                <span class="stat-label">Symptoms Checked</span>
-            </div>
-            <div class="stat">
-                <span class="stat-number" id="total-count">0</span>
-                <span class="stat-label">Total Symptoms</span>
-            </div>
-            <div class="stat">
-                <span class="stat-number" id="criteria-count">0/12</span>
-                <span class="stat-label">Criteria Features</span>
-            </div>
-        </div>
-
         <div id="categories"></div>
 
         <div class="assessment-panel collapsed" id="assessment-panel">
-            <div class="assessment-title">
-                <span>Assessment Summary</span>
+            <div class="assessment-stats">
+                <div class="assessment-stat">
+                    <span class="assessment-stat-value" id="checked-count">0</span>
+                    <span class="assessment-stat-label">Symptoms Checked</span>
+                </div>
+                <div class="assessment-stat">
+                    <span class="assessment-stat-value" id="heds-checked-count">0/30</span>
+                    <span class="assessment-stat-label">hEDS Emphasis</span>
+                </div>
+                <div class="assessment-stat">
+                    <span class="assessment-stat-value" id="criteria-count">0/17</span>
+                    <span class="assessment-stat-label">2017 Criteria</span>
+                </div>
+                <div class="assessment-stat" style="margin-left: auto;">
+                    <span class="assessment-stat-value" id="total-count">0</span>
+                    <span class="assessment-stat-label">Total Available</span>
+                </div>
+            </div>
+            <div class="assessment-header">
+                <span class="assessment-title">Assessment Summary</span>
                 <div>
                     <button class="collapse-btn" onclick="togglePanel()">▲ Expand</button>
                     <button class="reset-btn" onclick="resetAll()">Reset All</button>
@@ -1103,9 +1548,14 @@
                 </div>
             </div>
         </div>
-        </div><!-- end tab-checklist -->
 
-        <div id="tab-sources" class="tab-content">
+        <!-- Sources & References Section -->
+        <div class="reference-section" id="sources-section">
+            <div class="reference-section-header" onclick="toggleReferenceSection('sources-section')">
+                <span class="reference-section-title">Sources & References</span>
+                <span class="reference-section-toggle">▼</span>
+            </div>
+            <div class="reference-section-content">
             <div class="sources-intro">
                 <p>The following sources were used to compile this symptom checklist. Each source has been mapped to the symptom categories it primarily addresses. These references provide authoritative information for those seeking to learn more about Ehlers-Danlos syndromes.</p>
                 <p>Sources are categorized by type: <span class="source-type type-official">Official EDS Organization</span> <span class="source-type type-medical">Medical Institution</span> <span class="source-type type-research">Research/Academic</span> <span class="source-type type-reference">Reference</span></p>
@@ -1569,9 +2019,16 @@
                 </div>
             </div>
             </div><!-- end sources-container -->
-        </div><!-- end tab-sources -->
+            </div><!-- end reference-section-content -->
+        </div><!-- end sources-section -->
 
-        <div id="tab-monitoring" class="tab-content">
+        <!-- Health Monitoring Section -->
+        <div class="reference-section" id="monitoring-section">
+            <div class="reference-section-header" onclick="toggleReferenceSection('monitoring-section')">
+                <span class="reference-section-title">Health Monitoring Recommendations</span>
+                <span class="reference-section-toggle">▼</span>
+            </div>
+            <div class="reference-section-content">
             <div class="sources-intro">
                 <p>An EDS diagnosis provides valuable clinical context that can guide proactive health monitoring. While hEDS itself is not life-threatening, awareness of associated conditions allows for earlier detection and intervention. Discuss these considerations with your healthcare providers.</p>
             </div>
@@ -1757,26 +2214,22 @@
                 <strong>Important Note</strong>
                 These monitoring recommendations are based on clinical literature and expert consensus. Not all individuals with hEDS will develop these conditions. Work with your healthcare team to determine which screenings are appropriate for your specific situation and symptom profile.
             </div>
-        </div><!-- end tab-monitoring -->
-    </div>
+            </div><!-- end reference-section-content -->
+        </div><!-- end monitoring-section -->
+
+        <!-- Copyright Notice -->
+        <div class="copyright-notice">
+            <p>© 2025 EDS Symptom Assessment Tool</p>
+            <p>Free for educational and personal use with attribution. For commercial use inquiries, please <a href="mailto:contact@example.com">contact us</a>.</p>
+            <p>This tool is provided for informational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment.</p>
+        </div>
+
+    </div><!-- end container -->
 
     <script>
-        function switchTab(tabName) {
-            // Update tab buttons
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            // Update tab content
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.getElementById('tab-' + tabName).classList.add('active');
-            
-            // Show/hide assessment panel based on tab
-            const assessmentPanel = document.getElementById('assessment-panel');
-            if (tabName === 'checklist') {
-                assessmentPanel.style.display = 'block';
-            } else {
-                assessmentPanel.style.display = 'none';
-            }
+        function toggleReferenceSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.classList.toggle('open');
         }
 
         function filterSources() {
@@ -1866,67 +2319,67 @@
         const symptomData = {
             "Musculoskeletal Features": {
                 symptoms: [
-                    { name: "Generalized Joint Hypermobility", desc: "Excessive flexibility in multiple large and small joints (Beighton score ≥5 for adults)", criteria: true, heds: true },
-                    { name: "Recurrent Joint Subluxations", desc: "Partial dislocations occurring spontaneously or with minimal trauma", criteria: true, heds: true },
-                    { name: "Full Joint Dislocations", desc: "Complete displacement of joint surfaces, may occur repeatedly", criteria: true, heds: true },
+                    { name: "Generalized Joint Hypermobility", desc: "Excessive flexibility in multiple large and small joints (Beighton score ≥5 for adults)", criteria: true, heds: true, info: "This refers to joints that bend further than normal. The Beighton Score is a simple 9-point test measuring flexibility at specific points: pinky fingers bending back >90°, thumbs touching forearms, elbows and knees hyperextending, and palms flat on floor with straight legs. A score of 5+ in adults (or 6+ in children) indicates generalized hypermobility.", examples: "Being able to do 'party tricks' like bending fingers backward, hyperextending elbows past straight, or easily touching palms to floor" },
+                    { name: "Recurrent Joint Subluxations", desc: "Partial dislocations occurring spontaneously or with minimal trauma", criteria: true, heds: true, info: "A subluxation is when a joint partially slips out of place and then goes back. Unlike a full dislocation, the joint surfaces don't completely separate. These often happen during normal activities and may feel like the joint 'slips' or 'pops out' momentarily.", examples: "Shoulder sliding out while reaching overhead, kneecap shifting while walking, ribs 'popping out' during stretching" },
+                    { name: "Full Joint Dislocations", desc: "Complete displacement of joint surfaces, may occur repeatedly", criteria: true, heds: true, info: "A complete dislocation means the joint surfaces fully separate. In EDS, these can happen with minimal force and may occur repeatedly at the same joint. Some people can relocate their own joints.", examples: "Shoulder fully dislocating during sleep, jaw dislocating while yawning, fingers dislocating while gripping" },
                     { name: "Chronic Joint Pain (Arthralgia)", desc: "Persistent pain in joints, often widespread and disproportionate to findings", heds: true },
                     { name: "Widespread Musculoskeletal Pain", desc: "Diffuse pain affecting muscles, tendons, and ligaments", heds: true },
-                    { name: "Joint Clicking/Popping/Crepitus", desc: "Audible or palpable sounds during joint movement" },
-                    { name: "Joint Instability or 'Giving Way'", desc: "Sensation of joints buckling or being unreliable", heds: true },
+                    { name: "Joint Clicking/Popping/Crepitus", desc: "Audible or palpable sounds during joint movement", info: "Joints making noise during movement is common in hypermobility. This includes clicking, popping, grinding, or crunching sounds (crepitus). While often harmless, it may indicate joint instability or early cartilage changes." },
+                    { name: "Joint Instability or 'Giving Way'", desc: "Sensation of joints buckling or being unreliable", heds: true, info: "This is the feeling that a joint might collapse or 'give out' unexpectedly. Knees, ankles, and hips are commonly affected. It's different from weakness—the joint suddenly feels unstable.", examples: "Knee buckling while walking down stairs, ankle rolling on flat ground, hip feeling like it might collapse" },
                     { name: "Frequent Soft Tissue Injuries", desc: "Recurring sprains, strains, and tendinitis with minimal provocation" },
-                    { name: "Early Degenerative Joint Disease", desc: "Osteoarthritis or joint degeneration before age 40" },
+                    { name: "Early Degenerative Joint Disease", desc: "Osteoarthritis or joint degeneration before age 40", info: "Joint instability from hypermobility causes abnormal wear patterns, leading to earlier-than-expected arthritis. X-rays or MRIs may show cartilage loss, bone spurs, or joint space narrowing at an unusually young age." },
                     { name: "Chronic Back Pain", desc: "Persistent spinal pain, often with disc or vertebral involvement" },
                     { name: "Degenerative Disc Disease", desc: "Premature breakdown of intervertebral discs" },
                     { name: "Scoliosis or Kyphosis", desc: "Abnormal curvature of the spine" },
-                    { name: "Poor Proprioception", desc: "Difficulty sensing body position in space", heds: true },
+                    { name: "Poor Proprioception", desc: "Difficulty sensing body position in space", heds: true, info: "Proprioception is your body's ability to know where your limbs are without looking. In EDS, this sense is often impaired, contributing to clumsiness and difficulty with balance. You might not realize your joints are hyperextended without seeing them.", examples: "Difficulty knowing how hard you're gripping something, poor balance with eyes closed, not noticing your posture" },
                     { name: "Clumsiness/Poor Coordination", desc: "Frequent bumping into things, dropping objects, tripping" },
                     { name: "Motor Planning Difficulties", desc: "Trouble executing coordinated movement sequences" },
-                    { name: "Low Muscle Tone (Hypotonia)", desc: "Reduced baseline muscle tension, especially evident in childhood" },
+                    { name: "Low Muscle Tone (Hypotonia)", desc: "Reduced baseline muscle tension, especially evident in childhood", info: "Hypotonia means muscles have less resting tension than normal. This is different from weakness—it's about the baseline 'tightness' of muscles. In infants, this appears as 'floppiness.' In adults, it may contribute to fatigue and poor posture." },
                     { name: "Delayed Motor Milestones", desc: "Late walking, delayed gross motor skill development" },
                     { name: "Reduced Physical Endurance", desc: "Rapid fatigue with physical activity, poor stamina" },
                     { name: "Muscle Weakness", desc: "Reduced strength disproportionate to muscle mass" },
-                    { name: "Flat Feet (Pes Planus)", desc: "Collapsed arches, overpronation", criteria: true },
+                    { name: "Flat Feet (Pes Planus)", desc: "Collapsed arches, overpronation", criteria: true, info: "When the arch of the foot collapses so the entire sole touches the ground. This is common in EDS due to ligament laxity. It often leads to overpronation (feet rolling inward) and can contribute to knee, hip, and back problems." },
                     { name: "Foot Pain in Unsupported Shoes", desc: "Discomfort when walking barefoot or in flat shoes" }
                 ]
             },
             "Skin & Soft Tissue": {
                 symptoms: [
-                    { name: "Soft, Velvety Skin Texture", desc: "Unusually smooth, supple skin quality", criteria: true, heds: true },
-                    { name: "Mildly Hyperextensible Skin", desc: "Skin stretches beyond normal but returns (less dramatic than classical EDS)", heds: true },
+                    { name: "Soft, Velvety Skin Texture", desc: "Unusually smooth, supple skin quality", criteria: true, heds: true, info: "People with EDS often have skin that feels exceptionally soft and smooth to the touch, sometimes described as 'velvety' or like touching expensive fabric. This is due to changes in collagen structure." },
+                    { name: "Mildly Hyperextensible Skin", desc: "Skin stretches beyond normal but returns (less dramatic than classical EDS)", heds: true, info: "In hEDS, skin may stretch more than average but not as dramatically as in classical EDS. Test by gently pulling skin on the back of your hand or forearm—if it stretches noticeably and snaps back, this may be positive." },
                     { name: "Easy Bruising", desc: "Bruises appearing with minimal or unrecalled trauma", criteria: true, heds: true },
                     { name: "Fragile Skin", desc: "Skin that tears or damages easily" },
                     { name: "Delayed Wound Healing", desc: "Cuts and wounds taking longer than expected to close" },
-                    { name: "Abnormal or Atrophic Scarring", desc: "Thin, papery 'cigarette paper' scars", criteria: true },
+                    { name: "Abnormal or Atrophic Scarring", desc: "Thin, papery 'cigarette paper' scars", criteria: true, info: "Atrophic scars are thin, wrinkled, and often widened. They may look like tissue paper or appear sunken. This type of scarring indicates the skin isn't healing with normal collagen formation." },
                     { name: "Widened Scars", desc: "Scars that spread or stretch over time" },
-                    { name: "Unexplained Stretch Marks (Striae)", desc: "Striae appearing without significant weight change, often at young age", criteria: true, heds: true },
+                    { name: "Unexplained Stretch Marks (Striae)", desc: "Striae appearing without significant weight change, often at young age", criteria: true, heds: true, info: "Stretch marks in EDS appear without the typical causes (rapid weight gain, pregnancy, growth spurts). They may appear in unusual locations (back, arms) and often develop during adolescence." },
                     { name: "Thin or Translucent Skin", desc: "Visible veins, skin appears delicate" },
-                    { name: "Piezogenic Papules", desc: "Herniations of fat through heel tissue visible on standing", criteria: true },
-                    { name: "Inguinal Hernia", desc: "Bulging in the groin area" },
+                    { name: "Piezogenic Papules", desc: "Herniations of fat through heel tissue visible on standing", criteria: true, info: "These are small, skin-colored bumps that appear on the sides of your heels when you stand and bear weight. They disappear when you sit down. They're caused by fat tissue pushing through gaps in the heel's connective tissue and are very common in EDS.", examples: "Stand up and look at the sides of your heels—small bumps that appear only when standing" },
+                    { name: "Inguinal Hernia", desc: "Bulging in the groin area", info: "A hernia occurs when tissue pushes through a weak spot in the abdominal wall. The inguinal (groin) area is common. In EDS, hernias occur more frequently due to connective tissue weakness." },
                     { name: "Umbilical Hernia", desc: "Bulging at the navel" },
-                    { name: "Hiatal Hernia", desc: "Stomach protruding through diaphragm" },
-                    { name: "Pelvic Organ Prolapse", desc: "Descent of bladder, uterus, or rectum", criteria: true },
+                    { name: "Hiatal Hernia", desc: "Stomach protruding through diaphragm", info: "Part of the stomach pushes up through the diaphragm into the chest cavity. This contributes to reflux (GERD). More common in EDS due to the laxity of the tissue holding organs in place." },
+                    { name: "Pelvic Organ Prolapse", desc: "Descent of bladder, uterus, or rectum", criteria: true, info: "Organs in the pelvis (bladder, uterus, rectum) drop from their normal position due to weakness in supporting tissues. More common in women with EDS, especially after pregnancy. May cause pressure, bulging sensations, or urinary symptoms." },
                     { name: "Rectal Prolapse", desc: "Protrusion of rectal tissue" },
                     { name: "Early Varicose Veins", desc: "Visible, enlarged veins appearing before age 30" }
                 ]
             },
             "Cardiovascular & Autonomic": {
                 symptoms: [
-                    { name: "Postural Orthostatic Tachycardia (POTS)", desc: "Excessive heart rate increase upon standing (≥30 bpm)", heds: true },
-                    { name: "Orthostatic Intolerance", desc: "Difficulty tolerating upright position", heds: true },
+                    { name: "Postural Orthostatic Tachycardia (POTS)", desc: "Excessive heart rate increase upon standing (≥30 bpm)", heds: true, info: "POTS is a form of dysautonomia where your heart rate increases excessively when you stand up (30+ bpm increase within 10 minutes). This causes dizziness, palpitations, and fatigue. Approximately 80% of people with hEDS have POTS symptoms.", examples: "Heart racing when standing from sitting, feeling faint in the shower, needing to sit down after standing briefly" },
+                    { name: "Orthostatic Intolerance", desc: "Difficulty tolerating upright position", heds: true, info: "A broader term for symptoms that worsen when upright and improve when lying down. This can include dizziness, brain fog, palpitations, and fatigue triggered by standing or sitting upright." },
                     { name: "Near-Syncope (Pre-Fainting)", desc: "Frequent feeling of almost passing out", heds: true },
                     { name: "Syncope (Fainting)", desc: "Loss of consciousness, especially with standing" },
                     { name: "Palpitations", desc: "Awareness of heart beating, racing, or skipping", heds: true },
                     { name: "Dizziness/Lightheadedness", desc: "Frequent sensation of unsteadiness or head spinning" },
-                    { name: "Exercise Intolerance", desc: "Abnormal cardiovascular response to physical exertion", heds: true },
+                    { name: "Exercise Intolerance", desc: "Abnormal cardiovascular response to physical exertion", heds: true, info: "Difficulty exercising normally due to rapid heart rate increase, excessive fatigue, shortness of breath, or feeling faint. This is often related to POTS or deconditioning, not laziness." },
                     { name: "Temperature Dysregulation", desc: "Difficulty maintaining normal body temperature" },
                     { name: "Heat Intolerance", desc: "Excessive symptoms or distress in warm environments" },
                     { name: "Cold Extremities", desc: "Chronically cold hands and feet" },
-                    { name: "Raynaud's Phenomenon", desc: "Color changes in fingers/toes with cold or stress" },
+                    { name: "Raynaud's Phenomenon", desc: "Color changes in fingers/toes with cold or stress", info: "Fingers or toes turn white, then blue, then red in response to cold or stress. This is caused by blood vessel spasms. It can be painful and is more common in people with connective tissue disorders." },
                     { name: "Labile Blood Pressure", desc: "Blood pressure fluctuating unpredictably" },
                     { name: "Labile Heart Rate", desc: "Heart rate varying significantly at rest" },
                     { name: "Excessive Sweating", desc: "Hyperhidrosis, disproportionate sweating" },
-                    { name: "Mitral Valve Prolapse", desc: "Heart valve abnormality, often asymptomatic", criteria: true },
-                    { name: "Aortic Root Dilation", desc: "Mild enlargement of the aorta (more significant in vascular EDS)", criteria: true }
+                    { name: "Mitral Valve Prolapse", desc: "Heart valve abnormality, often asymptomatic", criteria: true, info: "The mitral valve in the heart doesn't close properly, allowing some blood to flow backward. Usually mild and asymptomatic in hEDS. Diagnosed by echocardiogram. May cause palpitations or a heart murmur." },
+                    { name: "Aortic Root Dilation", desc: "Mild enlargement of the aorta (more significant in vascular EDS)", criteria: true, info: "The aorta (main artery from the heart) may be mildly enlarged at its root. In hEDS, this is usually minor and monitored rather than treated. More significant dilation is a concern in vascular EDS." }
                 ]
             },
             "Gastrointestinal": {
@@ -2053,12 +2506,109 @@
             }
         };
 
-        let checkedSymptoms = new Set();
+        let checkedSymptoms = new Set();  // "Yes" responses
+        let maybeSymptoms = new Set();    // "Maybe/Unsure" responses
         let criteriaSymptoms = new Set();
+        let maybeCriteriaSymptoms = new Set();
+        let currentFilter = 'heds';  // Default filter: 'heds', 'criteria', 'both', 'all'
+
+        // Term glossary for subjective/unclear terms
+        const termGlossary = {
+            'excessive': 'More than what most people experience; noticeably beyond typical levels',
+            'recurrent': 'Happening repeatedly over time (3+ occurrences), not just once or twice',
+            'frequent': 'Occurring often—at least weekly or multiple times per month',
+            'chronic': 'Persistent or long-lasting—typically 3+ months duration',
+            'minimal trauma': 'Little to no force; activities that wouldn\'t normally cause injury',
+            'spontaneous': 'Happening without any apparent cause or trigger',
+            'disproportionate': 'More severe than expected given the situation',
+            'unusual': 'Not typical for your age/gender; different from most people',
+            'persistent': 'Continuing over time without letting up; not temporary',
+            'significant': 'Noticeable enough to affect daily life or function',
+            'premature': 'Earlier than expected for your age',
+            'unexplained': 'Without a clear medical cause after evaluation',
+            'widespread': 'Affecting multiple areas of the body, not localized',
+            'heightened': 'More sensitive or reactive than typical',
+            'early': 'Before the age when it typically occurs (usually before age 40)',
+            'longer than expected': 'Taking more time than typical; wounds taking 2+ weeks, illness lasting weeks instead of days',
+            'delayed': 'Taking longer than the normal timeframe'
+        };
+
+        function addTermTooltips(text) {
+            let result = text;
+            for (const [term, definition] of Object.entries(termGlossary)) {
+                // Case-insensitive match, preserving original case
+                const regex = new RegExp(`\\b(${term})\\b`, 'gi');
+                result = result.replace(regex, `<span class="term-tip" data-tip="${definition}">$1</span>`);
+            }
+            return result;
+        }
 
         function initializeApp() {
             const container = document.getElementById('categories');
             let totalSymptoms = 0;
+
+            // Add response legend and filter controls
+            const legend = document.createElement('div');
+            legend.className = 'response-legend';
+            legend.innerHTML = `
+                <span style="font-weight: 500;">Response options:</span>
+                <div class="legend-item"><span class="legend-box yes">Y</span> Yes, I have this</div>
+                <div class="legend-item"><span class="legend-box maybe">?</span> Maybe / Not sure</div>
+                <div class="legend-item"><span class="legend-box blank">−</span> No / Clear response</div>
+            `;
+            container.appendChild(legend);
+
+            // Add filter controls
+            const filterControls = document.createElement('div');
+            filterControls.className = 'filter-controls';
+            filterControls.innerHTML = `
+                <span class="filter-label">Show:</span>
+                <div class="filter-options">
+                    <div class="filter-option">
+                        <input type="radio" name="symptom-filter" id="filter-heds" value="heds" checked onchange="applySymptomFilter()">
+                        <label for="filter-heds">hEDS</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" name="symptom-filter" id="filter-criteria" value="criteria" onchange="applySymptomFilter()">
+                        <label for="filter-criteria">2017 Criteria</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" name="symptom-filter" id="filter-both" value="both" onchange="applySymptomFilter()">
+                        <label for="filter-both">hEDS + 2017</label>
+                    </div>
+                    <div class="filter-option">
+                        <input type="radio" name="symptom-filter" id="filter-all" value="all" onchange="applySymptomFilter()">
+                        <label for="filter-all">All</label>
+                    </div>
+                </div>
+                <button class="filter-help-btn" onclick="toggleFilterHelp()" title="What do these filters mean?">?</button>
+                <span class="filter-info" id="filter-info"></span>
+            `;
+            container.appendChild(filterControls);
+
+            // Add filter help panel
+            const filterHelp = document.createElement('div');
+            filterHelp.className = 'filter-help-panel';
+            filterHelp.id = 'filter-help';
+            filterHelp.innerHTML = `
+                <div class="filter-help-item">
+                    <strong>hEDS (Hypermobile EDS)</strong>
+                    <p>Shows 30 symptoms particularly prominent in hypermobile Ehlers-Danlos syndrome, the most common EDS subtype. hEDS is characterized by joint hypermobility, chronic pain, and fatigue without the more severe vascular or skin fragility seen in other types.</p>
+                </div>
+                <div class="filter-help-item">
+                    <strong>2017 Criteria</strong>
+                    <p>Shows 17 features specifically referenced in the 2017 International Classification of EDS diagnostic criteria. These criteria were established by the International Consortium on EDS to standardize hEDS diagnosis, requiring: (1) generalized joint hypermobility, (2) two or more systemic features, and (3) exclusion of other conditions.</p>
+                </div>
+                <div class="filter-help-item">
+                    <strong>hEDS + 2017</strong>
+                    <p>Shows all symptoms tagged with either hEDS Emphasis or 2017 Criteria (~40 symptoms). Some symptoms appear in both categories.</p>
+                </div>
+                <div class="filter-help-item">
+                    <strong>All</strong>
+                    <p>Shows the complete symptom inventory including associated conditions and comorbidities commonly seen alongside EDS.</p>
+                </div>
+            `;
+            container.appendChild(filterHelp);
 
             for (const [category, data] of Object.entries(symptomData)) {
                 const categoryDiv = document.createElement('div');
@@ -2079,12 +2629,15 @@
                             if (symptom.criteria) tags.push('<span class="symptom-tag tag-criteria">2017 Criteria</span>');
                             if (symptom.heds) tags.push('<span class="symptom-tag tag-heds">hEDS Emphasis</span>');
                             return `
-                                <div class="symptom-item" data-id="${id}" data-criteria="${symptom.criteria || false}">
-                                    <input type="checkbox" id="${id}" onchange="toggleSymptom('${id}', '${category}', ${symptom.criteria || false})">
-                                    <label class="symptom-label" for="${id}">
+                                <div class="symptom-item" data-id="${id}" data-criteria="${symptom.criteria || false}" data-heds="${symptom.heds || false}">
+                                    <div class="symptom-response">
+                                        <button class="response-btn" data-response="yes" onclick="setResponse('${id}', 'yes', '${category}', ${symptom.criteria || false})" title="Yes, I have this">Y</button>
+                                        <button class="response-btn" data-response="maybe" onclick="setResponse('${id}', 'maybe', '${category}', ${symptom.criteria || false})" title="Maybe / Not sure">?</button>
+                                    </div>
+                                    <div class="symptom-label">
                                         <span class="symptom-name">${symptom.name}${tags.join('')}</span>
-                                        <span class="symptom-desc">${symptom.desc}</span>
-                                    </label>
+                                        <span class="symptom-desc">${addTermTooltips(symptom.desc)}</span>
+                                    </div>
                                 </div>
                             `;
                         }).join('')}
@@ -2095,80 +2648,326 @@
 
             document.getElementById('total-count').textContent = totalSymptoms;
             updateAssessment();
+            
+            // Apply default filter (hEDS) after DOM is ready
+            setTimeout(() => {
+                applySymptomFilter();
+            }, 0);
         }
 
         function toggleCategory(header) {
             header.parentElement.classList.toggle('open');
         }
 
-        function toggleSymptom(id, category, isCriteria) {
-            const checkbox = document.getElementById(id);
-            const item = checkbox.closest('.symptom-item');
+        function toggleFilterHelp() {
+            const panel = document.getElementById('filter-help');
+            panel.classList.toggle('visible');
+        }
+
+        function applySymptomFilter() {
+            const filterValue = document.querySelector('input[name="symptom-filter"]:checked').value;
+            currentFilter = filterValue;
             
-            if (checkbox.checked) {
+            const totalCount = Object.values(symptomData).reduce((sum, cat) => sum + cat.symptoms.length, 0);
+            let visibleCount = 0;
+
+            // Count symptoms by category
+            let hedsOnlyCount = 0;
+            let criteriaOnlyCount = 0;
+            let bothCount = 0;
+            for (const data of Object.values(symptomData)) {
+                data.symptoms.forEach(s => {
+                    if (s.heds && !s.criteria) hedsOnlyCount++;
+                    else if (s.criteria && !s.heds) criteriaOnlyCount++;
+                    else if (s.heds && s.criteria) bothCount++;
+                });
+            }
+
+            document.querySelectorAll('.symptom-item').forEach(item => {
+                const isHeds = item.dataset.heds === 'true';
+                const isCriteria = item.dataset.criteria === 'true';
+                
+                let show = false;
+                switch (filterValue) {
+                    case 'heds':
+                        show = isHeds;
+                        break;
+                    case 'criteria':
+                        show = isCriteria;
+                        break;
+                    case 'both':
+                        show = isHeds || isCriteria;
+                        break;
+                    case 'all':
+                    default:
+                        show = true;
+                        break;
+                }
+                
+                if (show) {
+                    item.classList.remove('hidden-by-filter');
+                    visibleCount++;
+                } else {
+                    item.classList.add('hidden-by-filter');
+                }
+            });
+
+            // Hide empty categories
+            document.querySelectorAll('.category').forEach(category => {
+                const visibleItems = category.querySelectorAll('.symptom-item:not(.hidden-by-filter)');
+                if (visibleItems.length === 0) {
+                    category.classList.add('hidden-by-filter');
+                } else {
+                    category.classList.remove('hidden-by-filter');
+                }
+            });
+
+            // Update filter info
+            const filterInfo = document.getElementById('filter-info');
+            const filterLabels = {
+                'heds': 'hEDS Emphasis',
+                'criteria': '2017 Criteria',
+                'both': 'hEDS + 2017 Criteria',
+                'all': 'All'
+            };
+            filterInfo.innerHTML = `<strong>${visibleCount}</strong> of ${totalCount}`;
+
+            // Update all category counts to reflect filter state
+            for (const category of Object.keys(symptomData)) {
+                updateCategoryCount(category);
+            }
+        }
+
+        // Legacy function for compatibility
+        function toggleHEDSFilter() {
+            applySymptomFilter();
+        }
+
+        function setResponse(id, response, category, isCriteria) {
+            const item = document.querySelector(`[data-id="${id}"]`);
+            const yesBtn = item.querySelector('[data-response="yes"]');
+            const maybeBtn = item.querySelector('[data-response="maybe"]');
+            
+            // Clear previous state
+            item.classList.remove('response-yes', 'response-maybe');
+            yesBtn.classList.remove('active-yes');
+            maybeBtn.classList.remove('active-maybe');
+            checkedSymptoms.delete(id);
+            maybeSymptoms.delete(id);
+            criteriaSymptoms.delete(id);
+            maybeCriteriaSymptoms.delete(id);
+
+            // If clicking the same button that's active, just clear (toggle off)
+            const wasYes = yesBtn.classList.contains('active-yes');
+            const wasMaybe = maybeBtn.classList.contains('active-maybe');
+            
+            if (response === 'yes' && !wasYes) {
                 checkedSymptoms.add(id);
                 if (isCriteria) criteriaSymptoms.add(id);
-                item.classList.add('checked');
-            } else {
-                checkedSymptoms.delete(id);
-                criteriaSymptoms.delete(id);
-                item.classList.remove('checked');
+                item.classList.add('response-yes');
+                yesBtn.classList.add('active-yes');
+            } else if (response === 'maybe' && !wasMaybe) {
+                maybeSymptoms.add(id);
+                if (isCriteria) maybeCriteriaSymptoms.add(id);
+                item.classList.add('response-maybe');
+                maybeBtn.classList.add('active-maybe');
             }
+            // If neither condition met, button was toggled off - state already cleared
 
             updateCategoryCount(category);
             updateAssessment();
         }
 
+        // Legacy function for compatibility
+        function toggleSymptom(id, category, isCriteria) {
+            setResponse(id, 'yes', category, isCriteria);
+        }
+
         function updateCategoryCount(category) {
             const categoryData = symptomData[category];
-            const total = categoryData.symptoms.length;
-            let checked = 0;
+            let yesCount = 0;
+            let maybeCount = 0;
+            let visibleTotal = 0;
 
-            categoryData.symptoms.forEach((_, index) => {
+            categoryData.symptoms.forEach((symptom, index) => {
                 const id = `${category}-${index}`.replace(/\s+/g, '-').replace(/[&()]/g, '');
-                if (checkedSymptoms.has(id)) checked++;
+                const isHeds = symptom.heds;
+                const isCriteria = symptom.criteria;
+                
+                // Check if symptom should be visible based on current filter
+                let isVisible = false;
+                switch (currentFilter) {
+                    case 'heds':
+                        isVisible = isHeds;
+                        break;
+                    case 'criteria':
+                        isVisible = isCriteria;
+                        break;
+                    case 'both':
+                        isVisible = isHeds || isCriteria;
+                        break;
+                    case 'all':
+                    default:
+                        isVisible = true;
+                        break;
+                }
+                
+                if (!isVisible) return;
+                
+                visibleTotal++;
+                if (checkedSymptoms.has(id)) yesCount++;
+                if (maybeSymptoms.has(id)) maybeCount++;
             });
 
-            document.querySelector(`[data-category="${category}"]`).textContent = `${checked}/${total}`;
+            // Find the count element by iterating through all count elements
+            const countEls = document.querySelectorAll('.category-count');
+            countEls.forEach(el => {
+                if (el.getAttribute('data-category') === category) {
+                    if (maybeCount > 0) {
+                        el.textContent = `${yesCount}+${maybeCount}?/${visibleTotal}`;
+                    } else {
+                        el.textContent = `${yesCount}/${visibleTotal}`;
+                    }
+                }
+            });
         }
 
         function updateAssessment() {
             const total = Object.values(symptomData).reduce((sum, cat) => sum + cat.symptoms.length, 0);
-            const checked = checkedSymptoms.size;
-            const criteriaCount = criteriaSymptoms.size;
-            const percentage = (checked / total) * 100;
+            const yesCount = checkedSymptoms.size;
+            const maybeCount = maybeSymptoms.size;
+            const minCount = yesCount;  // If all maybes are "no"
+            const maxCount = yesCount + maybeCount;  // If all maybes are "yes"
+            
+            const criteriaYes = criteriaSymptoms.size;
+            const criteriaMaybe = maybeCriteriaSymptoms.size;
+            const criteriaMin = criteriaYes;
+            const criteriaMax = criteriaYes + criteriaMaybe;
 
-            document.getElementById('checked-count').textContent = checked;
-            document.getElementById('criteria-count').textContent = `${criteriaCount}/12`;
-            document.getElementById('progress-fill').style.width = `${percentage}%`;
+            // Count hEDS-tagged symptoms checked (heds: true only)
+            let hedsYes = 0;
+            let hedsMaybe = 0;
+            let hedsTotal = 0;
+            let criteriaTotal = 0;
+            for (const [category, data] of Object.entries(symptomData)) {
+                data.symptoms.forEach((symptom, index) => {
+                    const id = `${category}-${index}`.replace(/\s+/g, '-').replace(/[&()]/g, '');
+                    if (symptom.heds) {
+                        hedsTotal++;
+                        if (checkedSymptoms.has(id)) hedsYes++;
+                        if (maybeSymptoms.has(id)) hedsMaybe++;
+                    }
+                    if (symptom.criteria) {
+                        criteriaTotal++;
+                    }
+                });
+            }
+
+            // Update counts display
+            if (maybeCount > 0) {
+                document.getElementById('checked-count').innerHTML = `${yesCount} <span style="color: var(--amber);">+ ${maybeCount}?</span>`;
+            } else {
+                document.getElementById('checked-count').textContent = yesCount;
+            }
+
+            // Update hEDS count with total
+            if (hedsMaybe > 0) {
+                document.getElementById('heds-checked-count').innerHTML = `${hedsYes}<span style="color: var(--amber);">-${hedsYes + hedsMaybe}</span>/${hedsTotal}`;
+            } else {
+                document.getElementById('heds-checked-count').textContent = `${hedsYes}/${hedsTotal}`;
+            }
+            
+            // Update criteria count with total
+            if (criteriaMaybe > 0) {
+                document.getElementById('criteria-count').innerHTML = `${criteriaYes}<span style="color: var(--amber);">-${criteriaMax}</span>/${criteriaTotal}`;
+            } else {
+                document.getElementById('criteria-count').textContent = `${criteriaYes}/${criteriaTotal}`;
+            }
+
+            // Progress bar with range visualization
+            const minPercentage = (minCount / total) * 100;
+            const maybePercentage = (maybeCount / total) * 100;
+            
+            document.getElementById('progress-fill').style.width = `${minPercentage}%`;
+            document.getElementById('progress-fill').style.background = 'var(--sage)';
+            
+            // Add or update maybe portion of progress bar
+            let maybeFill = document.getElementById('progress-fill-maybe');
+            if (!maybeFill) {
+                maybeFill = document.createElement('div');
+                maybeFill.id = 'progress-fill-maybe';
+                maybeFill.style.cssText = 'position: absolute; top: 0; height: 100%; background: var(--amber); border-radius: 0 4px 4px 0; transition: all 0.3s;';
+                document.getElementById('progress-fill').parentElement.style.position = 'relative';
+                document.getElementById('progress-fill').parentElement.appendChild(maybeFill);
+            }
+            maybeFill.style.left = `${minPercentage}%`;
+            maybeFill.style.width = `${maybePercentage}%`;
 
             const resultDiv = document.getElementById('assessment-result');
             const breakdownDiv = document.getElementById('criteria-breakdown');
 
-            // Determine assessment level
-            let level, title, text;
+            // Determine assessment level with ranges
+            let levelMin, levelMax, title, text;
 
-            if (criteriaCount >= 5 || checked >= 25) {
-                level = 'high';
-                title = 'Significant Symptom Burden';
-                text = 'Your responses indicate a substantial number of symptoms commonly associated with hEDS. This pattern suggests that evaluation by a healthcare provider familiar with Ehlers-Danlos syndromes would be appropriate. Consider seeking referral to a geneticist, rheumatologist, or EDS-knowledgeable specialist.';
-            } else if (criteriaCount >= 3 || checked >= 12) {
-                level = 'moderate';
-                title = 'Moderate Symptom Correlation';
-                text = 'You have endorsed several symptoms that can be associated with hypermobile EDS and related conditions. While not necessarily indicative of EDS, discussing these symptoms with your healthcare provider may be worthwhile, particularly if they impact your daily functioning.';
-            } else {
-                level = 'low';
-                title = 'Lower Symptom Correlation';
-                text = 'Based on your responses, you have endorsed relatively few symptoms commonly associated with hEDS. However, if you have concerns about joint hypermobility or connective tissue issues, consultation with a healthcare provider is always appropriate.';
+            function getLevel(symptoms, criteria) {
+                if (criteria >= 5 || symptoms >= 25) return 'high';
+                if (criteria >= 3 || symptoms >= 12) return 'moderate';
+                return 'low';
             }
 
-            resultDiv.className = `assessment-result result-${level}`;
+            levelMin = getLevel(minCount, criteriaMin);
+            levelMax = getLevel(maxCount, criteriaMax);
+
+            if (levelMin === levelMax) {
+                // No range needed
+                if (levelMin === 'high') {
+                    title = 'Significant Symptom Burden';
+                    text = 'Your responses indicate a substantial number of symptoms commonly associated with hEDS. This pattern suggests that evaluation by a healthcare provider familiar with Ehlers-Danlos syndromes would be appropriate. Consider seeking referral to a geneticist, rheumatologist, or EDS-knowledgeable specialist.';
+                } else if (levelMin === 'moderate') {
+                    title = 'Moderate Symptom Correlation';
+                    text = 'You have endorsed several symptoms that can be associated with hypermobile EDS and related conditions. While not necessarily indicative of EDS, discussing these symptoms with your healthcare provider may be worthwhile, particularly if they impact your daily functioning.';
+                } else {
+                    title = 'Lower Symptom Correlation';
+                    text = 'Based on your responses, you have endorsed relatively few symptoms commonly associated with hEDS. However, if you have concerns about joint hypermobility or connective tissue issues, consultation with a healthcare provider is always appropriate.';
+                }
+            } else {
+                // Show range
+                const levelNames = { low: 'Lower', moderate: 'Moderate', high: 'Significant' };
+                title = `${levelNames[levelMin]} to ${levelNames[levelMax]} Correlation`;
+                
+                if (maybeCount > 0) {
+                    text = `You marked ${maybeCount} symptom${maybeCount > 1 ? 's' : ''} as "Maybe/Unsure." Your assessment ranges from ${levelNames[levelMin].toLowerCase()} (if uncertain items are not EDS-related) to ${levelNames[levelMax].toLowerCase()} (if they are). Consider reviewing the uncertain items—the info button (ℹ) on each symptom can help clarify what each symptom means.`;
+                } else {
+                    text = 'Your responses show a range of symptom correlation.';
+                }
+            }
+
+            // Determine display level (use max for visual emphasis if there's uncertainty)
+            const displayLevel = maybeCount > 0 ? 'range' : levelMin;
+
+            resultDiv.className = `assessment-result result-${levelMax}`;
+            
+            let rangeHTML = '';
+            if (maybeCount > 0) {
+                rangeHTML = `
+                    <div class="assessment-range" style="margin-bottom: 0.75rem; padding: 0.5rem; background: #f8f8f6; border-radius: 4px;">
+                        <div style="font-size: 0.8rem; color: var(--slate);">
+                            <strong>Score Range:</strong> 
+                            <span style="color: var(--sage-dark);">${minCount} confirmed</span> to 
+                            <span style="color: var(--amber);">${maxCount} possible</span> symptoms
+                            ${criteriaMin !== criteriaMax ? `<br><strong>Criteria Range:</strong> ${criteriaMin} to ${criteriaMax} of 12 features` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
             resultDiv.innerHTML = `
+                ${rangeHTML}
                 <div class="result-title">${title}</div>
                 <div class="result-text">${text}</div>
             `;
 
-            // Criteria breakdown
+            // Criteria breakdown with maybe indicators
             const criteriaFeatures = [
                 'Generalized Joint Hypermobility',
                 'Recurrent Joint Subluxations',
@@ -2185,14 +2984,31 @@
             ];
 
             breakdownDiv.innerHTML = `
-                <strong style="font-size: 0.85rem; color: var(--slate);">2017 hEDS Criteria Features Checked:</strong>
+                <strong style="font-size: 0.85rem; color: var(--slate);">2017 hEDS Criteria Features:</strong>
                 ${criteriaFeatures.map(feature => {
-                    const isMet = Array.from(criteriaSymptoms).some(id => {
-                        return document.getElementById(id)?.closest('.symptom-item')?.querySelector('.symptom-name')?.textContent.includes(feature);
+                    // Check if feature is in yes or maybe
+                    const isYes = Array.from(criteriaSymptoms).some(id => {
+                        const item = document.querySelector(`[data-id="${id}"]`);
+                        return item?.querySelector('.symptom-name')?.textContent.includes(feature);
                     });
-                    return `<div class="criteria-item ${isMet ? 'criteria-met' : 'criteria-unmet'}">
+                    const isMaybe = Array.from(maybeCriteriaSymptoms).some(id => {
+                        const item = document.querySelector(`[data-id="${id}"]`);
+                        return item?.querySelector('.symptom-name')?.textContent.includes(feature);
+                    });
+                    
+                    let statusClass = 'criteria-unmet';
+                    let statusIcon = '—';
+                    if (isYes) {
+                        statusClass = 'criteria-met';
+                        statusIcon = '✓';
+                    } else if (isMaybe) {
+                        statusClass = 'criteria-maybe';
+                        statusIcon = '?';
+                    }
+                    
+                    return `<div class="criteria-item ${statusClass}">
                         <span>${feature}</span>
-                        <span>${isMet ? '✓' : '—'}</span>
+                        <span>${statusIcon}</span>
                     </div>`;
                 }).join('')}
             `;
@@ -2207,23 +3023,24 @@
 
         function resetAll() {
             checkedSymptoms.clear();
+            maybeSymptoms.clear();
             criteriaSymptoms.clear();
-            
-            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                cb.checked = false;
-            });
+            maybeCriteriaSymptoms.clear();
             
             document.querySelectorAll('.symptom-item').forEach(item => {
-                item.classList.remove('checked');
+                item.classList.remove('response-yes', 'response-maybe', 'hidden-by-filter');
+                item.querySelectorAll('.response-btn').forEach(btn => {
+                    btn.classList.remove('active-yes', 'active-maybe');
+                });
+            });
+
+            document.querySelectorAll('.category').forEach(cat => {
+                cat.classList.remove('open', 'hidden-by-filter');
             });
 
             for (const category of Object.keys(symptomData)) {
                 updateCategoryCount(category);
             }
-
-            document.querySelectorAll('.category').forEach(cat => {
-                cat.classList.remove('open');
-            });
 
             // Reset age input
             document.getElementById('age-input').value = '';
@@ -2235,6 +3052,15 @@
             });
             document.getElementById('sex-note').classList.remove('visible');
 
+            // Reset filter to default (hEDS)
+            document.getElementById('filter-heds').checked = true;
+            currentFilter = 'heds';
+            applySymptomFilter();
+
+            // Reset maybe progress bar
+            const maybeFill = document.getElementById('progress-fill-maybe');
+            if (maybeFill) maybeFill.style.width = '0';
+
             updateAssessment();
         }
 
@@ -2242,18 +3068,27 @@
             const age = document.getElementById('age-input').value;
             const sexEl = document.querySelector('input[name="sex"]:checked');
             const sex = sexEl ? sexEl.value : 'Not specified';
-            const totalSymptoms = checkedSymptoms.size;
-            const criteriaCount = criteriaSymptoms.size;
+            
+            const yesCount = checkedSymptoms.size;
+            const maybeCount = maybeSymptoms.size;
+            const totalSymptoms = yesCount + maybeCount;
+            
+            const criteriaYes = criteriaSymptoms.size;
+            const criteriaMaybe = maybeCriteriaSymptoms.size;
+            
             const date = new Date().toLocaleDateString('en-US', { 
                 year: 'numeric', month: 'long', day: 'numeric' 
             });
 
-            let level = 'lower';
-            if (totalSymptoms >= 25 || criteriaCount >= 5) {
-                level = 'significant';
-            } else if (totalSymptoms >= 12 || criteriaCount >= 3) {
-                level = 'moderate';
+            // Calculate level ranges
+            function getLevel(symptoms, criteria) {
+                if (symptoms >= 25 || criteria >= 5) return 'significant';
+                if (symptoms >= 12 || criteria >= 3) return 'moderate';
+                return 'lower';
             }
+
+            const levelMin = getLevel(yesCount, criteriaYes);
+            const levelMax = getLevel(yesCount + maybeCount, criteriaYes + criteriaMaybe);
 
             const levelText = {
                 'lower': 'Lower Correlation',
@@ -2261,34 +3096,53 @@
                 'significant': 'Significant Correlation'
             };
 
-            // Get checked symptoms by category - match how IDs are generated in initializeApp
+            let levelTextDisplay;
+            if (levelMin === levelMax) {
+                levelTextDisplay = levelText[levelMin];
+            } else {
+                levelTextDisplay = `${levelText[levelMin]} to ${levelText[levelMax]}`;
+            }
+
+            // Get symptoms by category with response type
             const symptomsByCategory = {};
+            const maybeByCat = {};
             const criteriaSymptomNames = [];
+            const maybeCriteriaNames = [];
             
             for (const [category, data] of Object.entries(symptomData)) {
                 const symptoms = data.symptoms || [];
-                const checkedInCategory = [];
+                const yesInCategory = [];
+                const maybeInCategory = [];
                 
                 symptoms.forEach((s, index) => {
-                    // Match the ID generation from initializeApp
                     const id = `${category}-${index}`.replace(/\s+/g, '-').replace(/[&()]/g, '');
                     
                     if (checkedSymptoms.has(id)) {
-                        checkedInCategory.push({
+                        yesInCategory.push({
                             text: s.name,
                             desc: s.desc || '',
                             criteria: s.criteria || false,
-                            heds: s.heds || false
+                            heds: s.heds || false,
+                            response: 'yes'
                         });
-                        
-                        if (s.criteria) {
-                            criteriaSymptomNames.push(s.name);
-                        }
+                        if (s.criteria) criteriaSymptomNames.push(s.name);
+                    } else if (maybeSymptoms.has(id)) {
+                        maybeInCategory.push({
+                            text: s.name,
+                            desc: s.desc || '',
+                            criteria: s.criteria || false,
+                            heds: s.heds || false,
+                            response: 'maybe'
+                        });
+                        if (s.criteria) maybeCriteriaNames.push(s.name);
                     }
                 });
                 
-                if (checkedInCategory.length > 0) {
-                    symptomsByCategory[category] = checkedInCategory;
+                if (yesInCategory.length > 0) {
+                    symptomsByCategory[category] = yesInCategory;
+                }
+                if (maybeInCategory.length > 0) {
+                    maybeByCat[category] = maybeInCategory;
                 }
             }
 
@@ -2296,13 +3150,22 @@
                 date,
                 age: age || 'Not specified',
                 sex,
+                yesCount,
+                maybeCount,
                 totalSymptoms,
-                criteriaCount,
-                level,
-                levelText: levelText[level],
-                symptomsByCategory,
+                criteriaYes,
+                criteriaMaybe,
+                criteriaTotal: criteriaYes + criteriaMaybe,
+                levelMin,
+                levelMax,
+                level: levelMax, // For backward compat, use max
+                levelText: levelTextDisplay,
+                symptomsByCategory,      // "Yes" responses
+                maybeByCat,              // "Maybe" responses
                 checkedSymptoms: Array.from(checkedSymptoms),
-                criteriaSymptoms: criteriaSymptomNames
+                maybeSymptomIds: Array.from(maybeSymptoms),
+                criteriaSymptoms: criteriaSymptomNames,
+                maybeCriteriaSymptoms: maybeCriteriaNames
             };
         }
 
@@ -2312,23 +3175,40 @@
             // Create print-friendly content
             const printWindow = window.open('', '_blank');
             
-            // Build complete symptom list showing all symptoms with check marks for selected ones
+            // Build complete symptom list showing all symptoms with response indicators
             let symptomsHTML = '';
             let categoryIndex = 0;
             for (const [category, data] of Object.entries(symptomData)) {
                 const symptoms = data.symptoms || [];
-                const checkedInCategory = summary.symptomsByCategory[category] || [];
-                const checkedNames = checkedInCategory.map(s => s.text);
-                const checkedCount = checkedNames.length;
+                const yesInCategory = summary.symptomsByCategory[category] || [];
+                const maybeInCategory = summary.maybeByCat[category] || [];
+                const yesNames = yesInCategory.map(s => s.text);
+                const maybeNames = maybeInCategory.map(s => s.text);
+                const yesCount = yesNames.length;
+                const maybeCount = maybeNames.length;
+                
+                let statsText = `${yesCount} yes`;
+                if (maybeCount > 0) statsText += `, ${maybeCount} maybe`;
+                statsText += ` of ${symptoms.length}`;
                 
                 symptomsHTML += `<div class="print-category ${categoryIndex > 0 ? 'page-break-avoid' : ''}">
-                    <h3>${category} <span class="category-stats">(${checkedCount} of ${symptoms.length} selected)</span></h3>
+                    <h3>${category} <span class="category-stats">(${statsText})</span></h3>
                     <div class="symptom-list">
                         ${symptoms.map(s => {
-                            const isChecked = checkedNames.includes(s.name);
+                            const isYes = yesNames.includes(s.name);
+                            const isMaybe = maybeNames.includes(s.name);
+                            let responseClass = 'unchecked';
+                            let checkbox = '☐';
+                            if (isYes) {
+                                responseClass = 'checked-yes';
+                                checkbox = '☑';
+                            } else if (isMaybe) {
+                                responseClass = 'checked-maybe';
+                                checkbox = '?';
+                            }
                             return `
-                                <div class="symptom-entry ${isChecked ? 'checked' : 'unchecked'}">
-                                    <div class="symptom-checkbox">${isChecked ? '☑' : '☐'}</div>
+                                <div class="symptom-entry ${responseClass}">
+                                    <div class="symptom-checkbox">${checkbox}</div>
                                     <div class="symptom-content">
                                         <div class="symptom-name">${s.name}${s.criteria ? ' <span class="criteria-badge">2017 Criteria</span>' : ''}${s.heds ? ' <span class="heds-badge">hEDS</span>' : ''}</div>
                                         <div class="symptom-desc">${s.desc}</div>
@@ -2341,42 +3221,56 @@
                 categoryIndex++;
             }
 
+            // Criteria section with yes and maybe
             let criteriaHTML = '';
-            if (summary.criteriaSymptoms.length > 0) {
+            if (summary.criteriaSymptoms.length > 0 || summary.maybeCriteriaSymptoms.length > 0) {
+                let criteriaContent = '';
+                if (summary.criteriaSymptoms.length > 0) {
+                    criteriaContent += `<div style="margin-bottom: 0.5rem;"><strong>Confirmed (Yes):</strong></div><ul>${summary.criteriaSymptoms.map(s => `<li>${s}</li>`).join('')}</ul>`;
+                }
+                if (summary.maybeCriteriaSymptoms.length > 0) {
+                    criteriaContent += `<div style="margin-bottom: 0.5rem; margin-top: 0.5rem;"><strong style="color: #b8922e;">Uncertain (Maybe):</strong></div><ul style="color: #8b6914;">${summary.maybeCriteriaSymptoms.map(s => `<li>${s}</li>`).join('')}</ul>`;
+                }
+                
                 criteriaHTML = `<div class="criteria-section">
-                    <h3>2017 Diagnostic Criteria Features Present (${summary.criteriaCount}/12)</h3>
-                    <ul>
-                        ${summary.criteriaSymptoms.map(s => `<li>${s}</li>`).join('')}
-                    </ul>
+                    <h3>2017 Diagnostic Criteria Features (${summary.criteriaYes}${summary.criteriaMaybe > 0 ? '+' + summary.criteriaMaybe + '?' : ''}/12)</h3>
+                    ${criteriaContent}
                     <p class="criteria-note">Note: Meeting the 2017 hEDS criteria requires generalized joint hypermobility PLUS at least 2 of 3 feature categories (Feature A, B, C). This checklist identifies relevant symptoms but cannot determine if formal criteria are met.</p>
                 </div>`;
             }
 
-            // Generate monitoring recommendations based on checked symptoms
-            let monitoringHTML = '';
-            const hasCardiovascular = summary.checkedSymptoms.some(s => 
-                s.includes('palpitation') || s.includes('pots') || s.includes('orthostatic') || 
-                s.includes('syncope') || s.includes('dizziness') || s.includes('mitral'));
-            const hasGI = summary.checkedSymptoms.some(s => 
-                s.includes('reflux') || s.includes('gerd') || s.includes('ibs') || 
-                s.includes('gastroparesis') || s.includes('nausea') || s.includes('dysphagia'));
-            const hasNeuro = summary.checkedSymptoms.some(s => 
-                s.includes('headache') || s.includes('migraine') || s.includes('brain-fog') || 
-                s.includes('fatigue') || s.includes('sleep'));
-            const hasPelvic = summary.checkedSymptoms.some(s => 
-                s.includes('prolapse') || s.includes('incontinence') || s.includes('dysmenorrhea') || 
-                s.includes('menorrhagia') || s.includes('dyspareunia'));
+            // Range summary if there are maybes
+            let rangeHTML = '';
+            if (summary.maybeCount > 0) {
+                rangeHTML = `<div class="range-section">
+                    <h3>Score Range Analysis</h3>
+                    <p>You marked <strong>${summary.maybeCount}</strong> symptom${summary.maybeCount > 1 ? 's' : ''} as "Maybe/Unsure."</p>
+                    <ul>
+                        <li><strong>Minimum score</strong> (if all uncertain = No): ${summary.yesCount} symptoms, ${summary.criteriaYes} criteria features</li>
+                        <li><strong>Maximum score</strong> (if all uncertain = Yes): ${summary.yesCount + summary.maybeCount} symptoms, ${summary.criteriaTotal} criteria features</li>
+                    </ul>
+                    <p>Assessment range: <strong>${summary.levelText}</strong></p>
+                </div>`;
+            }
 
-            if (summary.totalSymptoms >= 10) {
+            // Generate monitoring recommendations
+            let monitoringHTML = '';
+            const allSymptomIds = [...summary.checkedSymptoms, ...summary.maybeSymptomIds];
+            const hasCardiovascular = allSymptomIds.some(s => 
+                s.toLowerCase().includes('cardiovascular') || s.toLowerCase().includes('pots'));
+            const hasGI = allSymptomIds.some(s => 
+                s.toLowerCase().includes('gastrointestinal'));
+            const hasNeuro = allSymptomIds.some(s => 
+                s.toLowerCase().includes('neurological') || s.toLowerCase().includes('fatigue'));
+
+            if (summary.yesCount >= 10 || summary.totalSymptoms >= 15) {
                 monitoringHTML = `<div class="monitoring-section">
                     <h3>Suggested Health Monitoring Discussions</h3>
                     <p>Based on your symptom profile, consider discussing the following with your healthcare provider:</p>
                     <ul>
                         <li><strong>Baseline Echocardiogram:</strong> Recommended for hEDS patients, especially with cardiac symptoms or family history</li>
-                        ${hasCardiovascular ? '<li><strong>POTS/Dysautonomia Evaluation:</strong> Tilt table test or active stand test given cardiovascular symptoms</li>' : ''}
-                        ${hasGI ? '<li><strong>GI Evaluation:</strong> Consider gastric emptying study, endoscopy, or motility testing</li>' : ''}
-                        ${hasNeuro ? '<li><strong>Sleep Study:</strong> If experiencing unrefreshing sleep, fatigue, or suspected apnea</li>' : ''}
-                        ${hasPelvic ? '<li><strong>Pelvic Floor Evaluation:</strong> Physical therapy referral for pelvic symptoms</li>' : ''}
+                        <li><strong>POTS/Dysautonomia Evaluation:</strong> Tilt table test or active stand test if experiencing dizziness, palpitations</li>
+                        <li><strong>GI Evaluation:</strong> Consider gastric emptying study, endoscopy, or motility testing for GI symptoms</li>
                         <li><strong>Genetic Counseling:</strong> To discuss inheritance patterns and rule out other EDS types</li>
                         <li><strong>Physical Therapy:</strong> Joint protection and strengthening program specific to hypermobility</li>
                     </ul>
@@ -2409,17 +3303,22 @@
                         .symptom-list { margin-left: 0; }
                         .symptom-entry { display: flex; gap: 0.5rem; padding: 0.35rem 0; border-bottom: 1px dotted #e8e8e8; align-items: flex-start; }
                         .symptom-entry:last-child { border-bottom: none; }
-                        .symptom-entry.checked { background: #f0f7f0; margin: 0 -0.5rem; padding-left: 0.5rem; padding-right: 0.5rem; }
+                        .symptom-entry.checked-yes { background: #f0f7f0; margin: 0 -0.5rem; padding-left: 0.5rem; padding-right: 0.5rem; }
+                        .symptom-entry.checked-maybe { background: #fff8e6; margin: 0 -0.5rem; padding-left: 0.5rem; padding-right: 0.5rem; }
                         .symptom-entry.unchecked { opacity: 0.7; }
-                        .symptom-checkbox { font-size: 1.1rem; line-height: 1; min-width: 1.2rem; }
-                        .symptom-entry.checked .symptom-checkbox { color: #166534; }
+                        .symptom-checkbox { font-size: 1.1rem; line-height: 1; min-width: 1.2rem; font-weight: bold; }
+                        .symptom-entry.checked-yes .symptom-checkbox { color: #166534; }
+                        .symptom-entry.checked-maybe .symptom-checkbox { color: #b8922e; }
                         .symptom-entry.unchecked .symptom-checkbox { color: #999; }
                         .symptom-content { flex: 1; }
                         .symptom-name { font-weight: 500; font-size: 0.9rem; }
-                        .symptom-entry.checked .symptom-name { font-weight: 600; }
+                        .symptom-entry.checked-yes .symptom-name { font-weight: 600; }
+                        .symptom-entry.checked-maybe .symptom-name { font-weight: 600; color: #8b6914; }
                         .symptom-desc { font-size: 0.8rem; color: #555; margin-top: 0.1rem; }
                         .criteria-section { background: #e8f0e9; padding: 0.75rem; margin: 0.75rem 0; border-left: 3px solid #7d9980; }
                         .criteria-note { font-size: 0.8rem; color: #666; margin-top: 0.5rem; font-style: italic; }
+                        .range-section { background: #f0f4ff; padding: 0.75rem; margin: 0.75rem 0; border-left: 3px solid #0369a1; }
+                        .range-section h3 { border-bottom: none; margin-top: 0; color: #0369a1; }
                         .monitoring-section { background: #fff8e6; padding: 0.75rem; margin: 1rem 0; border-left: 3px solid #d4a84b; }
                         .monitoring-section h3 { border-bottom: none; margin-top: 0; }
                         .page-break-avoid { page-break-inside: avoid; }
@@ -2436,17 +3335,20 @@
                     <div class="summary-box">
                         <div class="summary-row"><span>Age:</span><span>${summary.age}</span></div>
                         <div class="summary-row"><span>Sex Assigned at Birth:</span><span>${summary.sex}</span></div>
-                        <div class="summary-row"><span>Total Symptoms Selected:</span><span><strong>${summary.totalSymptoms}</strong></span></div>
-                        <div class="summary-row"><span>2017 Criteria Features:</span><span><strong>${summary.criteriaCount}</strong> of 12</span></div>
-                        <div class="summary-row"><span>Assessment Level:</span><span class="level-${summary.level}">${summary.levelText}</span></div>
+                        <div class="summary-row"><span>Confirmed Symptoms (Yes):</span><span><strong>${summary.yesCount}</strong></span></div>
+                        ${summary.maybeCount > 0 ? `<div class="summary-row"><span>Uncertain Symptoms (Maybe):</span><span style="color: #b8922e;"><strong>${summary.maybeCount}</strong></span></div>` : ''}
+                        <div class="summary-row"><span>2017 Criteria Features:</span><span><strong>${summary.criteriaYes}${summary.criteriaMaybe > 0 ? '+' + summary.criteriaMaybe + '?' : ''}</strong> of 12</span></div>
+                        <div class="summary-row"><span>Assessment Level:</span><span class="level-${summary.levelMax}">${summary.levelText}</span></div>
                     </div>
+
+                    ${rangeHTML}
 
                     ${criteriaHTML}
 
                     ${monitoringHTML}
 
                     <h2>Complete Symptom Checklist</h2>
-                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">☑ = Selected by user &nbsp;&nbsp; ☐ = Not selected</p>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 1rem;">☑ = Yes &nbsp;&nbsp; <span style="color: #b8922e; font-weight: bold;">?</span> = Maybe/Unsure &nbsp;&nbsp; ☐ = No response</p>
                     ${symptomsHTML}
 
                     <div class="disclaimer">
@@ -2483,45 +3385,64 @@
             csvContent += `Date,"${summary.date}"\n`;
             csvContent += `Age,"${summary.age}"\n`;
             csvContent += `Sex Assigned at Birth,"${summary.sex}"\n`;
-            csvContent += `Total Symptoms Selected,${summary.totalSymptoms}\n`;
-            csvContent += `2017 Criteria Features,${summary.criteriaCount} of 12\n`;
+            csvContent += `Confirmed Symptoms (Yes),${summary.yesCount}\n`;
+            csvContent += `Uncertain Symptoms (Maybe),${summary.maybeCount}\n`;
+            csvContent += `Total Responses,${summary.totalSymptoms}\n`;
+            csvContent += `2017 Criteria Features (Confirmed),${summary.criteriaYes} of 12\n`;
+            csvContent += `2017 Criteria Features (Including Maybe),${summary.criteriaTotal} of 12\n`;
             csvContent += `Assessment Level,"${summary.levelText}"\n\n`;
             
+            // Score range if maybes exist
+            if (summary.maybeCount > 0) {
+                csvContent += 'SCORE RANGE ANALYSIS\n';
+                csvContent += 'Scenario,Symptoms,Criteria Features\n';
+                csvContent += `Minimum (all Maybe = No),${summary.yesCount},${summary.criteriaYes}\n`;
+                csvContent += `Maximum (all Maybe = Yes),${summary.yesCount + summary.maybeCount},${summary.criteriaTotal}\n\n`;
+            }
+            
             // 2017 Criteria features section
-            if (summary.criteriaSymptoms.length > 0) {
-                csvContent += '2017 DIAGNOSTIC CRITERIA FEATURES PRESENT\n';
-                csvContent += 'Feature\n';
+            if (summary.criteriaSymptoms.length > 0 || summary.maybeCriteriaSymptoms.length > 0) {
+                csvContent += '2017 DIAGNOSTIC CRITERIA FEATURES\n';
+                csvContent += 'Feature,Response\n';
                 summary.criteriaSymptoms.forEach(s => {
-                    csvContent += `"${s.replace(/"/g, '""')}"\n`;
+                    csvContent += `"${s.replace(/"/g, '""')}",Yes\n`;
+                });
+                summary.maybeCriteriaSymptoms.forEach(s => {
+                    csvContent += `"${s.replace(/"/g, '""')}",Maybe\n`;
                 });
                 csvContent += '\n';
             }
 
             // Category summary
             csvContent += 'SYMPTOM COUNT BY CATEGORY\n';
-            csvContent += 'Category,Selected,Total,Percentage\n';
+            csvContent += 'Category,Yes,Maybe,Total Available\n';
             for (const [category, data] of Object.entries(symptomData)) {
-                const checkedCount = summary.symptomsByCategory[category]?.length || 0;
+                const yesCount = summary.symptomsByCategory[category]?.length || 0;
+                const maybeCount = summary.maybeByCat[category]?.length || 0;
                 const totalCount = data.symptoms.length;
-                const percentage = totalCount > 0 ? Math.round((checkedCount / totalCount) * 100) : 0;
-                csvContent += `"${category}",${checkedCount},${totalCount},${percentage}%\n`;
+                csvContent += `"${category}",${yesCount},${maybeCount},${totalCount}\n`;
             }
             csvContent += '\n';
 
             // Complete symptom checklist by category
             csvContent += 'COMPLETE SYMPTOM CHECKLIST\n';
-            csvContent += 'Category,Selected,Symptom Name,Description,2017 Criteria,hEDS Emphasis\n';
+            csvContent += 'Category,Response,Symptom Name,Description,2017 Criteria,hEDS Emphasis\n';
             
             for (const [category, data] of Object.entries(symptomData)) {
                 const symptoms = data.symptoms || [];
-                const checkedInCategory = summary.symptomsByCategory[category] || [];
-                const checkedNames = checkedInCategory.map(s => s.text);
+                const yesInCategory = summary.symptomsByCategory[category] || [];
+                const maybeInCategory = summary.maybeByCat[category] || [];
+                const yesNames = yesInCategory.map(s => s.text);
+                const maybeNames = maybeInCategory.map(s => s.text);
                 
                 for (const symptom of symptoms) {
-                    const isChecked = checkedNames.includes(symptom.name);
+                    let response = '-';
+                    if (yesNames.includes(symptom.name)) response = 'YES';
+                    else if (maybeNames.includes(symptom.name)) response = 'MAYBE';
+                    
                     const escapedName = symptom.name.replace(/"/g, '""');
                     const escapedDesc = (symptom.desc || '').replace(/"/g, '""');
-                    csvContent += `"${category}",${isChecked ? 'YES' : 'no'},"${escapedName}","${escapedDesc}",${symptom.criteria ? 'Yes' : 'No'},${symptom.heds ? 'Yes' : 'No'}\n`;
+                    csvContent += `"${category}",${response},"${escapedName}","${escapedDesc}",${symptom.criteria ? 'Yes' : 'No'},${symptom.heds ? 'Yes' : 'No'}\n`;
                 }
             }
 
@@ -2556,38 +3477,54 @@
             body += `Sex Assigned at Birth: ${summary.sex}\n\n`;
             body += `RESULTS\n`;
             body += `-------\n`;
-            body += `Total Symptoms Selected: ${summary.totalSymptoms}\n`;
-            body += `2017 Criteria Features: ${summary.criteriaCount} of 12\n`;
+            body += `Confirmed Symptoms (Yes): ${summary.yesCount}\n`;
+            if (summary.maybeCount > 0) {
+                body += `Uncertain Symptoms (Maybe): ${summary.maybeCount}\n`;
+                body += `Score Range: ${summary.yesCount} to ${summary.yesCount + summary.maybeCount}\n`;
+            }
+            body += `2017 Criteria Features: ${summary.criteriaYes}${summary.criteriaMaybe > 0 ? ' (+' + summary.criteriaMaybe + ' maybe)' : ''} of 12\n`;
             body += `Assessment Level: ${summary.levelText}\n\n`;
             
-            if (summary.criteriaSymptoms.length > 0) {
-                body += `2017 CRITERIA FEATURES PRESENT\n`;
-                body += `------------------------------\n`;
+            if (summary.criteriaSymptoms.length > 0 || summary.maybeCriteriaSymptoms.length > 0) {
+                body += `2017 CRITERIA FEATURES\n`;
+                body += `----------------------\n`;
                 summary.criteriaSymptoms.forEach(s => {
-                    body += `[x] ${s}\n`;
+                    body += `[Y] ${s}\n`;
+                });
+                summary.maybeCriteriaSymptoms.forEach(s => {
+                    body += `[?] ${s}\n`;
                 });
                 body += `\n`;
             }
 
             body += `COMPLETE SYMPTOM CHECKLIST\n`;
             body += `==========================\n`;
-            body += `[x] = Selected    [ ] = Not selected\n`;
+            body += `[Y] = Yes    [?] = Maybe    [ ] = No response\n`;
             
             for (const [category, data] of Object.entries(symptomData)) {
                 const symptoms = data.symptoms || [];
-                const checkedInCategory = summary.symptomsByCategory[category] || [];
-                const checkedNames = checkedInCategory.map(s => s.text);
-                const checkedCount = checkedNames.length;
+                const yesInCategory = summary.symptomsByCategory[category] || [];
+                const maybeInCategory = summary.maybeByCat[category] || [];
+                const yesNames = yesInCategory.map(s => s.text);
+                const maybeNames = maybeInCategory.map(s => s.text);
+                const yesCount = yesNames.length;
+                const maybeCount = maybeNames.length;
                 
-                body += `\n${category.toUpperCase()} (${checkedCount}/${symptoms.length})\n`;
+                let countText = `${yesCount}`;
+                if (maybeCount > 0) countText += `+${maybeCount}?`;
+                
+                body += `\n${category.toUpperCase()} (${countText}/${symptoms.length})\n`;
                 body += `${'─'.repeat(Math.min(category.length + 15, 50))}\n`;
                 
                 symptoms.forEach(s => {
-                    const isChecked = checkedNames.includes(s.name);
+                    let marker = '[ ]';
+                    if (yesNames.includes(s.name)) marker = '[Y]';
+                    else if (maybeNames.includes(s.name)) marker = '[?]';
+                    
                     let tags = '';
                     if (s.criteria) tags += ' *Criteria*';
                     if (s.heds) tags += ' *hEDS*';
-                    body += `${isChecked ? '[x]' : '[ ]'} ${s.name}${tags}\n`;
+                    body += `${marker} ${s.name}${tags}\n`;
                 });
             }
 
@@ -2610,32 +3547,45 @@
             let text = `EDS SYMPTOM ASSESSMENT\n`;
             text += `Date: ${summary.date}\n`;
             text += `Age: ${summary.age} | Sex: ${summary.sex}\n\n`;
-            text += `Results: ${summary.totalSymptoms} symptoms selected\n`;
-            text += `2017 Criteria: ${summary.criteriaCount}/12 features\n`;
+            text += `Confirmed (Yes): ${summary.yesCount}`;
+            if (summary.maybeCount > 0) text += ` | Uncertain (Maybe): ${summary.maybeCount}`;
+            text += `\n`;
+            text += `2017 Criteria: ${summary.criteriaYes}${summary.criteriaMaybe > 0 ? '+' + summary.criteriaMaybe + '?' : ''}/12\n`;
             text += `Level: ${summary.levelText}\n\n`;
             
-            if (summary.criteriaSymptoms.length > 0) {
-                text += `Criteria Features Present:\n`;
+            if (summary.criteriaSymptoms.length > 0 || summary.maybeCriteriaSymptoms.length > 0) {
+                text += `Criteria Features:\n`;
                 summary.criteriaSymptoms.forEach(s => {
                     text += `✓ ${s}\n`;
+                });
+                summary.maybeCriteriaSymptoms.forEach(s => {
+                    text += `? ${s}\n`;
                 });
                 text += `\n`;
             }
 
             text += `Complete Checklist:\n`;
             text += `==================\n`;
-            text += `✓ = Selected  ○ = Not selected\n`;
+            text += `✓ = Yes  ? = Maybe  ○ = No response\n`;
             
             for (const [category, data] of Object.entries(symptomData)) {
                 const symptoms = data.symptoms || [];
-                const checkedInCategory = summary.symptomsByCategory[category] || [];
-                const checkedNames = checkedInCategory.map(s => s.text);
-                const checkedCount = checkedNames.length;
+                const yesInCategory = summary.symptomsByCategory[category] || [];
+                const maybeInCategory = summary.maybeByCat[category] || [];
+                const yesNames = yesInCategory.map(s => s.text);
+                const maybeNames = maybeInCategory.map(s => s.text);
+                const yesCount = yesNames.length;
+                const maybeCount = maybeNames.length;
                 
-                text += `\n${category} (${checkedCount}/${symptoms.length})\n`;
+                let countText = `${yesCount}`;
+                if (maybeCount > 0) countText += `+${maybeCount}?`;
+                
+                text += `\n${category} (${countText}/${symptoms.length})\n`;
                 symptoms.forEach(s => {
-                    const isChecked = checkedNames.includes(s.name);
-                    text += `${isChecked ? '✓' : '○'} ${s.name}\n`;
+                    let marker = '○';
+                    if (yesNames.includes(s.name)) marker = '✓';
+                    else if (maybeNames.includes(s.name)) marker = '?';
+                    text += `${marker} ${s.name}\n`;
                 });
             }
 
