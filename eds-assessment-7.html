@@ -37,6 +37,100 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        /* Site Navigation Bar */
+        .site-nav {
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            background: var(--ink);
+            color: white;
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-nav-brand {
+            font-family: 'Source Sans 3', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .site-nav-brand a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .site-nav-brand a:hover {
+            color: var(--sage-light);
+        }
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .hamburger-btn span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        .hamburger-btn:hover span {
+            background: var(--sage-light);
+        }
+
+        /* Table of Contents Dropdown */
+        .toc-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 250px;
+            display: none;
+            z-index: 201;
+        }
+
+        .toc-dropdown.visible {
+            display: block;
+        }
+
+        .toc-dropdown a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border);
+            transition: background 0.15s;
+        }
+
+        .toc-dropdown a:last-child {
+            border-bottom: none;
+        }
+
+        .toc-dropdown a:hover {
+            background: var(--sage-light);
+        }
+
+        .toc-dropdown .toc-section-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--slate);
+            padding: 0.5rem 1rem 0.25rem;
+            background: #f8f8f6;
+        }
+
         .tab-nav {
             display: flex;
             border-bottom: 2px solid var(--border);
@@ -326,6 +420,31 @@
             margin-bottom: 2.5rem;
             padding-bottom: 2rem;
             border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .zebra-accent {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 400px;
+            height: 8px;
+            background: repeating-linear-gradient(
+                90deg,
+                #1a1a1a 0px,
+                #1a1a1a 12px,
+                white 12px,
+                white 24px
+            );
+            border-radius: 0 0 4px 4px;
+        }
+
+        .zebra-ribbon {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 0.5rem;
         }
 
         h1 {
@@ -335,12 +454,20 @@
             letter-spacing: -0.02em;
             margin-bottom: 0.5rem;
             color: var(--ink);
+            padding-top: 1rem;
         }
 
         .subtitle {
             font-size: 1.1rem;
             color: var(--slate);
             font-weight: 300;
+        }
+
+        .zebra-tagline {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--slate);
+            margin-top: 0.5rem;
         }
 
         .disclaimer {
@@ -1013,9 +1140,21 @@
             .container {
                 padding: 1rem 1rem 200px;
             }
+
+            .site-nav {
+                padding: 0.4rem 0.75rem;
+            }
+
+            .site-nav-brand {
+                font-size: 0.8rem;
+            }
             
             h1 {
                 font-size: 1.5rem;
+            }
+
+            .zebra-tagline {
+                font-size: 0.8rem;
             }
 
             .category-header {
@@ -1386,7 +1525,7 @@
             .tab-nav, .assessment-panel, .collapse-btn, .reset-btn, 
             .export-section, .filter-section, .disclaimer, .privacy-notice,
             .filter-controls, .response-legend, .assessment-stats, .assessment-header,
-            .reference-section, .copyright-notice, .filter-help-panel {
+            .reference-section, .copyright-notice, .filter-help-panel, .site-nav {
                 display: none !important;
             }
 
@@ -1455,10 +1594,37 @@
     </style>
 </head>
 <body>
+    <!-- Site Navigation Bar -->
+    <nav class="site-nav">
+        <div class="site-nav-brand">
+            <a href="https://darrenbender.com">← darrenbender.com</a>
+        </div>
+        <div style="position: relative;">
+            <button class="hamburger-btn" onclick="toggleTOC()" aria-label="Table of Contents">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="toc-dropdown" id="toc-dropdown">
+                <div class="toc-section-title">On This Page</div>
+                <a href="#" onclick="scrollToSection('intro'); return false;">Introduction</a>
+                <a href="#" onclick="scrollToSection('demographics'); return false;">Age & Sex</a>
+                <a href="#" onclick="scrollToSection('categories'); return false;">Symptom Checklist</a>
+                <a href="#" onclick="scrollToSection('assessment-panel'); return false;">Assessment Summary</a>
+                <a href="#" onclick="scrollToSection('sources-section'); return false;">Sources & References</a>
+                <a href="#" onclick="scrollToSection('monitoring-section'); return false;">Health Monitoring</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <header>
-            <h1>Ehlers-Danlos Syndrome</h1>
+            <div class="zebra-accent"></div>
+            <h1>
+                🦓 Ehlers-Danlos Syndrome
+            </h1>
             <p class="subtitle">Comprehensive Symptom Assessment Tool</p>
+            <p class="zebra-tagline">"When you hear hoofbeats, think horses—but don't forget the zebras."</p>
         </header>
 
         <div class="disclaimer">
@@ -1471,14 +1637,15 @@
             This tool runs entirely in your browser. <strong>No data is collected, stored, or transmitted.</strong> No cookies are used. No account is required. Your responses are not saved anywhere—when you close or refresh this page, all entries are cleared. Any exports you create (PDF, CSV, etc.) are generated locally on your device. Your health information remains completely private.
         </div>
 
-        <div class="intro-text">
+        <div class="intro-text" id="intro">
             <p>Ehlers-Danlos syndromes (EDS) are a group of inherited connective tissue disorders affecting collagen production and structure. This checklist focuses primarily on <strong><span class="term-tip" data-tip="Hypermobile Ehlers-Danlos Syndrome: The most common EDS subtype, characterized by joint hypermobility, chronic pain, fatigue, and soft/stretchy skin. Unlike other EDS types, hEDS has no identified genetic marker and is diagnosed clinically. It affects an estimated 1 in 3,100-5,000 people.">hypermobile EDS (hEDS)</span></strong>, the most common subtype, while including symptoms relevant to other EDS variants.</p>
             <p>Symptoms marked with <span class="symptom-tag tag-criteria">2017 Criteria</span> are specifically referenced in the <span class="term-tip" data-tip="The 2017 International Classification of EDS established standardized diagnostic criteria for hEDS, requiring: (1) Generalized joint hypermobility (Beighton score), (2) Two or more systemic features from a defined list, and (3) Exclusion of other connective tissue disorders. This replaced the older Brighton criteria.">2017 hEDS diagnostic criteria</span>. Those marked <span class="symptom-tag tag-heds">hEDS Emphasis</span> are particularly prominent in hypermobile EDS.</p>
         </div>
 
-        <div class="age-section">
+        <div class="age-section" id="demographics">
             <label for="age-input" class="age-label">Your Age (years)</label>
             <p class="input-help-text">Age affects how hypermobility is assessed. The <span class="term-tip" data-tip="A 9-point clinical test measuring joint flexibility: (1) pinky fingers bending back >90° (1 pt each), (2) thumbs touching forearms (1 pt each), (3) elbows hyperextending >10° (1 pt each), (4) knees hyperextending >10° (1 pt each), (5) palms flat on floor with straight legs (1 pt). Score ≥5 in adults or ≥6 in children indicates generalized hypermobility.">Beighton score</span> threshold is higher for children (≥6) than adults (≥5), and joint flexibility naturally decreases with age. Some symptoms like early-onset arthritis or premature osteoporosis are age-dependent findings.</p>
+            
             <input type="number" id="age-input" min="1" max="120" placeholder="Enter age" onchange="updateAgeContext()">
             <p class="age-note" id="age-note"></p>
         </div>
@@ -2227,6 +2394,30 @@
     </div><!-- end container -->
 
     <script>
+        // Navigation functions
+        function toggleTOC() {
+            const dropdown = document.getElementById('toc-dropdown');
+            dropdown.classList.toggle('visible');
+        }
+
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // Close the TOC dropdown
+                document.getElementById('toc-dropdown').classList.remove('visible');
+            }
+        }
+
+        // Close TOC when clicking outside
+        document.addEventListener('click', function(e) {
+            const toc = document.getElementById('toc-dropdown');
+            const hamburger = e.target.closest('.hamburger-btn');
+            if (!hamburger && !e.target.closest('.toc-dropdown')) {
+                toc.classList.remove('visible');
+            }
+        });
+
         function toggleReferenceSection(sectionId) {
             const section = document.getElementById(sectionId);
             section.classList.toggle('open');
@@ -2353,7 +2544,7 @@
                     { name: "Widened Scars", desc: "Scars that spread or stretch over time" },
                     { name: "Unexplained Stretch Marks (Striae)", desc: "Striae appearing without significant weight change, often at young age", criteria: true, heds: true, info: "Stretch marks in EDS appear without the typical causes (rapid weight gain, pregnancy, growth spurts). They may appear in unusual locations (back, arms) and often develop during adolescence." },
                     { name: "Thin or Translucent Skin", desc: "Visible veins, skin appears delicate" },
-                    { name: "Piezogenic Papules", desc: "Herniations of fat through heel tissue visible on standing", criteria: true, info: "These are small, skin-colored bumps that appear on the sides of your heels when you stand and bear weight. They disappear when you sit down. They're caused by fat tissue pushing through gaps in the heel's connective tissue and are very common in EDS.", examples: "Stand up and look at the sides of your heels—small bumps that appear only when standing" },
+                    { name: "Piezogenic Papules", desc: "Herniations of fat through heel tissue visible on standing", criteria: true, info: "These are small, skin-colored bumps that appear on the sides of your heels when you stand and bear weight. They disappear when you sit down. They're caused by fat tissue pushing through gaps in the heel's connective tissue and are very common in EDS. See clinical images at DermNet NZ: dermnetnz.org/topics/piezogenic-papule-images", examples: "Stand up and look at the sides of your heels—small bumps that appear only when standing" },
                     { name: "Inguinal Hernia", desc: "Bulging in the groin area", info: "A hernia occurs when tissue pushes through a weak spot in the abdominal wall. The inguinal (groin) area is common. In EDS, hernias occur more frequently due to connective tissue weakness." },
                     { name: "Umbilical Hernia", desc: "Bulging at the navel" },
                     { name: "Hiatal Hernia", desc: "Stomach protruding through diaphragm", info: "Part of the stomach pushes up through the diaphragm into the chest cavity. This contributes to reflux (GERD). More common in EDS due to the laxity of the tissue holding organs in place." },
