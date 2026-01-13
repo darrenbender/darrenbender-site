@@ -639,6 +639,16 @@
             color: white;
         }
 
+        .response-btn.active-no {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+            color: #6b7280;
+        }
+
+        .response-btn[data-response="no"] {
+            font-size: 0.65rem;
+        }
+
         .symptom-label {
             flex: 1;
             cursor: default;
@@ -943,7 +953,7 @@
 
         .legend-box.yes { background: var(--sage); }
         .legend-box.maybe { background: var(--amber); }
-        .legend-box.blank { background: white; border: 1px solid var(--border); color: var(--slate); }
+        .legend-box.no { background: #f3f4f6; border: 1px solid #9ca3af; color: #6b7280; }
 
         .assessment-range {
             display: flex;
@@ -2839,7 +2849,7 @@
                 <span style="font-weight: 500;">Response options:</span>
                 <div class="legend-item"><span class="legend-box yes">Y</span> Yes, I have this</div>
                 <div class="legend-item"><span class="legend-box maybe">?</span> Maybe / Not sure</div>
-                <div class="legend-item"><span class="legend-box blank">−</span> No / Clear response</div>
+                <div class="legend-item"><span class="legend-box no">N</span> No (default)</div>
             `;
             container.appendChild(legend);
 
@@ -2918,6 +2928,7 @@
                                     <div class="symptom-response">
                                         <button class="response-btn" data-response="yes" onclick="setResponse('${id}', 'yes', '${category}', ${symptom.criteria || false})" title="Yes, I have this">Y</button>
                                         <button class="response-btn" data-response="maybe" onclick="setResponse('${id}', 'maybe', '${category}', ${symptom.criteria || false})" title="Maybe / Not sure">?</button>
+                                        <button class="response-btn active-no" data-response="no" onclick="setResponse('${id}', 'no', '${category}', ${symptom.criteria || false})" title="No (default)">N</button>
                                     </div>
                                     <div class="symptom-label">
                                         <span class="symptom-name">${symptom.name}${tags.join('')}</span>
@@ -3032,32 +3043,39 @@
             const item = document.querySelector(`[data-id="${id}"]`);
             const yesBtn = item.querySelector('[data-response="yes"]');
             const maybeBtn = item.querySelector('[data-response="maybe"]');
+            const noBtn = item.querySelector('[data-response="no"]');
+            
+            // Check current state BEFORE clearing
+            const wasYes = yesBtn.classList.contains('active-yes');
+            const wasMaybe = maybeBtn.classList.contains('active-maybe');
             
             // Clear previous state
             item.classList.remove('response-yes', 'response-maybe');
             yesBtn.classList.remove('active-yes');
             maybeBtn.classList.remove('active-maybe');
+            if (noBtn) noBtn.classList.remove('active-no');
             checkedSymptoms.delete(id);
             maybeSymptoms.delete(id);
             criteriaSymptoms.delete(id);
             maybeCriteriaSymptoms.delete(id);
 
-            // If clicking the same button that's active, just clear (toggle off)
-            const wasYes = yesBtn.classList.contains('active-yes');
-            const wasMaybe = maybeBtn.classList.contains('active-maybe');
-            
+            // Handle response
             if (response === 'yes' && !wasYes) {
+                // Setting to Yes
                 checkedSymptoms.add(id);
                 if (isCriteria) criteriaSymptoms.add(id);
                 item.classList.add('response-yes');
                 yesBtn.classList.add('active-yes');
             } else if (response === 'maybe' && !wasMaybe) {
+                // Setting to Maybe
                 maybeSymptoms.add(id);
                 if (isCriteria) maybeCriteriaSymptoms.add(id);
                 item.classList.add('response-maybe');
                 maybeBtn.classList.add('active-maybe');
+            } else {
+                // Either clicked N, or toggled off Y/?, so N becomes active (default state)
+                if (noBtn) noBtn.classList.add('active-no');
             }
-            // If neither condition met, button was toggled off - state already cleared
 
             updateCategoryCount(category);
             updateAssessment();
@@ -3353,8 +3371,11 @@
             document.querySelectorAll('.symptom-item').forEach(item => {
                 item.classList.remove('response-yes', 'response-maybe', 'hidden-by-filter');
                 item.querySelectorAll('.response-btn').forEach(btn => {
-                    btn.classList.remove('active-yes', 'active-maybe');
+                    btn.classList.remove('active-yes', 'active-maybe', 'active-no');
                 });
+                // Set N button back to active (default state)
+                const noBtn = item.querySelector('[data-response="no"]');
+                if (noBtn) noBtn.classList.add('active-no');
             });
 
             document.querySelectorAll('.category').forEach(cat => {
