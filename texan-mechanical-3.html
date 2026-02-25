@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Texan Mechanical AC &amp; Heating | Fort Bend's Best HVAC 2025</title>
+<meta name="description" content="Fort Bend County's #1 rated HVAC company. AC repair, installation, maintenance, Generac generators, and indoor air quality. Family owned since 2013. Call 832-437-6019.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0D2137;
+  --navy-mid: #163354;
+  --blue: #1E6BB8;
+  --blue-light: #E8F1FA;
+  --red: #C0392B;
+  --red-dark: #A93226;
+  --gold: #E8A817;
+  --gold-light: #FEF3D1;
+  --gray-50: #F7F8FA;
+  --gray-100: #EDF0F4;
+  --gray-200: #D5DAE1;
+  --gray-400: #8E99A8;
+  --gray-600: #5A6577;
+  --gray-800: #2D3748;
+  --white: #FFFFFF;
+  --shadow-sm: 0 1px 3px rgba(13,33,55,0.08);
+  --shadow-md: 0 4px 12px rgba(13,33,55,0.1);
+  --shadow-lg: 0 8px 30px rgba(13,33,55,0.12);
+  --shadow-xl: 0 16px 50px rgba(13,33,55,0.15);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --font-heading: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-body: 'Lexend', system-ui, -apple-system, sans-serif;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+body {
+  font-family: var(--font-body); font-weight: 400; color: var(--gray-800);
+  line-height: 1.65; background: var(--white); -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height: 1.2; color: var(--navy); }
+h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); font-weight: 800; }
+h2 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); }
+h3 { font-size: clamp(1.2rem, 2vw, 1.5rem); }
+h4 { font-size: 1.1rem; font-weight: 600; }
+p { margin-bottom: 1em; }
+p:last-child { margin-bottom: 0; }
+
+/* ═══ NAV ═══ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: rgba(255,255,255,0.97); backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--gray-100);
+  transition: var(--transition);
+}
+.nav.scrolled { box-shadow: var(--shadow-md); }
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 72px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 12px; font-family: var(--font-heading);
+  font-weight: 800; font-size: 1.15rem; color: var(--navy); white-space: nowrap;
+}
+.nav-logo-icon {
+  width: 42px; height: 42px; background: var(--navy); border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center; color: white; font-size: 1.3rem; flex-shrink: 0;
+}
+.nav-logo .accent { color: var(--red); }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.nav-phone {
+  display: flex; align-items: center; gap: 8px; font-family: var(--font-heading);
+  font-weight: 700; font-size: 1rem; color: var(--navy); white-space: nowrap;
+}
+.nav-phone svg { color: var(--blue); }
+.nav-cta {
+  background: var(--red); color: white; padding: 10px 20px; border-radius: var(--radius-sm);
+  font-weight: 600; font-size: 0.88rem; transition: var(--transition); white-space: nowrap; display: inline-block;
+}
+.nav-cta:hover { background: var(--red-dark); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+/* Hamburger */
+.hamburger {
+  display: flex; flex-direction: column; justify-content: center; gap: 5px;
+  width: 40px; height: 40px; padding: 8px; border-radius: var(--radius-sm);
+  transition: var(--transition); cursor: pointer;
+}
+.hamburger:hover { background: var(--gray-50); }
+.hamburger span {
+  display: block; width: 24px; height: 2.5px; background: var(--navy);
+  border-radius: 2px; transition: var(--transition); transform-origin: center;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+
+/* Slide-out menu */
+.menu-overlay {
+  position: fixed; inset: 0; background: rgba(13,33,55,0.4);
+  opacity: 0; visibility: hidden; z-index: 998; transition: var(--transition);
+}
+.menu-overlay.open { opacity: 1; visibility: visible; }
+.slide-menu {
+  position: fixed; top: 0; right: -340px; width: 320px; height: 100vh;
+  background: var(--white); z-index: 999; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-xl); overflow-y: auto; padding: 80px 0 40px;
+}
+.slide-menu.open { transform: translateX(-340px); }
+.menu-section { padding: 0 28px; margin-bottom: 24px; }
+.menu-label {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gray-400); margin-bottom: 10px; padding: 0 4px;
+}
+.menu-link {
+  display: flex; align-items: center; gap: 12px; padding: 11px 12px;
+  border-radius: var(--radius-sm); font-size: 0.92rem; font-weight: 500;
+  color: var(--gray-600); transition: var(--transition); cursor: pointer;
+}
+.menu-link:hover { background: var(--blue-light); color: var(--blue); }
+.menu-link svg { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
+.menu-divider { height: 1px; background: var(--gray-100); margin: 8px 28px; }
+.menu-cta {
+  display: block; margin: 16px 28px 0; text-align: center;
+  background: var(--red); color: white; padding: 14px 24px;
+  border-radius: var(--radius-sm); font-weight: 700; font-size: 1rem;
+  transition: var(--transition); font-family: var(--font-heading);
+}
+.menu-cta:hover { background: var(--red-dark); }
+.menu-phone {
+  text-align: center; margin-top: 12px; padding: 0 28px;
+  font-size: 0.85rem; color: var(--gray-400);
+}
+.menu-phone a { color: var(--blue); font-weight: 600; }
+
+@media (max-width: 640px) {
+  .nav-phone-text { display: none; }
+  .slide-menu { width: 290px; right: -310px; }
+  .slide-menu.open { transform: translateX(-310px); }
+}
+
+/* ═══ HERO ═══ */
+.hero {
+  padding: 120px 0 80px;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #1a4a7a 100%);
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+}
+.hero::after {
+  content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 80px;
+  background: linear-gradient(to top, var(--white), transparent);
+}
+.hero-inner {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 1fr 420px; gap: 60px; align-items: center;
+}
+.hero-content { color: white; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(232,168,23,0.15); border: 1px solid rgba(232,168,23,0.3);
+  padding: 6px 16px; border-radius: 50px; font-size: 0.82rem; font-weight: 600;
+  color: var(--gold); margin-bottom: 20px;
+}
+.hero-badge svg { width: 16px; height: 16px; }
+.hero h1 { color: white; margin-bottom: 16px; }
+.hero h1 .gold { color: var(--gold); }
+.hero-sub { font-size: 1.1rem; color: rgba(255,255,255,0.75); line-height: 1.7; max-width: 520px; margin-bottom: 32px; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 36px; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px; background: var(--red);
+  color: white; padding: 14px 28px; border-radius: var(--radius-sm);
+  font-weight: 700; font-size: 1rem; transition: var(--transition); font-family: var(--font-heading);
+}
+.btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.1); border: 1.5px solid rgba(255,255,255,0.3);
+  color: white; padding: 14px 28px; border-radius: var(--radius-sm);
+  font-weight: 600; font-size: 1rem; transition: var(--transition);
+}
+.btn-outline:hover { background: rgba(255,255,255,0.2); }
+.hero-stats { display: flex; gap: 32px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.1); }
+.stat-val { font-family: var(--font-heading); font-weight: 800; font-size: 1.6rem; color: white; }
+.stat-lbl { font-size: 0.8rem; color: rgba(255,255,255,0.55); }
+
+/* Hero card */
+.hero-card {
+  background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-xl);
+  padding: 32px; position: relative;
+}
+.hero-card::before {
+  content: ''; position: absolute; top: 0; left: 24px; right: 24px; height: 4px;
+  background: linear-gradient(to right, var(--red), var(--gold)); border-radius: 0 0 4px 4px;
+}
+.hero-card h3 { margin-bottom: 4px; font-size: 1.3rem; }
+.hero-card-sub { font-size: 0.88rem; color: var(--gray-400); margin-bottom: 20px; }
+.booking-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.booking-opt {
+  display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+  background: var(--gray-50); border-radius: var(--radius-sm);
+  font-size: 0.88rem; color: var(--gray-600); transition: var(--transition);
+}
+.booking-opt:hover { background: var(--blue-light); color: var(--blue); }
+.booking-opt svg { width: 18px; height: 18px; color: var(--blue); flex-shrink: 0; }
+.card-cta { width: 100%; justify-content: center; font-size: 1.05rem; }
+.card-phone { text-align: center; margin-top: 14px; font-size: 0.85rem; color: var(--gray-400); }
+.card-phone a { color: var(--blue); font-weight: 600; }
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-card { max-width: 480px; }
+  .hero { padding: 110px 0 60px; }
+}
+
+/* ═══ SHARED SECTION STYLES ═══ */
+.section { padding: 80px 0; }
+.section-alt { background: var(--gray-50); }
+.section-dark { background: linear-gradient(135deg, var(--navy) 0%, #0a1929 100%); position: relative; overflow: hidden; }
+.section-dark::before {
+  content: ''; position: absolute; top: -50%; right: -20%; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(30,107,184,0.15), transparent 70%); border-radius: 50%;
+}
+.sh { text-align: center; margin-bottom: 48px; }
+.sh .overline {
+  display: inline-block; font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); margin-bottom: 10px;
+}
+.sh p { color: var(--gray-600); max-width: 600px; margin: 12px auto 0; font-size: 1rem; }
+.text-center { text-align: center; }
+
+/* ═══ AWARD ═══ */
+.award {
+  padding: 48px 0; background: linear-gradient(135deg, var(--gold-light) 0%, #FFF9E8 100%);
+  border-bottom: 1px solid rgba(232,168,23,0.15);
+}
+.award-inner { display: flex; align-items: center; gap: 32px; }
+.award-icon {
+  width: 72px; height: 72px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--gold), #D4940E); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 2rem;
+  box-shadow: 0 4px 16px rgba(232,168,23,0.3);
+}
+.award-txt h3 { color: var(--navy); font-size: 1.3rem; margin-bottom: 6px; }
+.award-txt p { color: var(--gray-600); font-size: 0.92rem; margin: 0; max-width: 700px; }
+@media (max-width: 640px) { .award-inner { flex-direction: column; text-align: center; } }
+
+/* ═══ SERVICES ═══ */
+.srv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 20px; }
+.srv {
+  background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius-md);
+  padding: 28px; transition: var(--transition);
+}
+.srv:hover { border-color: var(--blue); box-shadow: var(--shadow-md); transform: translateY(-3px); }
+.srv-icon {
+  width: 48px; height: 48px; border-radius: var(--radius-sm); background: var(--blue-light);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 16px; font-size: 1.4rem;
+}
+.srv h4 { margin-bottom: 8px; }
+.srv p { font-size: 0.88rem; color: var(--gray-600); line-height: 1.6; }
+
+/* ═══ GENERAC ═══ */
+.gen-grid {
+  position: relative; z-index: 1;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+}
+.gen-content { color: white; }
+.gen-content .overline { color: var(--gold); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; display: block; }
+.gen-content h2 { color: white; margin-bottom: 16px; }
+.gen-content > p { color: rgba(255,255,255,0.7); }
+.gen-feats { display: flex; flex-direction: column; gap: 14px; margin: 24px 0 32px; }
+.gen-feat { display: flex; align-items: flex-start; gap: 12px; color: rgba(255,255,255,0.85); font-size: 0.92rem; }
+.gen-feat svg { width: 20px; height: 20px; color: var(--gold); flex-shrink: 0; margin-top: 2px; }
+.gen-card {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-lg); padding: 40px; text-align: center;
+}
+.gen-card-icon { font-size: 4rem; margin-bottom: 16px; }
+.gen-card h3 { color: white; margin-bottom: 8px; font-size: 1.4rem; }
+.gen-card p { color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-bottom: 24px; }
+.btn-gold {
+  display: inline-flex; align-items: center; gap: 8px; background: var(--gold);
+  color: var(--navy); padding: 12px 24px; border-radius: var(--radius-sm);
+  font-weight: 700; font-size: 0.95rem; transition: var(--transition); font-family: var(--font-heading);
+}
+.btn-gold:hover { background: #d4940e; transform: translateY(-2px); }
+.gen-detail { max-width: 800px; margin: 40px auto 0; color: rgba(255,255,255,0.65); font-size: 0.92rem; line-height: 1.75; }
+.gen-detail h3 { color: white; font-size: 1.3rem; margin-bottom: 12px; }
+.gen-benefits { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin: 24px 0; }
+.gen-ben {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-md); padding: 20px;
+}
+.gen-ben h4 { color: var(--gold); font-size: 0.95rem; margin-bottom: 4px; }
+.gen-ben p { color: rgba(255,255,255,0.55); font-size: 0.82rem; margin: 0; }
+@media (max-width: 800px) { .gen-grid { grid-template-columns: 1fr; } }
+
+/* ═══ IAQ ═══ */
+.iaq-box {
+  display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;
+  background: var(--blue-light); border-radius: var(--radius-lg); padding: 36px; margin: 32px 0;
+}
+.iaq-box-icon { font-size: 4.5rem; }
+.iaq-box h3 { color: var(--navy); margin-bottom: 8px; }
+.iaq-box p { font-size: 0.9rem; color: var(--gray-600); line-height: 1.7; }
+.iaq-details { max-width: 800px; margin: 0 auto; }
+.iaq-details h3 { margin-top: 32px; margin-bottom: 8px; }
+.iaq-details p { font-size: 0.92rem; color: var(--gray-600); line-height: 1.75; }
+@media (max-width: 700px) { .iaq-box { grid-template-columns: 1fr; text-align: center; } }
+
+/* ═══ WHY US ═══ */
+.why-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 24px; }
+.why {
+  display: flex; gap: 18px; padding: 24px; background: var(--white);
+  border-radius: var(--radius-md); border: 1px solid var(--gray-100);
+}
+.why-icon {
+  width: 52px; height: 52px; flex-shrink: 0; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+}
+.why-icon.bl { background: var(--blue-light); }
+.why-icon.gl { background: var(--gold-light); }
+.why-icon.rd { background: #fde8e8; }
+.why h4 { margin-bottom: 6px; }
+.why p { font-size: 0.88rem; color: var(--gray-600); }
+
+/* ═══ PROMO ═══ */
+.promo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.promo { padding: 36px; border-radius: var(--radius-lg); color: white; }
+.promo.fin { background: linear-gradient(135deg, var(--blue), #1557A0); }
+.promo.disc { background: linear-gradient(135deg, var(--red), #962D22); }
+.promo h3 { color: white; font-size: 1.5rem; margin-bottom: 8px; }
+.promo-big { font-family: var(--font-heading); font-size: 3rem; font-weight: 800; margin-bottom: 8px; }
+.promo p { color: rgba(255,255,255,0.8); font-size: 0.92rem; }
+.promo .btn-outline { margin-top: 20px; border-color: rgba(255,255,255,0.4); }
+.promo .btn-outline:hover { background: rgba(255,255,255,0.15); }
+@media (max-width: 700px) { .promo-grid { grid-template-columns: 1fr; } }
+
+/* ═══ FAQ ═══ */
+.faq-list { max-width: 800px; margin: 0 auto; }
+.faq-item { border-bottom: 1px solid var(--gray-100); }
+.faq-q {
+  width: 100%; text-align: left; padding: 20px 0;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--font-heading); font-weight: 600; font-size: 1.02rem;
+  color: var(--navy); gap: 16px; cursor: pointer;
+}
+.faq-q svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--gray-400); transition: var(--transition); }
+.faq-item.open .faq-q svg { transform: rotate(180deg); color: var(--blue); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.faq-a-inner { padding: 0 0 20px; font-size: 0.92rem; color: var(--gray-600); line-height: 1.75; }
+
+/* ═══ ABOUT ═══ */
+.about-box {
+  background: var(--gray-50); border-radius: var(--radius-lg); padding: 40px;
+  max-width: 800px; margin: 0 auto 32px; text-align: center;
+}
+.about-box-icon { font-size: 3rem; margin-bottom: 16px; }
+.about-box p { font-size: 0.92rem; color: var(--gray-600); line-height: 1.75; }
+.tribute {
+  background: linear-gradient(135deg, #FDF2F8, #FDE8F0); border-radius: var(--radius-lg);
+  padding: 40px; max-width: 800px; margin: 0 auto; border-left: 4px solid #EC4899; text-align: center;
+}
+.tribute h3 { color: #9B1B5E; margin-bottom: 12px; }
+.tribute p { color: #6B2140; font-size: 0.95rem; line-height: 1.8; }
+
+/* ═══ AREAS ═══ */
+.areas-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px; max-width: 900px; margin: 0 auto;
+}
+.area {
+  display: flex; align-items: center; gap: 8px; padding: 12px 16px;
+  background: var(--white); border: 1px solid var(--gray-100); border-radius: var(--radius-sm);
+  font-size: 0.88rem; font-weight: 500; color: var(--gray-600); transition: var(--transition);
+}
+.area:hover { border-color: var(--blue); color: var(--blue); }
+.area svg { width: 14px; height: 14px; fill: var(--red); flex-shrink: 0; }
+
+/* ═══ PARTNERS ═══ */
+.partners { display: flex; justify-content: center; flex-wrap: wrap; gap: 40px; padding: 20px 0; }
+.partner {
+  font-family: var(--font-heading); font-weight: 800; font-size: 1.3rem;
+  color: var(--gray-200); transition: var(--transition);
+}
+.partner:hover { color: var(--gray-400); }
+
+/* ═══ REVIEWS ═══ */
+.stars { font-size: 1.5rem; color: var(--gold); letter-spacing: 4px; margin-bottom: 8px; }
+.rev-link {
+  display: inline-flex; align-items: center; gap: 8px; color: var(--blue);
+  font-weight: 600; font-size: 0.95rem; margin-top: 16px; transition: var(--transition);
+}
+.rev-link:hover { gap: 12px; }
+
+/* ═══ CTA BANNER ═══ */
+.cta-ban {
+  padding: 60px 0; background: linear-gradient(135deg, var(--red), var(--red-dark));
+  text-align: center; color: white;
+}
+.cta-ban h2 { color: white; margin-bottom: 12px; }
+.cta-ban p { color: rgba(255,255,255,0.8); margin-bottom: 24px; }
+.cta-ban .btn-primary { background: white; color: var(--red); }
+.cta-ban .btn-primary:hover { background: var(--gray-50); }
+
+/* ═══ FOOTER ═══ */
+.footer { background: var(--navy); color: rgba(255,255,255,0.6); padding: 60px 0 24px; }
+.ft-grid {
+  display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px;
+  padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.ft-brand p { font-size: 0.88rem; line-height: 1.7; margin-top: 12px; }
+.ft-col h5 {
+  color: white; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: 16px;
+}
+.ft-col a { display: block; padding: 4px 0; font-size: 0.88rem; color: rgba(255,255,255,0.5); transition: var(--transition); }
+.ft-col a:hover { color: white; }
+.ft-bottom {
+  padding-top: 24px; font-size: 0.78rem;
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+.ft-license { font-size: 0.72rem; max-width: 600px; color: rgba(255,255,255,0.35); }
+@media (max-width: 800px) { .ft-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 500px) { .ft-grid { grid-template-columns: 1fr; } }
+
+/* ═══ MOBILE RESPONSIVE ═══ */
+@media (max-width: 480px) {
+  .container { padding: 0 16px; }
+  .section { padding: 56px 0; }
+  .section-alt { padding: 56px 0; }
+  .sh { margin-bottom: 32px; }
+  h1 { font-size: 1.9rem; }
+  h2 { font-size: 1.5rem; }
+
+  /* Hero */
+  .hero { padding: 96px 0 48px; }
+  .hero-sub { font-size: 0.95rem; }
+  .hero-actions { flex-direction: column; }
+  .hero-actions a { width: 100%; justify-content: center; }
+  .hero-stats { gap: 16px; flex-wrap: wrap; }
+  .stat-val { font-size: 1.3rem; }
+  .hero-card { padding: 24px; }
+  .booking-opt { padding: 12px; font-size: 0.84rem; min-height: 44px; }
+
+  /* Award */
+  .award { padding: 32px 0; }
+  .award-icon { width: 56px; height: 56px; font-size: 1.5rem; }
+
+  /* Services */
+  .srv-grid { grid-template-columns: 1fr; gap: 14px; }
+  .srv { padding: 22px; }
+
+  /* IAQ */
+  .iaq-box { padding: 24px; }
+  .iaq-box-icon { font-size: 3rem; }
+
+  /* Generac */
+  .gen-card { padding: 28px; }
+  .gen-card-icon { font-size: 3rem; }
+  .gen-detail { font-size: 0.88rem; }
+  .gen-benefits { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .gen-ben { padding: 14px; }
+  .gen-ben h4 { font-size: 0.85rem; }
+
+  /* Why */
+  .why-grid { grid-template-columns: 1fr; gap: 14px; }
+  .why { padding: 20px; gap: 14px; }
+  .why-icon { width: 44px; height: 44px; font-size: 1.2rem; }
+
+  /* Promo */
+  .promo-grid { grid-template-columns: 1fr; gap: 14px; }
+  .promo { padding: 28px; }
+  .promo-big { font-size: 2.4rem; }
+
+  /* FAQ */
+  .faq-q { font-size: 0.92rem; padding: 16px 0; min-height: 48px; }
+
+  /* About */
+  .about-box { padding: 28px; }
+  .about-box p { font-size: 0.88rem; }
+  .tribute { padding: 28px; }
+  .tribute p { font-size: 0.88rem; }
+
+  /* Areas */
+  .areas-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .area { padding: 10px 12px; font-size: 0.82rem; min-height: 44px; }
+
+  /* Partners */
+  .partners { gap: 24px; }
+  .partner { font-size: 1rem; }
+
+  /* Footer */
+  .footer { padding: 40px 0 20px; }
+  .ft-grid { gap: 28px; }
+
+  /* CTA */
+  .cta-ban { padding: 40px 0; }
+  .cta-ban .btn-primary { width: 100%; justify-content: center; }
+
+  /* Menu */
+  .menu-link { min-height: 44px; padding: 12px; }
+}
+
+/* Tablet tweaks */
+@media (max-width: 768px) and (min-width: 481px) {
+  .why-grid { grid-template-columns: 1fr; }
+  .srv-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .hero-card { padding: 28px; }
+  .section { padding: 64px 0; }
+}
+
+/* Fix the why-grid overflow on any screen narrower than ~400px */
+@media (max-width: 400px) {
+  .gen-benefits { grid-template-columns: 1fr; }
+}
+
+/* Ensure tap targets meet iOS 44px minimum on interactive elements */
+.menu-link, .booking-opt, .area, .nav-cta, .btn-primary, .btn-outline, .btn-gold, .faq-q { min-height: 44px; }
+/* Restore block-level footer links */
+.ft-col a { display: block; min-height: 36px; line-height: 36px; }
+
+/* Safe area insets for notched iPhones */
+@supports (padding: max(0px)) {
+  .nav-inner { padding-left: max(24px, env(safe-area-inset-left)); padding-right: max(24px, env(safe-area-inset-right)); }
+  .footer { padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+}
+
+/* ═══ ANIMATIONS ═══ */
+.anim { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.anim.vis { opacity: 1; transform: translateY(0); }
+.stagger .anim:nth-child(1) { transition-delay: .05s; }
+.stagger .anim:nth-child(2) { transition-delay: .1s; }
+.stagger .anim:nth-child(3) { transition-delay: .15s; }
+.stagger .anim:nth-child(4) { transition-delay: .2s; }
+.stagger .anim:nth-child(5) { transition-delay: .25s; }
+.stagger .anim:nth-child(6) { transition-delay: .3s; }
+.stagger .anim:nth-child(7) { transition-delay: .35s; }
+.stagger .anim:nth-child(8) { transition-delay: .4s; }
+.stagger .anim:nth-child(9) { transition-delay: .45s; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-logo">
+      <div class="nav-logo-icon">&#10052;</div>
+      TEXAN<span class="accent">&nbsp;MECHANICAL</span>
+    </a>
+    <div class="nav-right">
+      <a href="tel:8324376019" class="nav-phone">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        <span class="nav-phone-text">832-437-6019</span>
+      </a>
+      <a href="https://book.housecallpro.com/book/Texan-Mechanical-AC--Heating/453d3024d5a84d8483d215601c661874?v2=true" target="_blank" class="nav-cta">Book Now</a>
+      <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Slide-out menu -->
+<div class="menu-overlay" id="overlay" onclick="closeMenu()"></div>
+<div class="slide-menu" id="slideMenu">
+  <div class="menu-section">
+    <div class="menu-label">Services</div>
+    <a class="menu-link" href="#services" onclick="closeMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg> All HVAC Services</a>
+    <a class="menu-link" href="#iaq" onclick="closeMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg> Indoor Air Quality</a>
+    <a class="menu-link" href="#generac" onclick="closeMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Generac Generators</a>
+  </div>
+  <div class="menu-divider"></div>
+  <div class="menu-section">
+    <div class="menu-label">Information</div>
+    <a class="menu-link" href="#financing" onclick="closeMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg> Financing &amp; Discounts</a>
+    <a class="menu-link" href="#why" onclick="closeMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Why Choose Us</a>
+    <a class="menu-link" href="#faq" onclick="closeMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> FAQ</a>
+    <a class="menu-link" href="#areas" onclick="closeMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg> Service Areas</a>
+  </div>
+  <div class="menu-divider"></div>
+  <div class="menu-section">
+    <div class="menu-label">Company</div>
+    <a class="menu-link" href="#about" onclick="closeMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> About Us &amp; Our Story</a>
+    <a class="menu-link" href="#reviews" onclick="closeMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> Reviews</a>
+  </div>
+  <a href="https://book.housecallpro.com/book/Texan-Mechanical-AC--Heating/453d3024d5a84d8483d215601c661874?v2=true" target="_blank" class="menu-cta">Book an Appointment</a>
+  <p class="menu-phone">Or call: <a href="tel:8324376019">832-437-6019</a></p>
+</div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero" id="top">
+  <div class="container hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        Fort Bend's Best HVAC &mdash; 2025
+      </div>
+      <h1>Your Comfort Is Our <span class="gold">Family Business</span></h1>
+      <p class="hero-sub">Locally owned and operated since 2013, Texan Mechanical provides honest, expert HVAC service throughout Fort Bend County and the greater Houston area. From emergency AC repair to complete system installations, we treat every home like our own.</p>
+      <div class="hero-actions">
+        <a href="https://book.housecallpro.com/book/Texan-Mechanical-AC--Heating/453d3024d5a84d8483d215601c661874?v2=true" target="_blank" class="btn-primary">Book an Appointment <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+        <a href="tel:8324376019" class="btn-outline"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg> Call Now</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="stat-val">12+</div><div class="stat-lbl">Years Serving Houston</div></div>
+        <div><div class="stat-val">0%</div><div class="stat-lbl">Financing Available</div></div>
+        <div><div class="stat-val">10yr</div><div class="stat-lbl">Parts Warranty</div></div>
+      </div>
+    </div>
+    <div class="hero-card">
+      <h3>Request Service Today</h3>
+      <p class="hero-card-sub">Instantly book an appointment online</p>
+      <div class="booking-options">
+        <div class="booking-opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg> AC &amp; Heating Repair</div>
+        <div class="booking-opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg> FREE System Replacement Estimate</div>
+        <div class="booking-opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> FREE Second Opinion</div>
+        <div class="booking-opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Routine Maintenance</div>
+        <div class="booking-opt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Generac Generator Service</div>
+      </div>
+      <a href="https://book.housecallpro.com/book/Texan-Mechanical-AC--Heating/453d3024d5a84d8483d215601c661874?v2=true" target="_blank" class="btn-primary card-cta">Book Now <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      <p class="card-phone">Or call: <a href="tel:8324376019">832-437-6019</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- AWARD -->
+<section class="award">
+  <div class="container award-inner">
+    <div class="award-icon">&#127942;</div>
+    <div class="award-txt">
+      <h3>Fort Bend County's Best HVAC &mdash; 2025</h3>
+      <p>Thank you, Fort Bend County! Because of your support, Texan Mechanical AC &amp; Heating has been named the BEST Heating and Air Conditioning company in Fort Bend County for 2025. Serving you with the best service at the best price is our commitment.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="sh"><div class="overline">Our HVAC Services</div><h2>Everything You Need Under One Roof</h2><p>From routine maintenance to emergency repairs, comprehensive HVAC solutions for homes and businesses across the Houston area.</p></div>
+    <div class="srv-grid stagger">
+      <div class="srv anim"><div class="srv-icon">&#10052;&#65039;</div><h4>AC &amp; Heater Installation</h4><p>Professional installation for your home or business. We'll help you choose the right system and install it efficiently.</p></div>
+      <div class="srv anim"><div class="srv-icon">&#128295;</div><h4>AC &amp; Heating Repair</h4><p>Our expert technicians diagnose and repair any issues. From simple fixes to complex problems, we've got you covered.</p></div>
+      <div class="srv anim"><div class="srv-icon">&#128203;</div><h4>Free HVAC Quotes</h4><p>Free consultation to evaluate your equipment and discuss replacement options, promotions, rebates, tax credits, and financing.</p></div>
+      <div class="srv anim"><div class="srv-icon">&#128269;</div><h4>Free Second Opinion</h4><p>Already received a diagnosis? We're happy to provide a free second opinion to make sure you're making the right call.</p></div>
+      <div class="srv anim"><div class="srv-icon">&#128167;</div><h4>Drain Line Cleaning</h4><p>Water dripping from the pipe on the side of the house? Your drain lines may be clogged. Included with all maintenance plans.</p></div>
+      <div class="srv anim"><div class="srv-icon">&#127811;</div><h4>Indoor Air Quality</h4><p>Breathe clean, healthy air year round with duct inspections, high-efficiency filtration, and UV air purifier lights.</p></div>
+      <div class="srv anim"><div class="srv-icon">&#9881;&#65039;</div><h4>System Tune-Ups</h4><p>Prevent costly repairs with comprehensive maintenance plans. Regular inspections keep your system running smoothly.</p></div>
+      <div class="srv anim"><div class="srv-icon">&#128680;</div><h4>Emergency HVAC</h4><p>Emergency air conditioning and heating services to keep your home or business comfortable when you need it most.</p></div>
+      <div class="srv anim"><div class="srv-icon">&#129501;</div><h4>Ductwork &amp; Insulation</h4><p>Ensure your ductwork and insulation are healthy and efficient to protect your home, family, and energy bills.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- INDOOR AIR QUALITY -->
+<section class="section section-alt" id="iaq">
+  <div class="container">
+    <div class="sh"><div class="overline">Indoor Air Quality</div><h2>Breathe Cleaner, Healthier Air</h2><p>Our technicians are experts in Indoor Air Quality, offering cutting-edge solutions developed with NASA technology.</p></div>
+    <div class="iaq-box">
+      <div>
+        <h3>Air Scrubber by Aerus&reg;</h3>
+        <p>Air Scrubber purification products use ActivePure&reg; technology, originally developed in cooperation with NASA for the International Space Station. Proven to destroy up to 99% of all surface contaminants.</p>
+        <p>Working through your heating and air conditioning unit, the Air Scrubber significantly reduces dust, pet dander, odors, and airborne irritants throughout your home.</p>
+      </div>
+      <div class="iaq-box-icon">&#128300;</div>
+    </div>
+    <div class="iaq-details">
+      <h3>Reduce Allergens &amp; Odors</h3>
+      <p>Common smells such as pet odor, cigarette smoke, paint fumes, mold smells, and the occasional burnt food odor can all be significantly reduced. If you suffer from sneezing, itchy or watery eyes during allergy season, dust, mold, pollen, and many other pollutants can be addressed. ActivePure&reg; Technology uses specialized light waves along with a proprietary catalytic process that creates scrubbing molecules of oxygen and hydrogen to purify your air.</p>
+      <h3>Contaminants Follow You Home</h3>
+      <p>Contaminants from school, daycare, or the office follow us home on hands, clothes, and shoes, landing on doorknobs, countertops, and floors. The Air Scrubber by Aerus&reg; contains ActivePure&reg; Technology, proven to destroy up to 99% of all surface contaminants &mdash; giving your family true peace of mind.</p>
+      <div class="text-center" style="margin-top:32px;">
+        <a href="https://book.housecallpro.com/book/Texan-Mechanical-AC--Heating/453d3024d5a84d8483d215601c661874?v2=true" target="_blank" class="btn-primary">Schedule a Duct Inspection <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GENERAC -->
+<section class="section section-dark" id="generac">
+  <div class="container">
+    <div class="gen-grid">
+      <div class="gen-content">
+        <span class="overline">Generac Authorized Dealer</span>
+        <h2>Whole Home Standby Generators</h2>
+        <p>The Houston area is notorious for power issues. Whether during a hurricane, storm, freeze, or everyday grid overload, our power supply has proved insufficient time and again.</p>
+        <div class="gen-feats">
+          <div class="gen-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Factory authorized installation, service &amp; repair</div>
+          <div class="gen-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Full service from planning to warranty fulfillment</div>
+          <div class="gen-feat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Keep your family safe during outages</div>
+        </div>
+        <a href="https://book.housecallpro.com/book/Texan-Mechanical-AC--Heating/453d3024d5a84d8483d215601c661874?v2=true" target="_blank" class="btn-gold">Schedule Free Estimate <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+      <div class="gen-card">
+        <div class="gen-card-icon">&#9889;</div>
+        <h3>Free Generator Estimate</h3>
+        <p>Find out which Generac generator is right for your home. No-obligation quote.</p>
+        <a href="tel:8324376019" class="btn-gold">Call 832-437-6019</a>
+      </div>
+    </div>
+    <div class="gen-detail">
+      <h3>Full-Service Generator Experience</h3>
+      <p>Texan Mechanical is proud to partner with Generac, the #1 Home Standby Generator manufacturer in North America. We offer factory direct products, competitive pricing, financing, and full warranties.</p>
+      <div class="gen-benefits">
+        <div class="gen-ben"><h4>&#128204; Factory Direct</h4><p>Generac factory authorized products and pricing</p></div>
+        <div class="gen-ben"><h4>&#128295; Expert Install</h4><p>Professional installation by certified technicians</p></div>
+        <div class="gen-ben"><h4>&#128736;&#65039; Full Service</h4><p>Ongoing maintenance and warranty support</p></div>
+        <div class="gen-ben"><h4>&#128176; Financing</h4><p>Flexible financing options available</p></div>
+      </div>
+      <p>A whole home standby generator automatically kicks in when the power goes out, keeping your HVAC, refrigeration, medical equipment, and security systems running. Don't wait for the next storm.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="section" id="why">
+  <div class="container">
+    <div class="sh"><div class="overline">Why Choose Us</div><h2>The Texan Mechanical Difference</h2><p>Deep trade knowledge, honest service, and the best price. That's our commitment.</p></div>
+    <div class="why-grid stagger">
+      <div class="why anim"><div class="why-icon bl">&#129309;</div><div><h4>Honest, Individualized Options</h4><p>We provide a full consultation to explain all your options. We won't sell you anything you don't need.</p></div></div>
+      <div class="why anim"><div class="why-icon gl">&#127942;</div><div><h4>Award-Winning Service</h4><p>Named Fort Bend County's Best HVAC company for 2025. Excellence backed by community trust.</p></div></div>
+      <div class="why anim"><div class="why-icon rd">&#10084;&#65039;</div><div><h4>Family Owned Since 2013</h4><p>Michael and Kristin Wallman started Texan Mechanical right here in Fort Bend. You're working with your neighbors.</p></div></div>
+      <div class="why anim"><div class="why-icon bl">&#128176;</div><div><h4>0% Financing Available</h4><p>0% on qualifying replacements. Standard financing on repairs. Cash discounts up to 20%.</p></div></div>
+      <div class="why anim"><div class="why-icon gl">&#128737;&#65039;</div><div><h4>Industry-Leading Warranty</h4><p>10-year parts warranty, up to 2-year labor warranty, and Lifetime Unit Replacement on qualifying equipment.</p></div></div>
+      <div class="why anim"><div class="why-icon rd">&#127894;&#65039;</div><div><h4>Military &amp; First Responder Discounts</h4><p>10% off all maintenance plans for teachers, first responders, and military. Thank you for your service.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINANCING -->
+<section class="section section-alt" id="financing">
+  <div class="container">
+    <div class="sh"><div class="overline">Financing &amp; Savings</div><h2>Affordable Comfort for Every Budget</h2></div>
+    <div class="promo-grid">
+      <div class="promo fin"><div class="promo-big">0% APR</div><h3>Financing Available</h3><p>Qualifying system replacements with 0% financing. Standard financing on partial replacements and repairs.</p><a href="https://book.housecallpro.com/book/Texan-Mechanical-AC--Heating/453d3024d5a84d8483d215601c661874?v2=true" target="_blank" class="btn-outline">Learn Your Options &rarr;</a></div>
+      <div class="promo disc"><div class="promo-big">Up to 20% Off</div><h3>Cash Discounts</h3><p>Cash discounts on replacements and repairs. Ask about current promotions, rebates, and tax credits.</p><a href="https://book.housecallpro.com/book/Texan-Mechanical-AC--Heating/453d3024d5a84d8483d215601c661874?v2=true" target="_blank" class="btn-outline">Get a Quote &rarr;</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="sh"><div class="overline">Frequently Asked Questions</div><h2>Your HVAC Questions, Answered</h2><p>Expert answers from our technicians on the most common HVAC concerns.</p></div>
+    <div class="faq-list" id="faqList"></div>
+    <div class="text-center" style="margin-top:32px;">
+      <p style="color:var(--gray-400);font-size:0.9rem;">Have a question we didn't answer?</p>
+      <a href="tel:8324376019" class="btn-primary" style="margin-top:12px;">Call Us: 832-437-6019</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="section section-alt" id="about">
+  <div class="container">
+    <div class="sh"><div class="overline">About Us</div><h2>Meet the Family Behind Texan Mechanical</h2></div>
+    <div class="about-box">
+      <div class="about-box-icon">&#128106;</div>
+      <h3 style="margin-bottom:12px;">The Wallman Family</h3>
+      <p>Meet Michael and Kristin Wallman and family. They are high school sweethearts, raised right here in Fort Bend County and still proud Fort Bend residents. They have four beautiful children &mdash; Kamryn, Zackary, Maverick, and Maddyn &mdash; who all help out in some way, shape, or form with the family business.</p>
+      <p>Michael and Kristin both began their careers in the HVAC field while still in high school. They were blessed with the opportunity to work for one of the largest HVAC and Controls corporations in the world, specializing primarily in commercial HVAC service and maintenance.</p>
+      <p>In 2013, they started their own company, focusing their service towards residential and light commercial service, maintenance, and installation. Over a decade later, they are proud to continue serving their hometown and surrounding areas.</p>
+    </div>
+    <div class="tribute">
+      <div style="font-size:2.5rem;margin-bottom:12px;">&#127888;</div>
+      <h3>In Loving Memory of Maddyn</h3>
+      <p>Our Maddy Girl was the caboose of our family and had big dreams. Only God knows why he needed her more than we did, but we know she is in Heaven watching over us and we will live for her and continue her legacy for the rest of our lives on this side.</p>
+      <p>We thank all of our customers, family, and friends in this amazing community for standing with us and supporting us through this extremely painful experience. We miss our beautiful girl beyond words every day, every hour. We know that we have the most precious guardian angel watching over and protecting us and our Texan Mechanical family. &#127888;</p>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE AREAS -->
+<section class="section" id="areas">
+  <div class="container">
+    <div class="sh"><div class="overline">Areas We Serve</div><h2>Proudly Serving Houston &amp; Surrounding Areas</h2><p>Quality HVAC services for our hometown and the communities around us.</p></div>
+    <div class="areas-grid stagger" id="areasGrid"></div>
+  </div>
+</section>
+
+<!-- BRAND PARTNERS -->
+<section class="section section-alt" id="partners">
+  <div class="container">
+    <div class="sh"><div class="overline">Trusted Brand Partners</div><h2>Top-Quality Equipment &amp; Products</h2><p>Authorized dealer for industry-leading brands with the best warranties.</p></div>
+    <div class="partners">
+      <div class="partner">AMANA</div><div class="partner">GOODMAN</div><div class="partner">DAIKIN</div>
+      <div class="partner">GENERAC</div><div class="partner">AERUS</div><div class="partner">HONEYWELL</div>
+      <div class="partner">NEST</div><div class="partner">ECOBEE</div>
+    </div>
+    <p class="text-center" style="color:var(--gray-400);font-size:0.88rem;margin-top:24px;">Daikin manufactures locally at their Texas Technology Park in Waller, TX &mdash; right in our backyard.</p>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="section" id="reviews">
+  <div class="container text-center">
+    <div class="sh"><div class="overline">Customer Reviews</div><h2>What Our Customers Say</h2></div>
+    <div class="stars">&#9733; &#9733; &#9733; &#9733; &#9733;</div>
+    <p style="color:var(--gray-600);max-width:500px;margin:0 auto;">Join hundreds of satisfied homeowners across Fort Bend County and the greater Houston area who trust Texan Mechanical.</p>
+    <a href="https://www.facebook.com/pg/texanmechanical/reviews/?ref=page_internal" target="_blank" class="rev-link">Read our reviews on Facebook <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-ban">
+  <div class="container">
+    <h2>Ready to Get Comfortable?</h2>
+    <p>Schedule your appointment online or call us directly. We're here to help.</p>
+    <a href="https://book.housecallpro.com/book/Texan-Mechanical-AC--Heating/453d3024d5a84d8483d215601c661874?v2=true" target="_blank" class="btn-primary">Book Your Appointment <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <div class="nav-logo" style="color:white;"><div class="nav-logo-icon">&#10052;</div> TEXAN<span class="accent">&nbsp;MECHANICAL</span></div>
+        <p>Fort Bend County's award-winning HVAC company. Family owned since 2013.</p>
+        <p style="margin-top:8px;"><a href="tel:8324376019" style="color:var(--gold);font-weight:600;">&#128222; 832-437-6019</a></p>
+      </div>
+      <div class="ft-col"><h5>Services</h5><a href="#services">AC Installation</a><a href="#services">Repair</a><a href="#services">Tune-Ups</a><a href="#services">Emergency</a><a href="#services">Ductwork</a></div>
+      <div class="ft-col"><h5>Solutions</h5><a href="#iaq">Indoor Air Quality</a><a href="#generac">Generac Generators</a><a href="#faq">FAQ</a><a href="#financing">Financing</a></div>
+      <div class="ft-col"><h5>Company</h5><a href="#about">About Us</a><a href="https://www.facebook.com/pg/texanmechanical/reviews/?ref=page_internal" target="_blank">Facebook</a><a href="https://book.housecallpro.com/book/Texan-Mechanical-AC--Heating/453d3024d5a84d8483d215601c661874?v2=true" target="_blank">Book Online</a></div>
+    </div>
+    <div class="ft-bottom">
+      <span>&copy; 2025 MKKZ Enterprises, LLC. All Rights Reserved.</span>
+      <div class="ft-license">License TACLA056434E &mdash; Regulated by The Texas Department of Licensing and Regulation, P.O. Box 12157, Austin, Texas 78711, 1-800-803-9202, 512-463-6599, <a href="http://www.license.state.tx.us" target="_blank" style="color:rgba(255,255,255,0.5);">www.license.state.tx.us</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Menu ── */
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('slideMenu').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('slideMenu').classList.contains('open') ? 'hidden' : '';
+}
+function closeMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('slideMenu').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* ── Nav scroll ── */
+window.addEventListener('scroll', function() {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 20);
+});
+
+/* ── FAQ ── */
+var faqs = [
+  { q: 'How long does an HVAC system last?', a: 'HVAC systems as a whole can last up to 10\u201315 years. Evaporator coils have an average life expectancy of 5\u20137 years, with the condenser lasting 10\u201315 years with proper maintenance. Furnaces, especially in Southeast Texas, tend to last a little longer \u2014 even up to 18\u201320 years due to limited use.' },
+  { q: 'How long does an AC repair typically take?', a: 'AC repairs typically take between one and eight hours, depending on which part requires fixing or replacement.' },
+  { q: 'How often should I have my HVAC system serviced?', a: 'To keep your HVAC system running efficiently, it\u2019s important to have it serviced at least twice per year. Regular maintenance prevents costly breakdowns and extends the life of your equipment.' },
+  { q: 'I see ice on the lines. What should I do?', a: 'If you notice ice on the lines leading from the condenser into the home or on the equipment in the attic, that means the system is freezing up due to lack of refrigerant. Turn the unit to OFF and the fan to ON to allow the system to defrost, and then call us. We will leak check the system to determine the issue.' },
+  { q: 'My unit is blowing warm air. Does it just need Freon?', a: 'You should never have to add refrigerant to a system. HVAC systems are sealed, pressurized systems \u2014 if there is a lack of charge, there is a leak somewhere that needs to be found. We do not recommend simply adding refrigerant when a leak is found.' },
+  { q: 'We had a power surge and the system isn\u2019t working.', a: 'Power surges are common in our area. Turn the unit off for 15\u201320 minutes to allow the compressor to reset. If it\u2019s still not running, call us \u2014 the surge may have damaged key components. We recommend adding surge protectors to both the condenser and furnace.' },
+  { q: 'Do you offer financing?', a: 'Yes! We offer 0% financing on qualifying system replacements. Standard financing is also available on partial replacements and repairs. Contact us to discuss your options.' },
+  { q: 'What happens to my maintenance plan if I move?', a: 'You can refer Texan to the new homeowner \u2014 we\u2019ll transfer the plan to their name. If you\u2019re relocating outside our service area, you may cancel once paid in full with an early termination fee.' },
+  { q: 'Do you perform inspections for real estate or foster care?', a: 'Yes! We complete extensive HVAC inspections for both foster care requirements and real estate transactions. Hiring a licensed HVAC company for a thorough inspection before purchasing a home is very important \u2014 general inspectors can only flag items visually.' }
+];
+var fl = document.getElementById('faqList');
+faqs.forEach(function(f) {
+  var d = document.createElement('div'); d.className = 'faq-item';
+  d.innerHTML = '<button class="faq-q" onclick="toggleFaq(this)">' + f.q + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button><div class="faq-a"><div class="faq-a-inner">' + f.a + '</div></div>';
+  fl.appendChild(d);
+});
+function toggleFaq(btn) {
+  var item = btn.parentElement, ans = item.querySelector('.faq-a'), open = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(function(i) { i.classList.remove('open'); i.querySelector('.faq-a').style.maxHeight = '0'; });
+  if (!open) { item.classList.add('open'); ans.style.maxHeight = ans.scrollHeight + 'px'; }
+}
+
+/* ── Areas ── */
+var areas = ['Fort Bend','Katy','Fulshear','Richmond','Cypress','Brookshire','Simonton','Sealy','Rosenberg','Sugar Land','Memorial','Spring Branch','Missouri City','Stafford','Meadows Place','Pearland','Tomball','Magnolia'];
+var ag = document.getElementById('areasGrid');
+areas.forEach(function(a) {
+  var d = document.createElement('div'); d.className = 'area anim';
+  d.innerHTML = '<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg> ' + a;
+  ag.appendChild(d);
+});
+
+/* ── Animations ── */
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('vis'); obs.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.anim').forEach(function(el) { obs.observe(el); });
+</script>
+</body>
+</html>
