@@ -1055,6 +1055,9 @@ function renderChart(c) {
     const ga = Math.max(0, c.eAw), gb = Math.min(c.eAw + c.X + c.Y, xSpan);
     if (gb > ga && Math.abs(ga - wa) > 0.05) {
         s += `<rect x="${xPix(ga)}" y="${MT+4}" width="${xPix(gb)-xPix(ga)}" height="${ph-8}" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5 5" rx="3"/>`;
+        // Backing plate: the label sits inside the current window's shading
+        // whenever the windows overlap (they nearly always do).
+        s += `<rect x="${xPix(ga)+2}" y="${H-MB-22}" width="94" height="16" rx="4" fill="white" opacity="0.88" stroke="#e2e8f0"/>`;
         s += `<text x="${xPix(ga)+6}" y="${H-MB-10}" text-anchor="start" font-size="10.5" fill="#64748b" font-family="DM Sans, sans-serif">W at awareness</text>`;
     }
 
