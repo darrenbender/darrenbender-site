@@ -636,7 +636,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
                 <p><strong>Interpolation.</strong> Monotone cubic (Fritsch&ndash;Carlson) through anchors at 0, 5, 10, 15, 20, 30 years from report publication, with <code>P(0) = 0</code>. Values beyond 30 years are clamped at the 30-year anchor and flagged.</p>
                 <p><strong>The window.</strong> <code>W = [today, start + X + Y]</code>. Left edge: a CRQC arriving today decrypts harvested data still within shelf life. Right edge: the last datum harvested before migration completes remains sensitive for X further years. <code>P(W) = P(right) &minus; P(left)</code> &mdash; the unconditional mass of Z inside W. (A conditional variant renormalizing on no-CRQC-today, <code>P(W)/(1 &minus; P(today))</code>, is more aggressive; the unconditional form is used here as the conservative default.) In the accompanying article's terms, W is the organization's own remaining slice of the Shor&ndash;Q-Day window: the global interval, open since Shor's 1994 proof and closing at Q-Day, within which harm is foreseeable but not yet manifest.</p>
                 <p><strong>Sliding vs. frozen.</strong> Until migration commences, the right edge is <code>today + X + Y</code> and W slides up the rising curve daily. Commencement freezes the right edge at <code>start + X + Y</code>; W then shrinks as the left edge (today) advances. The procrastination premium is <code>P(W today) &minus; P(W at awareness)</code>, both read on the current report's curve.</p>
-                <p><strong>Awareness anchors &amp; the notice gradient.</strong> The awareness date sets where D begins. The selector offers dated public signals &mdash; statutes and regulations in force, standards publications, intergovernmental statements, threat surveys, and industry deployments &mdash; each carried with its citation in the tool's data files. Which signal starts a particular organization's clock is a legal argument, not a computation: the tool takes the date you select (or your own documented date) and reports the consequences. The documentation block includes the full ladder &mdash; D measured from every listed signal &mdash; because the reasonableness of a claimed awareness date is naturally tested against the public record that preceded it.</p>
+                <p><strong>Awareness anchors &amp; the notice gradient.</strong> The awareness date sets where D begins. The selector offers dated public signals &mdash; statutes and regulations in force, standards publications, intergovernmental statements, threat surveys, and industry deployments &mdash; each carried with its citation in the tool's data files. Which signal starts a particular organization's clock is a legal argument, not a computation: the tool takes the date you select (or your own documented date) and reports the consequences. The documentation block includes the full ladder &mdash; D measured from every listed signal &mdash; because the reasonableness of a claimed awareness date is naturally tested against the public record that preceded it. Two hollow markers chart the <em>epistemic</em> tier &mdash; Shor's algorithm (1994) and the founding of post-quantum cryptography as a field (2006): the issue's coming-into-existence, which per the accompanying article's two-boundary framework precedes any duty and is deliberately not selectable as an anchor. Existence made the harm foreseeable; it did not start anyone's clock.</p>
                 <p><strong>Crossing date t*.</strong> The first calendar date at which the sliding window's mass reaches R, found by forward scan with bisection refinement on each interpretation curve. If the mass already exceeded R at the report's publication, the crossing is reported as "at or before publication" rather than extrapolated to dates predating the survey.</p>
                 <p><strong>Theoretical lineage.</strong> The window construction restates Mosca's Theorem &mdash; exposure when <code>x + y &gt; z</code> &mdash; in probabilistic form. Michele Mosca, <em>Cybersecurity in an Era with Quantum Computers: Will We Be Ready?</em>, 16 IEEE Security &amp; Privacy 38 (2018). The procrastination variable D adopts the augmentation introduced by Jaime G&oacute;mez Garc&iacute;a, Chair of the Europol Quantum Safe Financial Forum, within the FS-ISAC PQC Working Group's collaborative work &mdash; the <strong>Mosca-G&oacute;mez formulation</strong>, <code>x + y + p<sub>delay</sub> &gt; z</code> (this tool's D corresponds to p<sub>delay</sub>). See FS-ISAC PQC Working Grp., <em>The Timeline for Post-Quantum Cryptographic Migration</em> (Nov. 2025); Jaime G&oacute;mez Garc&iacute;a, <em>Perspectives on the Transition to PQC in the Financial Sector</em>, PKI Consortium PQC Conference (Jan. 16, 2025).</p>
                 <p><strong>Benchmark sources for B and L presets.</strong> Burden: OMB/ONCD, <em>Report on Post-Quantum Cryptography</em> (July 2024) (~$7.1B for federal civilian systems, 2025&ndash;2035); sector program models of $50&ndash;300M+ for a single large operator. Loss: IBM, <em>Cost of a Data Breach Report 2025</em> (U.S. average $10.22M; healthcare and financial costliest); Anthem 2015 breach aggregate &asymp;$171M ($115M class settlement + $16M OCR + $39.5M multistate AGs); UnitedHealth/Change Healthcare attack cost estimate $3.09B; Citi Institute (Feb. 2026) (systemic damage of a quantum-enabled attack on a major U.S. bank: $2.0&ndash;3.3T). Preset values are deliberately conservative within these ranges and are illustrative, not firm-specific.</p>
@@ -1130,13 +1130,27 @@ function renderChart(c) {
     s += `<text x="${W-MR-4}" y="${rY-7}" text-anchor="end" font-size="12.5" font-weight="700" fill="#7C3AED" font-family="JetBrains Mono, monospace">R = ${c.R < 0.1 ? c.R.toFixed(3) : c.R.toFixed(1)}%</text>`;
 
     // Awareness-event markers on the axis line: the public notice record at
-    // its true calendar positions; the selected anchor is highlighted.
+    // its true calendar positions; the selected anchor is highlighted, and
+    // same-date events stack vertically — the ramp-up made visible.
+    // Epistemic-tier events pre-dating the frame collapse into a left-edge
+    // caption: the issue is older than any notice anchor.
     const selDate = document.getElementById("awarenessDate").value;
+    const preFrame = [];
+    let stackX = -1, stackN = 0;
     for (const ev of AWARENESS_EVENTS) {
         const evCal = (new Date(ev.date + "T00:00:00") - CAL0) / MS_YEAR;
-        if (evCal < 0 || evCal > CAL_SPAN) continue;
-        const selEv = ev.date === selDate;
-        s += `<circle cx="${xCal(evCal)}" cy="${H-MB}" r="${selEv ? 4.5 : 3}" fill="${selEv ? "#7C3AED" : "#cbd5e1"}" stroke="white" stroke-width="1"><title>${fmtDate(new Date(ev.date + "T00:00:00"))} — ${ev.label}</title></circle>`;
+        if (evCal < 0) { if (ev.tier === "epistemic") preFrame.push(ev); continue; }
+        if (evCal > CAL_SPAN) continue;
+        const x = xCal(evCal);
+        stackN = Math.abs(x - stackX) < 4 ? stackN + 1 : 0;
+        stackX = x;
+        const cy = H - MB - stackN * 9;
+        const epi = ev.tier === "epistemic";
+        const selEv = !epi && ev.date === selDate;
+        s += `<circle cx="${x}" cy="${cy}" r="${selEv ? 4.5 : 3}" fill="${epi ? "none" : selEv ? "#7C3AED" : "#cbd5e1"}" stroke="${epi ? "#94a3b8" : "white"}" stroke-width="1"><title>${evWhen(ev)} — ${ev.label}</title></circle>`;
+    }
+    if (preFrame.length) {
+        s += `<text x="${ML}" y="556" text-anchor="start" font-size="9.5" fill="#94a3b8" font-family="DM Sans, sans-serif">◂ ${preFrame.map(ev => evWhen(ev) + " " + ev.label).join(" · ")} — the issue predates the frame; existence is not notice</text>`;
     }
 
     // Ghost-window label, on a backing plate: painted after the curves and
@@ -1297,11 +1311,12 @@ function generateDocument() {
         "",
         "NOTICE LADDER - D if awareness ran from each public signal",
         "(constructive-notice gradient: the later the claimed awareness date,",
-        "the more of this public record precedes it)",
-        ...AWARENESS_EVENTS.map(ev => {
+        "the more of this public record precedes it; epistemic-tier events -",
+        "the issue's existence - are charted but are not notice anchors)",
+        ...AWARENESS_EVENTS.filter(ev => ev.tier !== "epistemic").map(ev => {
             const end = c.start || c.now;
             const dv = Math.max(0, (end - new Date(ev.date + "T00:00:00")) / MS_YEAR);
-            return "  " + fmtDate(new Date(ev.date + "T00:00:00")).padEnd(14) +
+            return "  " + evWhen(ev).padEnd(14) +
                    (ev.label + " ").padEnd(44, ".") + " D = " + dv.toFixed(2) + " yrs";
         }),
         "",
@@ -1374,40 +1389,47 @@ function fbThanks() {
    feedback buttons via the shared .preset-btn class and set awareness to
    an Invalid Date when clicked.) */
 const TIER_LABELS = {
+    // "epistemic" is deliberately absent: the issue's coming-into-existence
+    // (Shor 1994, the field's founding) is displayed on the chart but is
+    // never a selectable anchor — existence precedes duty.
     "statute-regulation": "Statutes & regulation",
     "standards": "Standards",
     "intergovernmental": "Intergovernmental",
     "survey": "Threat surveys",
     "industry": "Industry signals"
 };
+// Big-picture events carry granularity "year": dated Jan 1, shown as the year
+const evWhen = ev => ev.granularity === "year"
+    ? ev.date.slice(0, 4) : fmtDate(new Date(ev.date + "T00:00:00"));
 function buildAwarenessSelect() {
     const sel = document.getElementById("awarenessEvent");
     sel.innerHTML = '<option value="custom">Custom date…</option>';
     for (const tier of Object.keys(TIER_LABELS)) {
-        const evs = AWARENESS_EVENTS.filter(e => e.tier === tier);
-        if (!evs.length) continue;
         const og = document.createElement("optgroup");
         og.label = TIER_LABELS[tier];
-        for (const ev of evs) {
+        AWARENESS_EVENTS.forEach((ev, i) => {
+            if (ev.tier !== tier) return;
             const o = document.createElement("option");
-            o.value = ev.date;
-            o.textContent = fmtDate(new Date(ev.date + "T00:00:00")) + " — " + ev.label;
+            o.value = String(i); // index, not date: several events can share a date
+            o.textContent = evWhen(ev) + " — " + ev.label;
             o.title = ev.citation;
             og.appendChild(o);
-        }
-        sel.appendChild(og);
+        });
+        if (og.children.length) sel.appendChild(og);
     }
     syncAwarenessSelect();
 }
 function syncAwarenessSelect() {
     const sel = document.getElementById("awarenessEvent");
     const cur = document.getElementById("awarenessDate").value;
-    sel.value = AWARENESS_EVENTS.some(e => e.date === cur) ? cur : "custom";
+    const i = AWARENESS_EVENTS.findIndex(e => e.date === cur && e.tier !== "epistemic");
+    sel.value = i >= 0 ? String(i) : "custom";
 }
 document.getElementById("awarenessEvent").addEventListener("change", e => {
     if (e.target.value === "custom") { document.getElementById("awarenessDate").focus(); return; }
-    document.getElementById("awarenessDate").value = e.target.value;
-    state.awareness = new Date(e.target.value + "T00:00:00");
+    const ev = AWARENESS_EVENTS[+e.target.value];
+    document.getElementById("awarenessDate").value = ev.date;
+    state.awareness = new Date(ev.date + "T00:00:00");
     render();
 });
 document.getElementById("awarenessDate").addEventListener("change", e => {
