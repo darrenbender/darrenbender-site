@@ -1,6 +1,10 @@
 {
-  "comment": "Public awareness signals for the constructive-notice gradient: candidate dates from which an organization's awareness clock could be argued to run. Each entry needs date (ISO), tier, label, and citation. Adding an event is a data commit — include the citation and keep labels short. Tier order in the UI: statute-regulation, standards, intergovernmental, survey, industry. The scholarship tier (Mosca 2015 analysis / 2018 theorem publication) is INTENTIONALLY OMITTED pending Darren's ruling on whether foreseeability scholarship belongs on a duty-crystallization ladder (see manuscript Part II.A: epistemic vs. ontic boundary; per standing guardrail, Shor 1994 is never an anchor). 2026 vendor and intergovernmental announcements (G7 follow-up, Google/Microsoft/Oracle/AWS, bank programs) should be added by data commit with citations once dated.",
+  "comment": "Public awareness signals for the constructive-notice gradient: candidate dates from which an organization's awareness clock could be argued to run. Each entry needs date (ISO), tier, label, and citation; granularity 'year' means the event is dated big-picture to Jan 1 and displayed as the year only. Adding an event is a data commit — include the citation and keep labels short. Tier order in the UI: statute-regulation, standards, intergovernmental, survey, industry. The EPISTEMIC tier (per Darren's ruling of 2026-07-18, modifying guardrail B-1) marks the issue's coming-into-existence — Shor's algorithm, the founding of the PQC field — and is DISPLAY-ONLY: never selectable as an awareness anchor, never in the notice ladder; existence precedes duty (manuscript Part II.A). The Mosca 2015/2018 scholarship question remains open pending ruling. Events dated 2026 carry citations marked 'full citation pending' — supplied by Darren, to be completed by data commit.",
   "events": [
+    { "date": "1994-01-01", "tier": "epistemic", "granularity": "year", "label": "Shor's algorithm",
+      "citation": "Peter W. Shor, Algorithms for Quantum Computation: Discrete Logarithms and Factoring, Proc. 35th Ann. Symp. on Foundations of Computer Science 124 (1994)" },
+    { "date": "2006-01-01", "tier": "epistemic", "granularity": "year", "label": "Post-quantum cryptography emerges as a field",
+      "citation": "PQCrypto 2006: First International Workshop on Post-Quantum Cryptography (Leuven, May 2006); term attributed to D.J. Bernstein" },
     { "date": "2016-12-20", "tier": "standards", "label": "NIST opens PQC standardization",
       "citation": "NIST, Announcing Request for Nominations for Public-Key Post-Quantum Cryptographic Algorithms, 81 Fed. Reg. 92787 (Dec. 20, 2016)" },
     { "date": "2022-09-07", "tier": "statute-regulation", "label": "NSA CNSA 2.0 advisory",
@@ -25,6 +29,18 @@
       "citation": "GRI/evolutionQ, Quantum Threat Timeline Report 2024 (Dec. 6, 2024)" },
     { "date": "2025-01-17", "tier": "statute-regulation", "label": "DORA applies",
       "citation": "Regulation (EU) 2022/2554, art. 64 (applies from Jan. 17, 2025)" },
+    { "date": "2025-01-01", "tier": "intergovernmental", "granularity": "year", "label": "Europol QSFF call to action",
+      "citation": "Europol Quantum Safe Financial Forum, Quantum Safe Financial Forum: A Call to Action (Feb. 2025)" },
+    { "date": "2026-01-01", "tier": "intergovernmental", "granularity": "year", "label": "Europol QSFF report",
+      "citation": "Europol Quantum Safe Financial Forum report (2026) (full citation pending)" },
+    { "date": "2026-01-01", "tier": "intergovernmental", "granularity": "year", "label": "G7 Cyber Expert Group statement",
+      "citation": "G7 CEG statement (2026) (full citation pending)" },
+    { "date": "2026-01-01", "tier": "intergovernmental", "granularity": "year", "label": "Quantum security on the Davos agenda",
+      "citation": "World Economic Forum, Davos (2026) (full citation pending)" },
+    { "date": "2026-01-01", "tier": "statute-regulation", "granularity": "year", "label": "U.S. executive order on quantum",
+      "citation": "Exec. Order (2026) (full citation pending)" },
+    { "date": "2026-01-01", "tier": "industry", "granularity": "year", "label": "European bank CEOs' joint letter",
+      "citation": "Joint letter of European bank chief executives (2026) (full citation pending)" },
     { "date": "2026-03-09", "tier": "survey", "label": "QTTR (Mar 2026) published",
       "citation": "GRI/evolutionQ, Quantum Threat Timeline Report (Mar. 9, 2026)" }
   ]
