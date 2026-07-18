@@ -5,12 +5,12 @@
 
     THE MOSCA HAND THRESHOLD FORM:  R < P(W)
 
-    where R = B/L (risk ratio) and W = [today, start + Y + X] is the
+    where R = B/L (risk ratio) and W = [today, start + X + Y] is the
     vulnerability window: the range of CRQC-arrival dates (Z realizations)
     that harm the organization. P(W) is the probability mass of Z falling
     inside W, read from the most recent Quantum Threat Timeline Report.
 
-    If migration has not commenced, W's right edge is today + Y + X and
+    If migration has not commenced, W's right edge is today + X + Y and
     slides forward daily (cryptographic procrastination). Commencement
     freezes the right edge; the window then shrinks as time advances.
 
@@ -445,7 +445,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
         <h1>&#9878;&#65039; Mosca Hand Threshold Evaluator</h1>
         <p class="subtitle">The Learned Hand Formula in threshold form, with the probability variable read as the mass of the vulnerability window under the most recent Quantum Threat Timeline curve</p>
         <div class="formula-hero">R &nbsp;&lt;&nbsp; P(W)</div>
-        <div class="formula-legend">R = B/L (risk ratio) &nbsp;|&nbsp; W = [today, start+Y+X] &mdash; the range of Z that harms you</div>
+        <div class="formula-legend">R = B/L (risk ratio) &nbsp;|&nbsp; W = [today, start+X+Y] &mdash; the range of Z that harms you</div>
         <div class="current-info">
             <span class="pulse-dot"></span>
             <span>Evaluated as of: <strong id="todayLabel"></strong></span>
@@ -481,7 +481,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
                 <div class="t-stage s3">
                     <div class="t-tag">Substitute &middot; The Mosca Hand Threshold</div>
                     <div class="t-formula">R &lt; P(W)</div>
-                    <div class="t-caption">Name the ratio <strong>R = B/L</strong> and make P organization-specific: the mass of the expert-survey curve falling inside <strong>your</strong> vulnerability window W = [today, start + Y + X].</div>
+                    <div class="t-caption">Name the ratio <strong>R = B/L</strong> and make P organization-specific: the mass of the expert-survey curve falling inside <strong>your</strong> vulnerability window W = [today, start + X + Y].</div>
                 </div>
             </div>
             <div class="t-closing">
@@ -530,7 +530,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
     <div class="card">
         <div class="step-header">Step 2</div>
         <div class="section-title">Your Vulnerability Window &mdash; W</div>
-        <div class="section-sub">The range of CRQC-arrival dates that harm you. Left edge: today. Right edge: migration start + Y + X, when the last datum harvested under breakable encryption expires. Until migration begins, the right edge slides forward daily.</div>
+        <div class="section-sub">The range of CRQC-arrival dates that harm you. Left edge: today. Right edge: migration start + X + Y, when the last datum harvested under breakable encryption expires. Until migration begins, the right edge slides forward daily.</div>
 
         <div class="variable-section">
             <div class="variable-label">X = Data Shelf Life <span class="value-display" id="xValue"></span></div>
@@ -629,8 +629,8 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
             <div class="method-body">
                 <p><strong>Anchors.</strong> Averaged cumulative probabilities computed from the raw expert response counts published in each report's Appendix A.4, using the report's own optimistic/pessimistic bin assignments. QTTR 2024 (n=32, published Dec 6, 2024); the March 2026 QTTR (n=26, published Mar 9, 2026), referred to in the accompanying article as the March 2026 Quantum Threat Timeline Report. Cross-checked against values stated in each report's body (e.g., Mar 2026: ~15% optimistic at 5 years; 28&ndash;49% at 10 years; 51&ndash;70% at 15 years). Read in sequence, the selectable curves trace the foreseeability ratchet the article describes: each survey cycle has moved the consensus probability upward, tightening the duty inside the window since long before most organizations knew the window existed.</p>
                 <p><strong>Interpolation.</strong> Monotone cubic (Fritsch&ndash;Carlson) through anchors at 0, 5, 10, 15, 20, 30 years from report publication, with <code>P(0) = 0</code>. Values beyond 30 years are clamped at the 30-year anchor and flagged.</p>
-                <p><strong>The window.</strong> <code>W = [today, start + Y + X]</code>. Left edge: a CRQC arriving today decrypts harvested data still within shelf life. Right edge: the last datum harvested before migration completes remains sensitive for X further years. <code>P(W) = P(right) &minus; P(left)</code> &mdash; the unconditional mass of Z inside W. (A conditional variant renormalizing on no-CRQC-today, <code>P(W)/(1 &minus; P(today))</code>, is more aggressive; the unconditional form is used here as the conservative default.) In the accompanying article's terms, W is the organization's own remaining slice of the Shor&ndash;Q-Day window: the global interval, open since Shor's 1994 proof and closing at Q-Day, within which harm is foreseeable but not yet manifest.</p>
-                <p><strong>Sliding vs. frozen.</strong> Until migration commences, the right edge is <code>today + Y + X</code> and W slides up the rising curve daily. Commencement freezes the right edge at <code>start + Y + X</code>; W then shrinks as the left edge (today) advances. The procrastination premium is <code>P(W today) &minus; P(W at awareness)</code>, both read on the current report's curve.</p>
+                <p><strong>The window.</strong> <code>W = [today, start + X + Y]</code>. Left edge: a CRQC arriving today decrypts harvested data still within shelf life. Right edge: the last datum harvested before migration completes remains sensitive for X further years. <code>P(W) = P(right) &minus; P(left)</code> &mdash; the unconditional mass of Z inside W. (A conditional variant renormalizing on no-CRQC-today, <code>P(W)/(1 &minus; P(today))</code>, is more aggressive; the unconditional form is used here as the conservative default.) In the accompanying article's terms, W is the organization's own remaining slice of the Shor&ndash;Q-Day window: the global interval, open since Shor's 1994 proof and closing at Q-Day, within which harm is foreseeable but not yet manifest.</p>
+                <p><strong>Sliding vs. frozen.</strong> Until migration commences, the right edge is <code>today + X + Y</code> and W slides up the rising curve daily. Commencement freezes the right edge at <code>start + X + Y</code>; W then shrinks as the left edge (today) advances. The procrastination premium is <code>P(W today) &minus; P(W at awareness)</code>, both read on the current report's curve.</p>
                 <p><strong>Crossing date t*.</strong> The first calendar date at which the sliding window's mass reaches R, found by forward scan with bisection refinement on each interpretation curve. If the mass already exceeded R at the report's publication, the crossing is reported as "at or before publication" rather than extrapolated to dates predating the survey.</p>
                 <p><strong>Theoretical lineage.</strong> The window construction restates Mosca's Theorem &mdash; exposure when <code>x + y &gt; z</code> &mdash; in probabilistic form. Michele Mosca, <em>Cybersecurity in an Era with Quantum Computers: Will We Be Ready?</em>, 16 IEEE Security &amp; Privacy 38 (2018). The procrastination variable D adopts the augmentation introduced by Jaime G&oacute;mez Garc&iacute;a, Chair of the Europol Quantum Safe Financial Forum, within the FS-ISAC PQC Working Group's collaborative work &mdash; the <strong>Mosca-G&oacute;mez formulation</strong>, <code>x + y + p<sub>delay</sub> &gt; z</code> (this tool's D corresponds to p<sub>delay</sub>). See FS-ISAC PQC Working Grp., <em>The Timeline for Post-Quantum Cryptographic Migration</em> (Nov. 2025); Jaime G&oacute;mez Garc&iacute;a, <em>Perspectives on the Transition to PQC in the Financial Sector</em>, PKI Consortium PQC Conference (Jan. 16, 2025).</p>
                 <p><strong>Benchmark sources for B and L presets.</strong> Burden: OMB/ONCD, <em>Report on Post-Quantum Cryptography</em> (July 2024) (~$7.1B for federal civilian systems, 2025&ndash;2035); sector program models of $50&ndash;300M+ for a single large operator. Loss: IBM, <em>Cost of a Data Breach Report 2025</em> (U.S. average $10.22M; healthcare and financial costliest); Anthem 2015 breach aggregate &asymp;$171M ($115M class settlement + $16M OCR + $39.5M multistate AGs); UnitedHealth/Change Healthcare attack cost estimate $3.09B; Citi Institute (Feb. 2026) (systemic damage of a quantum-enabled attack on a major U.S. bank: $2.0&ndash;3.3T). Preset values are deliberately conservative within these ranges and are illustrative, not firm-specific.</p>
@@ -913,7 +913,7 @@ function render() {
     const widthYrs = Math.max(0, c.b - c.a);
     document.getElementById("windowSummary").innerHTML = c.windowClosed
         ? "W has <strong>closed</strong>: all data harvested under breakable encryption has expired."
-        : "W = [today, " + (c.start ? "start" : "today") + " + Y + X] \u2192 closes <strong>" +
+        : "W = [today, " + (c.start ? "start" : "today") + " + X + Y] \u2192 closes <strong>" +
           fmtMonthYear(rightDate) + "</strong> \u00b7 width " + widthYrs.toFixed(1) + " yrs \u00b7 " +
           (c.start ? "frozen right edge \u2014 shrinking" : "sliding right edge \u2014 " +
           "moves 1 day per day of inaction");
@@ -1051,11 +1051,12 @@ function renderChart(c) {
         s += `<text x="${xPix(wb)}" y="${MT-10}" text-anchor="middle" font-size="11" font-weight="700" fill="#7C3AED" font-family="DM Sans, sans-serif">W closes${c.beyond ? " (30yr+)" : ""}</text>`;
     }
 
-    // Ghost window at awareness (dashed outline)
+    // Ghost window at awareness (dashed outline); its label is emitted after
+    // the curves so plate and text paint on top (SVG stacks by paint order)
     const ga = Math.max(0, c.eAw), gb = Math.min(c.eAw + c.X + c.Y, xSpan);
-    if (gb > ga && Math.abs(ga - wa) > 0.05) {
+    const showGhost = gb > ga && Math.abs(ga - wa) > 0.05;
+    if (showGhost) {
         s += `<rect x="${xPix(ga)}" y="${MT+4}" width="${xPix(gb)-xPix(ga)}" height="${ph-8}" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5 5" rx="3"/>`;
-        s += `<text x="${xPix(ga)+6}" y="${H-MB-10}" text-anchor="start" font-size="10.5" fill="#64748b" font-family="DM Sans, sans-serif">W at awareness</text>`;
     }
 
     // ----- Exposure areas inside W -----
@@ -1104,6 +1105,13 @@ function renderChart(c) {
     const rY = yPix(Math.min(c.R, 100));
     s += `<line x1="${ML}" y1="${rY}" x2="${W-MR}" y2="${rY}" stroke="#7C3AED" stroke-width="2.5" stroke-dasharray="10 5"/>`;
     s += `<text x="${W-MR-4}" y="${rY-7}" text-anchor="end" font-size="12.5" font-weight="700" fill="#7C3AED" font-family="JetBrains Mono, monospace">R = ${c.R < 0.1 ? c.R.toFixed(3) : c.R.toFixed(1)}%</text>`;
+
+    // Ghost-window label, on a backing plate: painted after the curves and
+    // R line because the bottom-left corner is exactly where they run.
+    if (showGhost) {
+        s += `<rect x="${xPix(ga)+2}" y="${H-MB-22}" width="94" height="16" rx="4" fill="white" opacity="0.88" stroke="#e2e8f0"/>`;
+        s += `<text x="${xPix(ga)+6}" y="${H-MB-10}" text-anchor="start" font-size="10.5" fill="#64748b" font-family="DM Sans, sans-serif">W at awareness</text>`;
+    }
 
     // Legend, on a semi-opaque backing plate: W's left edge is always "today"
     // (the plot's left edge), so the legend always sits inside the window

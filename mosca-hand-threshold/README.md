@@ -9,7 +9,7 @@ Formula (*United States v. Carroll Towing Co.*, 159 F.2d 169 (2d Cir. 1947))
 rearranged to threshold form (R = B/L), with the probability read as **P(W)**:
 the mass of the CRQC-arrival distribution (from the Quantum Threat Timeline
 Reports) falling inside the organization's vulnerability window
-W = [today, migration-start + Y + X]. D (*cryptographic procrastination*, per
+W = [today, migration-start + X + Y]. D (*cryptographic procrastination*, per
 the Mosca-Gómez formulation) slides W's right edge daily until migration
 commences. The tool renders the exposure area, computes the crossing date t*,
 the procrastination premium, and produces a timestamped documentation block.
