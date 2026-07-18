@@ -1,0 +1,15 @@
+{
+  "key": "2015",
+  "label": "Mosca 2015",
+  "sub": "historical point estimates · no interpretation band",
+  "published": "2015-01-01",
+  "anchors": {
+    "0":  [0, 0],
+    "11": [14, 14],
+    "16": [50, 50],
+    "20": [70, 70],
+    "25": [85, 85]
+  },
+  "rawBins": null,
+  "provenance": "Historical continuity dataset: point estimates from Dr. Michele Mosca's 2015 analysis (14% by 2026, 50% by 2031, 70% by 2035, 85% by 2040), as presented in the original ProteQC(R) Post-Quantum Risk Evaluator (darrenbender.com/pqc-risk-evaluator.html). No optimistic/pessimistic band existed; both columns carry the stated values, so band displays collapse to a single point estimate. Anchor keys are years elapsed from the nominal 2015-01-01 epoch. Not a QTTR survey; no Appendix A.4 raw bins exist for this dataset."
+}

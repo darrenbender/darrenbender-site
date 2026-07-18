@@ -1,0 +1,16 @@
+{
+  "key": "2026",
+  "label": "QTTR (Mar 2026)",
+  "sub": "n=26 experts · published Mar 9, 2026",
+  "published": "2026-03-09",
+  "anchors": {
+    "0":  [0, 0],
+    "5":  [14.7, 5.2],
+    "10": [48.9, 27.6],
+    "15": [70.2, 51.0],
+    "20": [86.4, 68.5],
+    "30": [92.7, 81.1]
+  },
+  "rawBins": null,
+  "provenance": "Averaged cumulative probabilities [optimistic, pessimistic] computed from the raw expert response counts in the report's Appendix A.4 ('Quantum factoring responses and analysis'), using the report's own optimistic/pessimistic cumulative assignments: EU 1/0, VU 5/1, U 30/5, N 70/30, L 95/70, VL 99/95, EL 100/99 (percent). Cross-checked against in-report stated values (~15% optimistic at 5 years; 28-49% at 10 years; 51-70% at 15 years). Anchor keys are years elapsed from the publication date. Labeled 'QTTR (Mar 2026)' to match the accompanying article's usage ('the March 2026 Quantum Threat Timeline Report'). rawBins pending: populate from Appendix A.4 in a future data commit; the anchors above are the prototype v0.4 values of record and must not be recomputed or corrected."
+}
