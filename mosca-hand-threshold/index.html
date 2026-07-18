@@ -214,6 +214,13 @@ input[type="range"] {
     width: 100%; height: 6px; border-radius: 3px;
     background: var(--border-light); outline: none;
     -webkit-appearance: none; appearance: none;
+    /* iOS Safari otherwise claims press-hold-drag as a page-scroll gesture
+       and cancels the slider drag (tap still works, drag doesn't) */
+    touch-action: none;
+}
+@media (pointer: coarse) {
+    input[type="range"]::-webkit-slider-thumb { width: 26px; height: 26px; }
+    input[type="range"]::-moz-range-thumb { width: 26px; height: 26px; }
 }
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none; appearance: none;
@@ -509,14 +516,14 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
         <div class="variable-section">
             <div class="variable-label">B = Burden of PQC Migration <span class="value-display" id="bValue"></span></div>
             <div class="variable-description">Total cost of migration: cryptographic inventory, technology, labor, consulting, testing, business disruption.</div>
-            <input type="range" id="bSlider" min="0" max="100" value="59">
+            <input type="range" id="bSlider" min="2" max="100" value="20" step="0.5">
             <div class="range-ticks"><span id="bMin"></span><span id="bMax"></span></div>
         </div>
 
         <div class="variable-section">
             <div class="variable-label">L = Magnitude of Loss <span class="value-display" id="lValue"></span></div>
             <div class="variable-description">Loss if harvested data is eventually decrypted: breach response, regulatory penalties, litigation, reputational damage.</div>
-            <input type="range" id="lSlider" min="0" max="100" value="60">
+            <input type="range" id="lSlider" min="50" max="500" value="200" step="5">
             <div class="range-ticks"><span id="lMin"></span><span id="lMax"></span></div>
         </div>
 
@@ -581,7 +588,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
         <div class="report-selector" id="reportSelector"></div>
 
         <div class="chart-wrap"><svg id="chart" viewBox="0 0 920 580" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QTTR band with vulnerability window, risk ratio line, exposure area, and a D/Y/X timeline bracket from awareness to window close"></svg></div>
-        <div class="chart-footnote">Cumulative probability of a CRQC (RSA-2048 in &lt;24h) by calendar date, monotone-interpolated between the report's five survey anchors. Values beyond the 30-year survey horizon are clamped.</div>
+        <div class="chart-footnote">Cumulative probability of a CRQC (RSA-2048 in &lt;24h) by calendar date, monotone-interpolated between the report's five survey anchors. The time axis is fixed at 2015&ndash;2045 across all reports, so each survey's curve plots at its true calendar position; survey years beyond 2045 lie off-frame, and values beyond the 30-year survey horizon are clamped.</div>
 
         <div class="readout-grid">
             <div class="readout-cell">
@@ -705,13 +712,13 @@ const state = {
     commenceDate: null
 };
 
-/* ---------- Sector scenarios (slider positions chosen so log mapping
-   lands exactly on the sourced values; see methodology for benchmarks) ---------- */
+/* ---------- Sector scenarios (b and l are the sourced values directly,
+   in $M \u2014 sliders are linear; see methodology for benchmarks) ---------- */
 const SCENARIOS = {
-    bank:     { label: "Regional Bank",   sub: "B $20M \u00b7 L $200M \u00b7 X 7y",  b: 59, l: 60, x: 7,  y: 4 },
-    hospital: { label: "Hospital System", sub: "B $15M \u00b7 L $250M \u00b7 X 25y", b: 52, l: 70, x: 25, y: 5 },
-    insurer:  { label: "Insurer",         sub: "B $25M \u00b7 L $300M \u00b7 X 10y", b: 65, l: 78, x: 10, y: 4 },
-    article:  { label: "Article \u00a7III.C", sub: "B $3.5M \u00b7 L $125M \u00b7 X 5y", b: 14, l: 40, x: 5, y: 4 },
+    bank:     { label: "Regional Bank",   sub: "B $20M \u00b7 L $200M \u00b7 X 7y",  b: 20, l: 200, x: 7,  y: 4 },
+    hospital: { label: "Hospital System", sub: "B $15M \u00b7 L $250M \u00b7 X 25y", b: 15, l: 250, x: 25, y: 5 },
+    insurer:  { label: "Insurer",         sub: "B $25M \u00b7 L $300M \u00b7 X 10y", b: 25, l: 300, x: 10, y: 4 },
+    article:  { label: "Article \u00a7III.C", sub: "B $3.5M \u00b7 L $125M \u00b7 X 5y", b: 3.5, l: 125, x: 5, y: 4 },
     custom:   { label: "Custom",          sub: "your own inputs", b: null }
 };
 let activeScenario = "bank";
@@ -779,7 +786,10 @@ function buildCurves(reportKey) {
     };
 }
 
-/* ---------- Log slider mapping ---------- */
+/* ---------- Legacy log slider mapping ----------
+   B/L sliders were logarithmic (position 0-100) through v1; they are now
+   linear in $M. These functions survive solely to decode pre-v2 scenario
+   links, whose b/l parameters encode log positions. ---------- */
 function logMap(v, lo, hi) { return lo * Math.pow(hi/lo, v/100); }
 function niceRound(x) {
     const mag = Math.pow(10, Math.floor(Math.log10(x)));
@@ -804,8 +814,8 @@ function compute() {
     const now = new Date();
     const symRaw = document.getElementById("currency").value;
     const sym = symRaw === "$" ? "$" : symRaw;
-    const B = niceRound(logMap(+document.getElementById("bSlider").value, B_LO, B_HI));
-    const L = niceRound(logMap(+document.getElementById("lSlider").value, L_LO, L_HI));
+    const B = +document.getElementById("bSlider").value * 1e6;
+    const L = +document.getElementById("lSlider").value * 1e6;
     const X = +document.getElementById("xSlider").value;
     const Y = +document.getElementById("ySlider").value;
     const R = (B / L) * 100;
@@ -997,15 +1007,18 @@ function renderChart(c) {
     // and the extra 80px below the axis hosts the D/Y/X timeline bracket.
     const W = 920, H = 580, ML = 62, MR = 24, MT = 30, MB = 126;
     const pw = W - ML - MR, ph = H - MT - MB;
-    const xSpan = c.curves.maxT;
-    const xPix = t => ML + (Math.max(0, Math.min(t, xSpan)) / xSpan) * pw;
+    // Static calendar frame, 2015 (Mosca's first predictions) to 2045: every
+    // report's curve plots at its true calendar position, so switching reports
+    // shows the surveys marching up a shared timeline. Report-time t (years
+    // from publication) maps in via the report's calendar offset pubOff.
+    const CAL0 = new Date("2015-01-01T00:00:00");
+    const CAL_SPAN = 30; // 2015 -> 2045
+    const pubOff = (c.pub - CAL0) / MS_YEAR;
+    const xCal = cal => ML + (Math.max(0, Math.min(cal, CAL_SPAN)) / CAL_SPAN) * pw;
+    const xPix = t => xCal(pubOff + t);
     const yPix = p => MT + (1 - p / 100) * ph;
-    // Round tick labels to the nearest calendar year: 365.25-day years drift
-    // Jan-anchored publications onto Dec 31, which getFullYear() mislabels.
-    const yearOf = t => {
-        const d = new Date(c.pub.getTime() + t * MS_YEAR);
-        return Math.round(d.getFullYear() + (d.getMonth() + 0.5) / 12);
-    };
+    const xSpan = c.curves.maxT;              // survey horizon, report-time
+    const tVis = Math.min(xSpan, CAL_SPAN - pubOff); // last visible t on-frame
 
     let s = "";
     s += `<defs>
@@ -1019,9 +1032,9 @@ function renderChart(c) {
         s += `<line x1="${ML}" y1="${yPix(p)}" x2="${W-MR}" y2="${yPix(p)}" stroke="#e2e8f0" stroke-width="1"/>`;
         s += `<text x="${ML-8}" y="${yPix(p)+4}" text-anchor="end" font-size="11" fill="#94a3b8" font-family="JetBrains Mono, monospace">${p}%</text>`;
     }
-    for (let t = 0; t <= xSpan; t += 5) {
-        s += `<line x1="${xPix(t)}" y1="${MT}" x2="${xPix(t)}" y2="${H-MB}" stroke="#f1f5f9" stroke-width="1"/>`;
-        s += `<text x="${xPix(t)}" y="${H-MB+18}" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="JetBrains Mono, monospace">${yearOf(t)}</text>`;
+    for (let cal = 0; cal <= CAL_SPAN; cal += 5) {
+        s += `<line x1="${xCal(cal)}" y1="${MT}" x2="${xCal(cal)}" y2="${H-MB}" stroke="#f1f5f9" stroke-width="1"/>`;
+        s += `<text x="${xCal(cal)}" y="${H-MB+18}" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="JetBrains Mono, monospace">${2015 + cal}</text>`;
     }
     s += `<text x="${ML + pw/2}" y="${H-6}" text-anchor="middle" font-size="11.5" fill="#64748b" font-family="DM Sans, sans-serif">CRQC arrival date Z (cumulative probability, ${c.rpt.label})</text>`;
 
@@ -1037,46 +1050,51 @@ function renderChart(c) {
     const path = pts => pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
     const rev = pts => pts.slice().reverse().map(p=>"L"+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
 
-    const ptsO = sample(c.curves.opt, 0, xSpan, N);
-    const ptsP = sample(c.curves.pess, 0, xSpan, N);
+    const ptsO = sample(c.curves.opt, 0, tVis, N);
+    const ptsP = sample(c.curves.pess, 0, tVis, N);
 
     // Full band (faint)
     s += `<path d="${path(ptsO)} ${rev(ptsP)} Z" fill="url(#bandGrad)"/>`;
 
-    // ----- Vulnerability window W -----
-    const wa = Math.max(0, c.a), wb = Math.min(c.b, xSpan);
+    // ----- Vulnerability window W (chart edge clips at 2045) -----
+    const wa = Math.max(0, c.a), wb = c.b;
+    const wClipped = pubOff + wb > CAL_SPAN;
     if (!c.windowClosed && wb > wa) {
         s += `<rect x="${xPix(wa)}" y="${MT}" width="${xPix(wb)-xPix(wa)}" height="${ph}" fill="#8B5CF6" opacity="0.09"/>`;
         s += `<line x1="${xPix(wa)}" y1="${MT}" x2="${xPix(wa)}" y2="${H-MB}" stroke="#7C3AED" stroke-width="2"/>`;
-        s += `<line x1="${xPix(wb)}" y1="${MT}" x2="${xPix(wb)}" y2="${H-MB}" stroke="#7C3AED" stroke-width="2"/>`;
+        if (!wClipped) s += `<line x1="${xPix(wb)}" y1="${MT}" x2="${xPix(wb)}" y2="${H-MB}" stroke="#7C3AED" stroke-width="2"/>`;
         s += `<text x="${xPix(wa)}" y="${MT-10}" text-anchor="middle" font-size="11" font-weight="700" fill="#7C3AED" font-family="DM Sans, sans-serif">today</text>`;
-        s += `<text x="${xPix(wb)}" y="${MT-10}" text-anchor="middle" font-size="11" font-weight="700" fill="#7C3AED" font-family="DM Sans, sans-serif">W closes${c.beyond ? " (30yr+)" : ""}</text>`;
+        s += `<text x="${Math.min(xPix(wb), W-MR-40)}" y="${MT-10}" text-anchor="middle" font-size="11" font-weight="700" fill="#7C3AED" font-family="DM Sans, sans-serif">W closes${c.beyond ? " (30yr+)" : wClipped ? " (&gt;2045)" : ""}</text>`;
     }
 
-    // Ghost window at awareness (dashed outline); its label is emitted after
+    // Ghost window at awareness (dashed outline), drawn at the TRUE calendar
+    // awareness date — the fixed 2015 frame means pre-survey awareness no
+    // longer clamps to the report's publication. Its label is emitted after
     // the curves so plate and text paint on top (SVG stacks by paint order)
-    const ga = Math.max(0, c.eAw), gb = Math.min(c.eAw + c.X + c.Y, xSpan);
-    const showGhost = gb > ga && Math.abs(ga - wa) > 0.05;
+    const awCal = (state.awareness - CAL0) / MS_YEAR;
+    const gaCal = Math.max(0, awCal), gbCal = Math.min(awCal + c.X + c.Y, CAL_SPAN);
+    const showGhost = gbCal > gaCal && Math.abs(awCal - (pubOff + wa)) > 0.05;
     if (showGhost) {
-        s += `<rect x="${xPix(ga)}" y="${MT+4}" width="${xPix(gb)-xPix(ga)}" height="${ph-8}" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5 5" rx="3"/>`;
+        s += `<rect x="${xCal(gaCal)}" y="${MT+4}" width="${xCal(gbCal)-xCal(gaCal)}" height="${ph-8}" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5 5" rx="3"/>`;
     }
 
-    // ----- Exposure areas inside W -----
-    if (!c.windowClosed && wb > wa && c.R < 100) {
+    // ----- Exposure areas inside W (drawn only over the visible frame) -----
+    const wbVis = Math.min(wb, tVis);
+    if (!c.windowClosed && wbVis > wa && c.R < 100) {
         // consensus exposure: R..pess where pess > R
-        const tP = firstAbove(c.curves.pess, c.R, wa, wb);
+        const tP = firstAbove(c.curves.pess, c.R, wa, wbVis);
         if (tP !== null) {
-            const top = sample(c.curves.pess, tP, wb, 60);
-            const bottom = [[xPix(wb), yPix(c.R)], [xPix(tP), yPix(c.R)]];
+            const top = sample(c.curves.pess, tP, wbVis, 60);
+            const bottom = [[xPix(wbVis), yPix(c.R)], [xPix(tP), yPix(c.R)]];
             s += `<path d="${path(top)} L${bottom[0][0].toFixed(1)},${bottom[0][1].toFixed(1)} L${bottom[1][0].toFixed(1)},${bottom[1][1].toFixed(1)} Z" fill="#dc2626" opacity="0.32"/>`;
         }
         // contested exposure: max(pess,R)..opt where opt > R
-        const tO = firstAbove(c.curves.opt, c.R, wa, wb);
+        const tO = firstAbove(c.curves.opt, c.R, wa, wbVis);
         if (tO !== null) {
-            const top = sample(c.curves.opt, tO, wb, 60);
+            const top = sample(c.curves.opt, tO, wbVis, 60);
             const botPts = [];
             for (let i = 60; i >= 0; i--) {
-                const t = tO + (i/60)*(wb-tO);
+                const t = tO + (i/60)*(wbVis-tO);
                 botPts.push([xPix(t), yPix(Math.max(c.curves.pess(Math.min(t,xSpan)), c.R))]);
             }
             s += `<path d="${path(top)} ${botPts.map(p=>"L"+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ")} Z" fill="#f59e0b" opacity="0.30"/>`;
@@ -1098,7 +1116,7 @@ function renderChart(c) {
     s += `<path d="${path(ptsO)}" fill="none" stroke="#10B981" stroke-width="2.5"/>`;
     s += `<path d="${path(ptsP)}" fill="none" stroke="#14B8A6" stroke-width="2.5" stroke-dasharray="7 4"/>`;
     for (const t of c.curves.xs) {
-        if (t === 0) continue;
+        if (t === 0 || t > tVis) continue; // skip anchors beyond the 2045 frame
         s += `<circle cx="${xPix(t)}" cy="${yPix(c.curves.opt(t))}" r="3.5" fill="#10B981"/>`;
         s += `<circle cx="${xPix(t)}" cy="${yPix(c.curves.pess(t))}" r="3.5" fill="#14B8A6"/>`;
     }
@@ -1111,8 +1129,8 @@ function renderChart(c) {
     // Ghost-window label, on a backing plate: painted after the curves and
     // R line because the bottom-left corner is exactly where they run.
     if (showGhost) {
-        s += `<rect x="${xPix(ga)+2}" y="${H-MB-22}" width="94" height="16" rx="4" fill="white" opacity="0.88" stroke="#e2e8f0"/>`;
-        s += `<text x="${xPix(ga)+6}" y="${H-MB-10}" text-anchor="start" font-size="10.5" fill="#64748b" font-family="DM Sans, sans-serif">W at awareness</text>`;
+        s += `<rect x="${xCal(gaCal)+2}" y="${H-MB-22}" width="94" height="16" rx="4" fill="white" opacity="0.88" stroke="#e2e8f0"/>`;
+        s += `<text x="${xCal(gaCal)+6}" y="${H-MB-10}" text-anchor="start" font-size="10.5" fill="#64748b" font-family="DM Sans, sans-serif">W at awareness</text>`;
     }
 
     // Legend, on a semi-opaque backing plate: W's left edge is always "today"
@@ -1136,21 +1154,23 @@ function renderChart(c) {
     // (migrating), X (harvested data ages out). D lies behind W's left edge;
     // from awareness the right edge sits D + Y + X out (Mosca\u2013G\u00f3mez).
     if (!c.windowClosed) {
-        const eS = c.b - c.X - c.Y; // migration start in report-time
+        // Calendar-space segments: the fixed 2015 frame lets D start at the
+        // true awareness date instead of clamping to the report's publication
+        const startCal = c.start ? (c.start - CAL0) / MS_YEAR : pubOff + c.a;
         const segs = [
-            { t0: Math.max(0, c.eAw), t1: eS, letter: "D", years: c.D,
+            { c0: Math.max(0, awCal), c1: startCal, letter: "D", years: c.D,
               desc: c.start ? "delay (frozen)" : "delay \u2014 accruing",
               color: c.start ? "#047857" : "#dc2626" },
-            { t0: eS, t1: eS + c.Y, letter: "Y", years: c.Y,
+            { c0: startCal, c1: startCal + c.Y, letter: "Y", years: c.Y,
               desc: "migrating", color: "#14B8A6" },
-            { t0: eS + c.Y, t1: c.b, letter: "X", years: c.X,
+            { c0: startCal + c.Y, c1: startCal + c.Y + c.X, letter: "X", years: c.X,
               desc: "harvested data ages out", color: "#10B981" }
         ];
         const yBr = 496, yLab = 514, yCap = 538;
         let dLabelShown = false;
         for (const sg of segs) {
-            const x0 = xPix(sg.t0), x1 = xPix(sg.t1), wSeg = x1 - x0;
-            if (wSeg < 2) continue; // fully clipped at origin or horizon
+            const x0 = xCal(sg.c0), x1 = xCal(sg.c1), wSeg = x1 - x0;
+            if (wSeg < 2) continue; // fully clipped at origin or 2045 edge
             s += `<line x1="${x0}" y1="${yBr}" x2="${x1}" y2="${yBr}" stroke="${sg.color}" stroke-width="3"/>`;
             s += `<line x1="${x0}" y1="${yBr-5}" x2="${x0}" y2="${yBr+5}" stroke="${sg.color}" stroke-width="1.5"/>`;
             s += `<line x1="${x1}" y1="${yBr-5}" x2="${x1}" y2="${yBr+5}" stroke="${sg.color}" stroke-width="1.5"/>`;
@@ -1162,9 +1182,10 @@ function renderChart(c) {
             if (sg.letter === "D" && label.length > 1) dLabelShown = true;
         }
         // Awareness tag; carries D's value whenever the segment itself was too
-        // narrow to label it (e.g., pre-survey awareness clamps to the origin)
+        // narrow to label it. "(pre-survey)" still flags that the premium
+        // math clamps to this report's curve origin (methodology, \u00a77.1).
         const preSurvey = state.awareness < c.pub;
-        s += `<text x="${xPix(Math.max(0, c.eAw))}" y="${yBr-9}" text-anchor="start" font-size="9.5" fill="#94a3b8" font-family="DM Sans, sans-serif">awareness${preSurvey ? " (pre-survey)" : ""}${!dLabelShown && c.D > 0.005 ? ` \u2014 D ${c.D.toFixed(1)}y${c.start ? " frozen" : " accruing"}` : ""}</text>`;
+        s += `<text x="${xCal(Math.max(0, awCal))}" y="${yBr-9}" text-anchor="start" font-size="9.5" fill="#94a3b8" font-family="DM Sans, sans-serif">awareness${preSurvey ? " (pre-survey)" : ""}${!dLabelShown && c.D > 0.005 ? ` \u2014 D ${c.D.toFixed(1)}y${c.start ? " frozen" : " accruing"}` : ""}</text>`;
         s += `<text x="${ML + pw/2}" y="${yCap}" text-anchor="middle" font-size="10.5" fill="#64748b" font-family="DM Sans, sans-serif">x + y + p_delay &gt; z (Mosca\u2013G\u00f3mez): from awareness, W's right edge sits D + Y + X out \u2014 the window closes only when the last harvested datum ages out</text>`;
     }
 
@@ -1188,6 +1209,7 @@ function buildReportSelector() {
 /* ---------- Scenario link (URL hash) ---------- */
 function encodeHash() {
     const p = new URLSearchParams({
+        v: "2", // v2: b/l carry values in $M; unversioned links carry log positions
         b: document.getElementById("bSlider").value,
         l: document.getElementById("lSlider").value,
         x: document.getElementById("xSlider").value,
@@ -1204,8 +1226,16 @@ function decodeHash() {
     if (!location.hash || location.hash.length < 2) return;
     try {
         const p = new URLSearchParams(location.hash.slice(1));
-        if (p.get("b")) document.getElementById("bSlider").value = p.get("b");
-        if (p.get("l")) document.getElementById("lSlider").value = p.get("l");
+        if (p.get("v") === "2") {
+            if (p.get("b")) document.getElementById("bSlider").value = p.get("b");
+            if (p.get("l")) document.getElementById("lSlider").value = p.get("l");
+        } else {
+            // Pre-v2 links: b/l are 0-100 positions on the old log scale
+            if (p.get("b")) document.getElementById("bSlider").value =
+                Math.min(100, Math.max(2, niceRound(logMap(+p.get("b"), B_LO, B_HI)) / 1e6));
+            if (p.get("l")) document.getElementById("lSlider").value =
+                Math.min(500, Math.max(50, niceRound(logMap(+p.get("l"), L_LO, L_HI)) / 1e6));
+        }
         if (p.get("x")) document.getElementById("xSlider").value = p.get("x");
         if (p.get("y")) document.getElementById("ySlider").value = p.get("y");
         if (p.get("r") && QTTR_DATA[p.get("r")]) state.report = p.get("r");
