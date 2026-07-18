@@ -1,0 +1,31 @@
+{
+  "comment": "Public awareness signals for the constructive-notice gradient: candidate dates from which an organization's awareness clock could be argued to run. Each entry needs date (ISO), tier, label, and citation. Adding an event is a data commit — include the citation and keep labels short. Tier order in the UI: statute-regulation, standards, intergovernmental, survey, industry. The scholarship tier (Mosca 2015 analysis / 2018 theorem publication) is INTENTIONALLY OMITTED pending Darren's ruling on whether foreseeability scholarship belongs on a duty-crystallization ladder (see manuscript Part II.A: epistemic vs. ontic boundary; per standing guardrail, Shor 1994 is never an anchor). 2026 vendor and intergovernmental announcements (G7 follow-up, Google/Microsoft/Oracle/AWS, bank programs) should be added by data commit with citations once dated.",
+  "events": [
+    { "date": "2016-12-20", "tier": "standards", "label": "NIST opens PQC standardization",
+      "citation": "NIST, Announcing Request for Nominations for Public-Key Post-Quantum Cryptographic Algorithms, 81 Fed. Reg. 92787 (Dec. 20, 2016)" },
+    { "date": "2022-09-07", "tier": "statute-regulation", "label": "NSA CNSA 2.0 advisory",
+      "citation": "NSA, Commercial National Security Algorithm Suite 2.0 (Sept. 7, 2022)" },
+    { "date": "2022-11-18", "tier": "statute-regulation", "label": "OMB M-23-02 migration memo",
+      "citation": "OMB, Memorandum M-23-02, Migrating to Post-Quantum Cryptography (Nov. 18, 2022)" },
+    { "date": "2022-12-21", "tier": "statute-regulation", "label": "Quantum Computing Cybersecurity Preparedness Act",
+      "citation": "Pub. L. No. 117-260, 136 Stat. 2389 (2022)" },
+    { "date": "2023-08-15", "tier": "industry", "label": "Chrome ships hybrid post-quantum key agreement",
+      "citation": "Google, Protecting Chrome Traffic with Hybrid Kyber KEM, Chromium Blog (Aug. 2023; Chrome 116)" },
+    { "date": "2024-02-21", "tier": "industry", "label": "Apple iMessage PQ3 protocol",
+      "citation": "Apple Security Engineering, iMessage with PQ3 (Feb. 21, 2024)" },
+    { "date": "2024-06-07", "tier": "intergovernmental", "label": "UN proclaims Int'l Year of Quantum 2025",
+      "citation": "G.A. Res. 78/287 (June 7, 2024)" },
+    { "date": "2024-08-13", "tier": "standards", "label": "NIST PQC standards final (FIPS 203/204/205)",
+      "citation": "NIST, FIPS 203, 204, 205 (Aug. 13, 2024)" },
+    { "date": "2024-09-25", "tier": "intergovernmental", "label": "G7 Cyber Expert Group quantum statement",
+      "citation": "G7 CEG, Planning for the Opportunities and Risks of Quantum Computing (Sept. 25, 2024)" },
+    { "date": "2024-10-17", "tier": "statute-regulation", "label": "NIS2 transposition deadline",
+      "citation": "Directive (EU) 2022/2555, art. 41 (transposition due Oct. 17, 2024)" },
+    { "date": "2024-12-06", "tier": "survey", "label": "QTTR 2024 published",
+      "citation": "GRI/evolutionQ, Quantum Threat Timeline Report 2024 (Dec. 6, 2024)" },
+    { "date": "2025-01-17", "tier": "statute-regulation", "label": "DORA applies",
+      "citation": "Regulation (EU) 2022/2554, art. 64 (applies from Jan. 17, 2025)" },
+    { "date": "2026-03-09", "tier": "survey", "label": "QTTR (Mar 2026) published",
+      "citation": "GRI/evolutionQ, Quantum Threat Timeline Report (Mar. 9, 2026)" }
+  ]
+}
