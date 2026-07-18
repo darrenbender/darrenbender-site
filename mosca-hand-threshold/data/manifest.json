@@ -1,0 +1,4 @@
+{
+  "comment": "Datasets available to the evaluator. To add a new report cycle: drop its JSON into this directory and list it here — a one-file-plus-one-line data commit. The report selector builds from these files; the most recent (highest key) is the default.",
+  "datasets": ["qttr-2026.json", "qttr-2024.json", "mosca-2015.json"]
+}
