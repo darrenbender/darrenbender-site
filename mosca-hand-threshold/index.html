@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<!--
+    ProteQC(R) Mosca Hand Threshold Evaluator - Educational Edition
+    v1.0 (from prototype v0.4) | (c) 2026 ProteQC Limited. All rights reserved.
+
+    THE MOSCA HAND THRESHOLD FORM:  R < P(W)
+
+    where R = B/L (risk ratio) and W = [today, start + Y + X] is the
+    vulnerability window: the range of CRQC-arrival dates (Z realizations)
+    that harm the organization. P(W) is the probability mass of Z falling
+    inside W, read from the most recent Quantum Threat Timeline Report.
+
+    If migration has not commenced, W's right edge is today + Y + X and
+    slides forward daily (cryptographic procrastination). Commencement
+    freezes the right edge; the window then shrinks as time advances.
+
+    Use at your own risk. This is an educational framework, not legal advice.
+    For commercial licensing or questions: advisory@proteqc.com
+
+    Survey datasets live in data/*.json (one file per report cycle, listed
+    in data/manifest.json). A new report is a data commit, not a code change.
+    See README.md for the update procedure.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mosca Hand Threshold Evaluator | ProteQC&reg; Educational Edition</title>
+<meta name="description" content="The Learned Hand Formula in threshold form, R &lt; P(W): read the mass of the Quantum Threat Timeline curve inside your organization's vulnerability window, compute the crossing date, and document the analysis. Interactive companion to the article Post-Quantum Negligence.">
+<link rel="canonical" href="https://darrenbender.com/mosca-hand-threshold/">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+<link rel="apple-touch-icon" href="favicon-192.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mosca Hand Threshold Evaluator | ProteQC&reg;">
+<meta property="og:description" content="R &lt; P(W): the Learned Hand Formula in threshold form, read against the Quantum Threat Timeline. Compute your vulnerability window, crossing date, and procrastination premium — then document the analysis.">
+<meta property="og:url" content="https://darrenbender.com/mosca-hand-threshold/">
+<meta property="og:image" content="https://darrenbender.com/mosca-hand-threshold/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mosca Hand Threshold Evaluator | ProteQC&reg;">
+<meta name="twitter:description" content="R &lt; P(W): the Learned Hand Formula in threshold form, read against the Quantum Threat Timeline.">
+<meta name="twitter:image" content="https://darrenbender.com/mosca-hand-threshold/og-image.png">
+<style>
+/* Self-hosted variable fonts, latin subset (no third-party font CDN; see fonts/) */
+@font-face { font-family: 'DM Sans'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('fonts/dm-sans-latin.woff2') format('woff2'); }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('fonts/jetbrains-mono-latin.woff2') format('woff2'); }
+
+:root {
+    /* ProteQC(R) Brand Colors */
+    --proteqc-purple: #8B5CF6;
+    --proteqc-purple-dark: #7C3AED;
+    --proteqc-teal: #14B8A6;
+    --proteqc-green: #10B981;
+    --proteqc-gradient: linear-gradient(135deg, #14B8A6 0%, #10B981 100%);
+    --proteqc-accent-gradient: linear-gradient(135deg, #8B5CF6 0%, #14B8A6 50%, #10B981 100%);
+
+    /* UI Colors */
+    --primary: #1e3a5f;
+    --accent: var(--proteqc-teal);
+    --danger: #dc2626;
+    --warning: #f59e0b;
+    --success: var(--proteqc-green);
+    --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 30%, #0f172a 70%, #134e4a 100%);
+    --card-bg: rgba(255, 255, 255, 0.98);
+    --text-dark: #1a202c;
+    --text-muted: #64748b;
+    --text-light: #94a3b8;
+    --border-light: #e2e8f0;
+    --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-gradient);
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+/* ============ HEADER ============ */
+.header { text-align: center; padding: 30px 20px 10px; color: white; }
+.logo-container { margin-bottom: 18px; }
+.logo-container img {
+    max-width: 280px; height: auto;
+    filter: drop-shadow(0 4px 20px rgba(139, 92, 246, 0.3));
+}
+.edition-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--proteqc-purple) 0%, var(--proteqc-teal) 100%);
+    color: white;
+    padding: 6px 18px; border-radius: 20px;
+    font-size: 13px; font-weight: 600; letter-spacing: 0.5px;
+    margin-bottom: 18px;
+}
+.header h1 { font-size: 30px; font-weight: 700; margin-bottom: 6px; }
+.header .subtitle { font-size: 15px; color: rgba(255,255,255,0.75); max-width: 660px; margin: 0 auto 20px; }
+
+.formula-hero {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(26px, 5vw, 40px);
+    font-weight: 700;
+    background: var(--proteqc-accent-gradient);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 8px 0 2px;
+    letter-spacing: 1px;
+}
+.formula-legend {
+    font-size: 12.5px; color: rgba(255,255,255,0.6);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 8px;
+}
+.current-info {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; color: rgba(255,255,255,0.65); margin-top: 10px;
+}
+.pulse-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--proteqc-green);
+    animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+/* ============ TRANSITION PANEL ============ */
+details.transition { padding: 6px 0 0; }
+details.transition summary {
+    list-style: none; cursor: pointer; outline: none;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+details.transition summary::-webkit-details-marker { display: none; }
+details.transition summary .chev {
+    font-size: 13px; color: var(--text-light); transition: transform 0.2s;
+}
+details.transition[open] summary .chev { transform: rotate(180deg); }
+.transition-flow {
+    display: flex; align-items: stretch; gap: 0; margin-top: 20px;
+}
+.t-stage {
+    flex: 1; text-align: center; padding: 18px 14px 16px;
+    border-radius: 12px; border: 1px solid var(--border-light);
+    background: #fafbfc;
+}
+.t-stage.s2 { border-color: rgba(20,184,166,0.4); background: rgba(20,184,166,0.05); }
+.t-stage.s3 { border-color: rgba(139,92,246,0.4); background: linear-gradient(135deg, rgba(139,92,246,0.06), rgba(16,185,129,0.06)); }
+.t-formula {
+    font-family: 'JetBrains Mono', monospace; font-weight: 700;
+    font-size: clamp(17px, 2.6vw, 23px); color: var(--text-muted); margin-bottom: 8px;
+}
+.t-stage.s2 .t-formula { color: var(--proteqc-teal); }
+.t-stage.s3 .t-formula {
+    background: var(--proteqc-accent-gradient);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.t-tag {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    letter-spacing: 1.2px; text-transform: uppercase; color: var(--text-light);
+    margin-bottom: 6px;
+}
+.t-caption { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+.t-arrow {
+    display: flex; align-items: center; padding: 0 10px;
+    font-size: 22px; color: var(--proteqc-teal); font-weight: 700; flex-shrink: 0;
+}
+.t-closing {
+    margin-top: 16px; padding: 13px 18px; border-radius: 10px;
+    background: linear-gradient(135deg, rgba(139,92,246,0.05), rgba(20,184,166,0.05));
+    border-left: 3px solid var(--proteqc-purple);
+    font-size: 13.5px; color: var(--text-dark);
+}
+@media (max-width: 700px) {
+    .transition-flow { flex-direction: column; }
+    .t-arrow { justify-content: center; padding: 6px 0; transform: rotate(90deg); }
+}
+
+/* ============ CARDS ============ */
+.card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    padding: 28px 30px;
+    margin: 22px 0;
+}
+.step-header {
+    display: inline-block;
+    background: var(--proteqc-gradient);
+    color: white; font-size: 11px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 4px 14px; border-radius: 12px; margin-bottom: 10px;
+}
+.section-title { font-size: 21px; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.section-sub { font-size: 13.5px; color: var(--text-muted); margin-bottom: 22px; }
+
+.variable-section { margin-bottom: 26px; }
+.variable-label {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+    font-weight: 600; font-size: 15px; color: var(--text-dark); margin-bottom: 4px;
+}
+.value-display {
+    font-family: 'JetBrains Mono', monospace;
+    background: var(--proteqc-gradient);
+    color: white; padding: 3px 12px; border-radius: 8px;
+    font-size: 14px; font-weight: 600;
+}
+.value-display.purple { background: linear-gradient(135deg, var(--proteqc-purple), var(--proteqc-purple-dark)); }
+.variable-description { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; }
+
+input[type="range"] {
+    width: 100%; height: 6px; border-radius: 3px;
+    background: var(--border-light); outline: none;
+    -webkit-appearance: none; appearance: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--proteqc-teal); cursor: pointer;
+    border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+input[type="range"]::-moz-range-thumb {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--proteqc-teal); cursor: pointer;
+    border: 3px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+.range-ticks { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-light); margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+
+.ratio-readout {
+    text-align: center;
+    background: linear-gradient(135deg, rgba(139,92,246,0.07), rgba(20,184,166,0.07));
+    border: 1px solid rgba(139,92,246,0.25);
+    border-radius: 12px; padding: 18px; margin-top: 6px;
+}
+.ratio-readout .big {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 34px; font-weight: 700; color: var(--proteqc-purple-dark);
+}
+.ratio-readout .caption { font-size: 13px; color: var(--text-muted); }
+
+/* Scenario presets */
+.scenario-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+.scenario-btn {
+    flex: 1; min-width: 150px; text-align: left;
+    border: 2px solid var(--border-light); border-radius: 12px;
+    background: white; padding: 11px 14px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+}
+.scenario-btn .sc-title { font-weight: 700; font-size: 13.5px; color: var(--primary); }
+.scenario-btn .sc-sub { font-size: 11px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+.scenario-btn.active { border-color: var(--proteqc-purple); background: rgba(139,92,246,0.06); }
+.scenario-btn:hover { border-color: var(--proteqc-teal); }
+
+/* Action row + governance */
+.action-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+.action-btn {
+    font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 600;
+    padding: 10px 18px; border-radius: 10px; cursor: pointer;
+    border: none; background: var(--proteqc-gradient); color: white;
+    transition: opacity 0.15s;
+}
+.action-btn:hover { opacity: 0.88; }
+.action-btn.secondary {
+    background: white; color: var(--proteqc-teal);
+    border: 1.5px solid var(--proteqc-teal);
+}
+.action-btn.enterprise {
+    background: linear-gradient(135deg, var(--proteqc-purple), var(--proteqc-purple-dark));
+}
+.doc-output {
+    display: none; margin-top: 14px;
+}
+.doc-output.show { display: block; }
+.doc-output textarea {
+    width: 100%; min-height: 230px; resize: vertical;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.55;
+    padding: 14px; border: 1px solid var(--border-light); border-radius: 10px;
+    background: #f8fafc; color: var(--text-dark);
+}
+.doc-note { font-size: 11.5px; color: var(--text-light); margin-top: 4px; }
+.enterprise-panel {
+    display: none; margin-top: 14px; padding: 16px 20px;
+    border-radius: 12px; border: 1.5px solid rgba(139,92,246,0.35);
+    background: linear-gradient(135deg, rgba(139,92,246,0.06), rgba(20,184,166,0.05));
+    font-size: 13.5px; color: var(--text-dark);
+}
+.enterprise-panel.show { display: block; }
+.enterprise-panel .ep-badge {
+    display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase; color: white; padding: 3px 10px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--proteqc-purple), var(--proteqc-teal));
+    margin-bottom: 8px;
+}
+.enterprise-panel a { color: var(--proteqc-purple-dark); font-weight: 600; }
+
+.controls-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; align-items: center; }
+select, input[type="date"] {
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    padding: 8px 12px; border: 1px solid var(--border-light);
+    border-radius: 8px; background: white; color: var(--text-dark);
+}
+.preset-btn {
+    font-family: 'DM Sans', sans-serif; font-size: 12.5px; font-weight: 600;
+    padding: 7px 13px; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--border-light); background: white; color: var(--text-muted);
+    transition: all 0.15s;
+}
+.preset-btn:hover { border-color: var(--proteqc-teal); color: var(--proteqc-teal); }
+.preset-btn.active {
+    background: var(--proteqc-gradient); color: white; border-color: transparent;
+}
+
+.d-counter {
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(220, 38, 38, 0.06);
+    border: 1px solid rgba(220, 38, 38, 0.25);
+    border-radius: 12px; padding: 14px 18px; margin-top: 10px;
+}
+.d-counter.frozen {
+    background: rgba(16, 185, 129, 0.06);
+    border-color: rgba(16, 185, 129, 0.35);
+}
+.d-counter .d-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 24px; font-weight: 700; color: var(--danger);
+}
+.d-counter.frozen .d-value { color: #047857; }
+.d-counter .d-caption { font-size: 12.5px; color: var(--text-muted); }
+.accruing-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--danger); animation: pulse 1.2s infinite; flex-shrink: 0;
+}
+.d-counter.frozen .accruing-dot { background: var(--proteqc-green); animation: none; }
+
+.commence-row {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin-top: 14px; padding: 12px 16px;
+    background: #f8fafc; border: 1px solid var(--border-light); border-radius: 10px;
+    font-size: 13.5px;
+}
+.commence-row label { display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; }
+.commence-row input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--proteqc-teal); cursor: pointer; }
+
+.window-summary {
+    font-family: 'JetBrains Mono', monospace; font-size: 13.5px;
+    text-align: center; margin-top: 16px; padding: 12px;
+    background: #f8fafc; border-radius: 10px; color: var(--primary);
+}
+.window-summary strong { color: var(--proteqc-purple-dark); }
+
+.report-selector { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+.report-btn {
+    flex: 1; min-width: 200px; text-align: left;
+    border: 2px solid var(--border-light); border-radius: 12px;
+    background: white; padding: 13px 16px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+}
+.report-btn .rb-title { font-weight: 700; font-size: 14.5px; color: var(--primary); }
+.report-btn .rb-sub { font-size: 12px; color: var(--text-muted); }
+.report-btn.active { border-color: var(--proteqc-teal); background: rgba(20,184,166,0.06); }
+
+.chart-wrap { margin: 10px 0 6px; }
+#chart { width: 100%; height: auto; display: block; }
+.chart-footnote { font-size: 11.5px; color: var(--text-light); text-align: center; margin-top: 6px; }
+
+.readout-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px; margin-top: 18px;
+}
+.readout-cell {
+    background: #f8fafc; border: 1px solid var(--border-light);
+    border-radius: 10px; padding: 13px 15px;
+}
+.readout-cell .rc-label { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-muted); }
+.readout-cell .rc-value { font-family: 'JetBrains Mono', monospace; font-size: 19px; font-weight: 700; color: var(--primary); margin-top: 2px; }
+.readout-cell .rc-sub { font-size: 11.5px; color: var(--text-light); }
+.readout-cell.premium { border-color: rgba(220,38,38,0.3); background: rgba(220,38,38,0.04); }
+.readout-cell.premium .rc-value { color: var(--danger); }
+
+.verdict { border-radius: 14px; padding: 22px 26px; margin-top: 20px; font-size: 15px; }
+.verdict h3 { font-size: 18px; margin-bottom: 8px; }
+.verdict.crossed { background: rgba(220,38,38,0.07); border: 2px solid rgba(220,38,38,0.4); }
+.verdict.crossed h3 { color: var(--danger); }
+.verdict.contested { background: rgba(245,158,11,0.08); border: 2px solid rgba(245,158,11,0.4); }
+.verdict.contested h3 { color: #b45309; }
+.verdict.defensible { background: rgba(16,185,129,0.07); border: 2px solid rgba(16,185,129,0.4); }
+.verdict.defensible h3 { color: #047857; }
+.verdict.closed { background: rgba(100,116,139,0.07); border: 2px solid rgba(100,116,139,0.35); }
+.verdict.closed h3 { color: var(--text-muted); }
+.verdict p { color: var(--text-dark); font-size: 14px; margin-bottom: 8px; }
+.verdict .mono { font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+
+details.method {
+    margin-top: 18px; border: 1px solid var(--border-light); border-radius: 10px;
+    padding: 14px 18px; background: #fafbfc;
+}
+details.method summary { font-weight: 600; cursor: pointer; color: var(--primary); font-size: 14px; }
+details.method .method-body { font-size: 13px; color: var(--text-muted); margin-top: 10px; }
+details.method .method-body p { margin-bottom: 8px; }
+details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: #eef2f7; padding: 1px 5px; border-radius: 4px; }
+
+.footer { text-align: center; color: rgba(255,255,255,0.6); padding: 20px 20px 40px; font-size: 12.5px; }
+.enterprise-cta {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(20, 184, 166, 0.2) 100%);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    padding: 15px 25px; border-radius: 10px;
+    margin: 20px auto; max-width: 520px; color: rgba(255,255,255,0.85);
+}
+.enterprise-cta strong { color: var(--proteqc-teal); }
+.enterprise-cta a { color: var(--proteqc-teal); }
+.disclaimer { max-width: 720px; margin: 14px auto 0; font-size: 11.5px; color: rgba(255,255,255,0.45); }
+
+@media (max-width: 700px) {
+    .card { padding: 20px 18px; }
+    .logo-container img { max-width: 220px; }
+    .header h1 { font-size: 24px; }
+}
+@media print {
+    body { background: white; }
+    .header, .header h1 { color: black; }
+    .enterprise-cta, .action-row, .feedback-card, .report-selector, .scenario-row { display: none; }
+    /* Chrome omits backgrounds when printing by default; without this the
+       white-text value pills and badges print white-on-white (invisible). */
+    .value-display, .step-header, .edition-badge, .preset-btn.active,
+    .verdict, .d-counter, .ratio-readout {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+    <!-- ============ HEADER ============ -->
+    <header class="header">
+        <div class="logo-container">
+            <a href="https://ProteQC.com" target="_blank" title="Visit ProteQC.com">
+                <img src="ProteQC_logo.png" alt="ProteQC&reg;" onerror="this.style.display='none'">
+            </a>
+        </div>
+        <div class="edition-badge">&#128218; Educational Edition</div>
+        <h1>&#9878;&#65039; Mosca Hand Threshold Evaluator</h1>
+        <p class="subtitle">The Learned Hand Formula in threshold form, with the probability variable read as the mass of the vulnerability window under the most recent Quantum Threat Timeline curve</p>
+        <div class="formula-hero">R &nbsp;&lt;&nbsp; P(W)</div>
+        <div class="formula-legend">R = B/L (risk ratio) &nbsp;|&nbsp; W = [today, start+Y+X] &mdash; the range of Z that harms you</div>
+        <div class="current-info">
+            <span class="pulse-dot"></span>
+            <span>Evaluated as of: <strong id="todayLabel"></strong></span>
+            <span style="opacity:0.5">|</span>
+            <span>Updates at <a href="https://ProteQC.com" target="_blank" style="color:var(--proteqc-teal)">ProteQC.com</a></span>
+        </div>
+    </header>
+
+    <!-- ============ TRANSITION: FROM CARROLL TOWING TO THE THRESHOLD FORM ============ -->
+    <div class="card">
+        <details class="transition" open>
+            <summary>
+                <div>
+                    <div class="step-header">Foundation</div>
+                    <div class="section-title">From Carroll Towing to the Threshold Form</div>
+                    <div class="section-sub" style="margin-bottom:0">Two steps of algebra, one substitution &mdash; nothing added, nothing smuggled in.</div>
+                </div>
+                <span class="chev">&#9660;</span>
+            </summary>
+            <div class="transition-flow">
+                <div class="t-stage s1">
+                    <div class="t-tag">1947 &middot; The Hand Formula</div>
+                    <div class="t-formula">B &lt; P &times; L</div>
+                    <div class="t-caption">Negligence when the <strong>b</strong>urden of precaution is less than the <strong>p</strong>robability of harm times the magnitude of <strong>l</strong>oss. <em>United States v. Carroll Towing Co.</em>, 159 F.2d 169 (2d Cir. 1947).</div>
+                </div>
+                <div class="t-arrow">&rarr;</div>
+                <div class="t-stage s2">
+                    <div class="t-tag">Divide by L &middot; Threshold Form</div>
+                    <div class="t-formula">B / L &lt; P</div>
+                    <div class="t-caption">The same inequality, rearranged. Now each side belongs to the party who knows it: your costs and your exposure on the left; the world's probability on the right.</div>
+                </div>
+                <div class="t-arrow">&rarr;</div>
+                <div class="t-stage s3">
+                    <div class="t-tag">Substitute &middot; The Mosca Hand Threshold</div>
+                    <div class="t-formula">R &lt; P(W)</div>
+                    <div class="t-caption">Name the ratio <strong>R = B/L</strong> and make P organization-specific: the mass of the expert-survey curve falling inside <strong>your</strong> vulnerability window W = [today, start + Y + X].</div>
+                </div>
+            </div>
+            <div class="t-closing">
+                The rearrangement changes no law and no math &mdash; it changes <strong>who must prove what</strong>. R is endogenous: yours to compute, document, and defend. P(W) is exogenous: published, annually re-surveyed, and rising. When the second number overtakes the first, the Hand Formula's condition for negligence is satisfied on the defendant's own figures.
+            </div>
+        </details>
+    </div>
+
+    <!-- ============ STEP 1: RISK RATIO ============ -->
+    <div class="card">
+        <div class="step-header">Step 1</div>
+        <div class="section-title">Your Risk Ratio &mdash; R = B/L</div>
+        <div class="section-sub">Both variables are endogenous: your own migration cost and your own loss exposure. R is the fraction of your exposed loss it would cost to prevent that loss. Start from a sector archetype or set your own:</div>
+
+        <div class="scenario-row" id="scenarioRow"></div>
+
+        <div class="controls-row">
+            <select id="currency">
+                <option value="$">USD ($)</option>
+                <option value="&euro;">EUR (&euro;)</option>
+                <option value="&pound;">GBP (&pound;)</option>
+            </select>
+        </div>
+
+        <div class="variable-section">
+            <div class="variable-label">B = Burden of PQC Migration <span class="value-display" id="bValue"></span></div>
+            <div class="variable-description">Total cost of migration: cryptographic inventory, technology, labor, consulting, testing, business disruption.</div>
+            <input type="range" id="bSlider" min="0" max="100" value="59">
+            <div class="range-ticks"><span id="bMin"></span><span id="bMax"></span></div>
+        </div>
+
+        <div class="variable-section">
+            <div class="variable-label">L = Magnitude of Loss <span class="value-display" id="lValue"></span></div>
+            <div class="variable-description">Loss if harvested data is eventually decrypted: breach response, regulatory penalties, litigation, reputational damage.</div>
+            <input type="range" id="lSlider" min="0" max="100" value="60">
+            <div class="range-ticks"><span id="lMin"></span><span id="lMax"></span></div>
+        </div>
+
+        <div class="ratio-readout">
+            <div class="big" id="rValue">R = 2.8%</div>
+            <div class="caption" id="rCaption"></div>
+        </div>
+    </div>
+
+    <!-- ============ STEP 2: VULNERABILITY WINDOW ============ -->
+    <div class="card">
+        <div class="step-header">Step 2</div>
+        <div class="section-title">Your Vulnerability Window &mdash; W</div>
+        <div class="section-sub">The range of CRQC-arrival dates that harm you. Left edge: today. Right edge: migration start + Y + X, when the last datum harvested under breakable encryption expires. Until migration begins, the right edge slides forward daily.</div>
+
+        <div class="variable-section">
+            <div class="variable-label">X = Data Shelf Life <span class="value-display" id="xValue"></span></div>
+            <div class="variable-description">How long your data must remain confidential (retention obligations, trade secrets, personal data sensitivity).</div>
+            <input type="range" id="xSlider" min="1" max="25" value="5" step="0.5">
+            <div class="range-ticks"><span>1 yr</span><span>25 yrs</span></div>
+        </div>
+
+        <div class="variable-section">
+            <div class="variable-label">Y = Migration Time <span class="value-display" id="yValue"></span></div>
+            <div class="variable-description">Time to complete PQC migration once begun, including inventory, remediation, and validation.</div>
+            <input type="range" id="ySlider" min="0.5" max="10" value="4" step="0.5">
+            <div class="range-ticks"><span>0.5 yr</span><span>10 yrs</span></div>
+        </div>
+
+        <div class="variable-section">
+            <div class="variable-label">D = Cryptographic Procrastination <span class="value-display purple" id="dValue"></span></div>
+            <div class="variable-description">Elapsed time between documented awareness and commencement of migration. Select the awareness anchor:</div>
+            <div class="controls-row">
+                <button class="preset-btn" data-date="2024-08-13" id="presetNist">NIST PQC Standards (Aug 13, 2024)</button>
+                <button class="preset-btn active" data-date="2024-12-06" id="presetQttr24">QTTR 2024 (Dec 6, 2024)</button>
+                <button class="preset-btn" data-date="2026-03-09" id="presetQttr25">QTTR (Mar 9, 2026)</button>
+                <input type="date" id="awarenessDate" value="2024-12-06">
+            </div>
+            <div class="d-counter" id="dBox">
+                <span class="accruing-dot"></span>
+                <div>
+                    <div class="d-value" id="dCounter">D = 0.00 years</div>
+                    <div class="d-caption" id="dCaptionDays">Accruing since awareness date &mdash; and counting.</div>
+                </div>
+            </div>
+            <div class="commence-row">
+                <label><input type="checkbox" id="commenceCheck"> Migration commenced</label>
+                <input type="date" id="commenceDate" disabled>
+                <span style="color:var(--text-muted);font-size:12.5px" id="commenceHint">Commencement freezes the window's right edge; W stops sliding and starts shrinking.</span>
+            </div>
+        </div>
+
+        <div class="window-summary" id="windowSummary"></div>
+    </div>
+
+    <!-- ============ STEP 3: EXPOSURE AREA ============ -->
+    <div class="card">
+        <div class="step-header">Step 3</div>
+        <div class="section-title">P(W) and the Exposure Area</div>
+        <div class="section-sub">The QTTR band with your window and risk ratio overlaid. The shaded exposure area is where expert consensus exceeds your ratio inside your window &mdash; darker where both interpretations agree, lighter where only the optimistic read does.</div>
+
+        <div class="report-selector" id="reportSelector"></div>
+
+        <div class="chart-wrap"><svg id="chart" viewBox="0 0 920 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QTTR band with vulnerability window, risk ratio line, and exposure area"></svg></div>
+        <div class="chart-footnote">Cumulative probability of a CRQC (RSA-2048 in &lt;24h) by calendar date, monotone-interpolated between the report's five survey anchors. Values beyond the 30-year survey horizon are clamped.</div>
+
+        <div class="readout-grid">
+            <div class="readout-cell">
+                <div class="rc-label">P(W) &mdash; window mass</div>
+                <div class="rc-value" id="pwValue">&mdash;</div>
+                <div class="rc-sub" id="pwSub"></div>
+            </div>
+            <div class="readout-cell">
+                <div class="rc-label">R = B/L threshold</div>
+                <div class="rc-value" id="rReadout">&mdash;</div>
+                <div class="rc-sub">Your risk ratio</div>
+            </div>
+            <div class="readout-cell premium">
+                <div class="rc-label">Procrastination premium</div>
+                <div class="rc-value" id="premiumValue">&mdash;</div>
+                <div class="rc-sub">Mass added since the window began sliding at awareness</div>
+            </div>
+            <div class="readout-cell">
+                <div class="rc-label">Crossing date t*</div>
+                <div class="rc-value" id="tstarValue">&mdash;</div>
+                <div class="rc-sub" id="tstarSub"></div>
+            </div>
+        </div>
+
+        <div class="verdict" id="verdict"></div>
+
+        <div class="action-row">
+            <button class="action-btn" id="docBtn">&#128221; Document this analysis</button>
+            <button class="action-btn secondary" id="linkBtn">&#128279; Copy scenario link</button>
+            <button class="action-btn secondary" id="pdfBtn">&#128424;&#65039; Export to PDF</button>
+            <button class="action-btn enterprise" id="lawBtn">&#9878;&#65039; Find updates for current applicable law</button>
+        </div>
+        <div class="doc-output" id="docOutput">
+            <textarea id="docText" readonly></textarea>
+            <div class="doc-note">Timestamped summary of inputs, sources, and result &mdash; governance in action. Copy into board minutes, a risk register entry, or counsel's file. The date matters: contemporaneous documentation is the record that the analysis was run.</div>
+        </div>
+        <div class="enterprise-panel" id="lawPanel">
+            <div class="ep-badge">Enterprise Feature</div>
+            <p><strong>Live legal &amp; regulatory monitoring</strong> &mdash; the Enterprise edition of this evaluator links each input to the current state of applicable law for your jurisdiction and sector: NYDFS Part 500, HIPAA Security Rule, GLBA Safeguards, SEC cyber disclosure, DORA, and state UDAP enforcement &mdash; plus new case law bearing on unmanifested-harm standing and the evolving standard of care. Your X (retention obligations) and L (penalty exposure) update as the law does.</p>
+            <p style="margin-top:8px">Inquire: <a href="mailto:advisory@proteqc.com?subject=Enterprise%20Legal%20Monitoring%20%E2%80%94%20Mosca%20Hand%20Threshold%20Evaluator">advisory@proteqc.com</a> &middot; <a href="https://ProteQC.com" target="_blank">ProteQC.com</a></p>
+        </div>
+
+        <details class="method">
+            <summary>Methodology &amp; data provenance</summary>
+            <div class="method-body">
+                <p><strong>Anchors.</strong> Averaged cumulative probabilities computed from the raw expert response counts published in each report's Appendix A.4, using the report's own optimistic/pessimistic bin assignments. QTTR 2024 (n=32, published Dec 6, 2024); the March 2026 QTTR (n=26, published Mar 9, 2026), referred to in the accompanying article as the March 2026 Quantum Threat Timeline Report. Cross-checked against values stated in each report's body (e.g., Mar 2026: ~15% optimistic at 5 years; 28&ndash;49% at 10 years; 51&ndash;70% at 15 years).</p>
+                <p><strong>Interpolation.</strong> Monotone cubic (Fritsch&ndash;Carlson) through anchors at 0, 5, 10, 15, 20, 30 years from report publication, with <code>P(0) = 0</code>. Values beyond 30 years are clamped at the 30-year anchor and flagged.</p>
+                <p><strong>The window.</strong> <code>W = [today, start + Y + X]</code>. Left edge: a CRQC arriving today decrypts harvested data still within shelf life. Right edge: the last datum harvested before migration completes remains sensitive for X further years. <code>P(W) = P(right) &minus; P(left)</code> &mdash; the unconditional mass of Z inside W. (A conditional variant renormalizing on no-CRQC-today, <code>P(W)/(1 &minus; P(today))</code>, is more aggressive; the unconditional form is used here as the conservative default.)</p>
+                <p><strong>Sliding vs. frozen.</strong> Until migration commences, the right edge is <code>today + Y + X</code> and W slides up the rising curve daily. Commencement freezes the right edge at <code>start + Y + X</code>; W then shrinks as the left edge (today) advances. The procrastination premium is <code>P(W today) &minus; P(W at awareness)</code>, both read on the current report's curve.</p>
+                <p><strong>Crossing date t*.</strong> The first calendar date at which the sliding window's mass reaches R, found by forward scan with bisection refinement on each interpretation curve. If the mass already exceeded R at the report's publication, the crossing is reported as "at or before publication" rather than extrapolated to dates predating the survey.</p>
+                <p><strong>Theoretical lineage.</strong> The window construction restates Mosca's Theorem &mdash; exposure when <code>x + y &gt; z</code> &mdash; in probabilistic form. Michele Mosca, <em>Cybersecurity in an Era with Quantum Computers: Will We Be Ready?</em>, 16 IEEE Security &amp; Privacy 38 (2018). The procrastination variable D adopts the augmentation introduced by Jaime G&oacute;mez Garc&iacute;a, Chair of the Europol Quantum Safe Financial Forum, within the FS-ISAC PQC Working Group's collaborative work &mdash; the <strong>Mosca-G&oacute;mez formulation</strong>, <code>x + y + p<sub>delay</sub> &gt; z</code> (this tool's D corresponds to p<sub>delay</sub>). See FS-ISAC PQC Working Grp., <em>The Timeline for Post-Quantum Cryptographic Migration</em> (Nov. 2025); Jaime G&oacute;mez Garc&iacute;a, <em>Perspectives on the Transition to PQC in the Financial Sector</em>, PKI Consortium PQC Conference (Jan. 16, 2025).</p>
+                <p><strong>Benchmark sources for B and L presets.</strong> Burden: OMB/ONCD, <em>Report on Post-Quantum Cryptography</em> (July 2024) (~$7.1B for federal civilian systems, 2025&ndash;2035); sector program models of $50&ndash;300M+ for a single large operator. Loss: IBM, <em>Cost of a Data Breach Report 2025</em> (U.S. average $10.22M; healthcare and financial costliest); Anthem 2015 breach aggregate &asymp;$171M ($115M class settlement + $16M OCR + $39.5M multistate AGs); UnitedHealth/Change Healthcare attack cost estimate $3.09B; Citi Institute (Feb. 2026) (systemic damage of a quantum-enabled attack on a major U.S. bank: $2.0&ndash;3.3T). Preset values are deliberately conservative within these ranges and are illustrative, not firm-specific.</p>
+                <p><strong>Threshold logic.</strong> Liability exposure indicated when <code>R &lt; P(W)</code>, where <code>R = B/L</code> &mdash; algebraically the Learned Hand condition <code>B &lt; P&times;L</code> for <code>L &gt; 0</code> (United States v. Carroll Towing Co., 159 F.2d 169 (2d Cir. 1947)), with P made organization-specific as the window mass.</p>
+                <p><strong>Severity taper (future refinement).</strong> Arrival early in W (before migration completes) is catastrophic; arrival late in W harms only not-yet-expired harvested data, decaying to zero at the right edge. This refines L, not P, and is reserved for the enterprise analysis.</p>
+            </div>
+        </details>
+
+        <details class="method">
+            <summary>&#9888;&#65039; Limitations &mdash; what this tool does not assess</summary>
+            <div class="method-body">
+                <p>This is an educational framework for one negligence-analysis lens. It does not model: <strong>regulatory compliance mandates</strong> (NIST, NSA CNSA 2.0, sector-specific rules); <strong>industry standards and peer behavior</strong>; <strong>insurance coverage and requirements</strong>; <strong>vendor and ecosystem readiness</strong>; <strong>technical feasibility</strong> of migration for specific systems; <strong>data classification nuances</strong> (different data types carry different X); <strong>operational impacts</strong> during migration; or the <strong>severity taper</strong> within the window (early CRQC arrival is catastrophic, late arrival harms only unexpired harvested data &mdash; an expected-loss refinement reserved for enterprise analysis).</p>
+                <p><strong>Recommended next steps:</strong> consult qualified legal counsel on your risk profile; engage cybersecurity experts on feasibility; review applicable regulatory requirements; conduct data classification to identify HNDL-sensitive holdings; and document your decision-making process regardless of the timeline you choose &mdash; the documentation itself is the governance.</p>
+                <p><strong>Resources:</strong> <a href="https://csrc.nist.gov/projects/post-quantum-cryptography" target="_blank">NIST Post-Quantum Cryptography Project</a> &middot; <a href="https://media.defense.gov/2022/Sep/07/2003071834/-1/-1/0/CSI_CNSA_2.0_ALGORITHMS_.PDF" target="_blank">NSA CNSA 2.0 Advisory</a> &middot; <a href="https://globalriskinstitute.org/publication/quantum-threat-timeline-report/" target="_blank">GRI / evolutionQ Quantum Threat Timeline Reports</a> &middot; Mosca, <em>Cybersecurity in an Era with Quantum Computers</em>, 16 IEEE Sec. &amp; Priv. 38 (2018) &middot; <em>United States v. Carroll Towing Co.</em>, 159 F.2d 169 (2d Cir. 1947) &middot; FS-ISAC PQC Working Group publications.</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- ============ FEEDBACK ============ -->
+    <div class="card feedback-card" style="text-align:center; padding:20px">
+        <div style="font-weight:600; color:var(--primary); margin-bottom:12px">Was this tool helpful for your risk assessment?</div>
+        <div id="fbRow" style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
+            <button class="preset-btn" onclick="fbThanks()">&#128077; Yes, very helpful</button>
+            <button class="preset-btn" onclick="fbThanks()">&#128076; Somewhat helpful</button>
+            <button class="preset-btn" onclick="fbThanks()">&#128078; Not helpful</button>
+        </div>
+        <div id="fbThanksMsg" style="display:none; color:var(--proteqc-teal); font-weight:600">Thank you for your feedback! &#128591;</div>
+    </div>
+
+    <footer class="footer">
+        <div class="enterprise-cta">
+            <p><strong>Enterprise Advisory:</strong> Custom threshold analysis calibrated to your organization's data holdings, regulatory exposure, and migration posture &mdash; including full sector scenario libraries and live legal monitoring.</p>
+            <p>Contact: <a href="mailto:advisory@proteqc.com">advisory@proteqc.com</a></p>
+        </div>
+        <div style="max-width:640px; margin:0 auto; text-align:left; font-size:12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:10px; padding:16px 20px">
+            <div style="font-weight:700; letter-spacing:1px; margin-bottom:6px">&#128220; LICENSE TERMS</div>
+            <div><strong>&copy; 2026 ProteQC Limited. All rights reserved.</strong></div>
+            <div style="margin-top:6px"><strong>&#10003; Free use permitted:</strong> educational and academic purposes &middot; research and non-commercial analysis &middot; personal risk assessment &middot; sharing with proper attribution.</div>
+            <div style="margin-top:4px"><strong>&#10007; Permission required:</strong> commercial use or paid services &middot; white-labeling or rebranding &middot; removal of attribution.</div>
+            <div style="margin-top:6px"><strong>Attribution:</strong> "Developed by ProteQC Limited (ProteQC.com)"</div>
+            <div style="margin-top:4px"><strong>No warranty:</strong> provided "AS IS" for educational purposes.</div>
+            <div style="margin-top:6px">Commercial licensing: <a href="mailto:licensing@ProteQC.com" style="color:var(--proteqc-teal)">licensing@ProteQC.com</a> &middot; <a href="https://ProteQC.com" target="_blank" style="color:var(--proteqc-teal)">ProteQC.com</a></div>
+        </div>
+        <div style="margin-top:14px">Developed by ProteQC Limited</div>
+        <div class="disclaimer">This tool is provided for educational and informational purposes only and does not constitute legal advice, professional consultation, or a guarantee of legal outcomes. Consult qualified legal counsel before making decisions based on this analysis; no attorney-client relationship is created by its use. Probability estimates derive from published expert surveys (Global Risk Institute / evolutionQ Quantum Threat Timeline Reports; historical Mosca 2015 estimates) and involve substantial uncertainty.</div>
+    </footer>
+</div>
+
+<script>
+/* ================================================================
+   QTTR_DATA - loaded from data/*.json (one file per report cycle,
+   listed in data/manifest.json). Each dataset carries its own
+   provenance field; values are copied verbatim from the reports'
+   Appendix A.4 computations and must not be recomputed here.
+   ================================================================ */
+const QTTR_DATA = {};
+
+async function loadData() {
+    const manifest = await (await fetch("data/manifest.json")).json();
+    const sets = await Promise.all(
+        manifest.datasets.map(f => fetch("data/" + f).then(r => r.json())));
+    for (const ds of sets) QTTR_DATA[ds.key] = ds;
+    // Default to the most recent report; prior curves stay selectable.
+    state.report = Object.keys(QTTR_DATA).sort().reverse()[0];
+}
+
+const MS_YEAR = 365.25 * 24 * 3600 * 1000;
+const state = {
+    report: null,
+    awareness: new Date("2024-12-06T00:00:00"),
+    commenced: false,
+    commenceDate: null
+};
+
+/* ---------- Sector scenarios (slider positions chosen so log mapping
+   lands exactly on the sourced values; see methodology for benchmarks) ---------- */
+const SCENARIOS = {
+    bank:     { label: "Regional Bank",   sub: "B $20M \u00b7 L $200M \u00b7 X 7y",  b: 59, l: 60, x: 7,  y: 4 },
+    hospital: { label: "Hospital System", sub: "B $15M \u00b7 L $250M \u00b7 X 25y", b: 52, l: 70, x: 25, y: 5 },
+    insurer:  { label: "Insurer",         sub: "B $25M \u00b7 L $300M \u00b7 X 10y", b: 65, l: 78, x: 10, y: 4 },
+    article:  { label: "Article \u00a7III.C", sub: "B $3.5M \u00b7 L $125M \u00b7 X 5y", b: 14, l: 40, x: 5, y: 4 },
+    custom:   { label: "Custom",          sub: "your own inputs", b: null }
+};
+let activeScenario = "bank";
+
+function applyScenario(key) {
+    activeScenario = key;
+    const sc = SCENARIOS[key];
+    if (sc.b !== null) {
+        document.getElementById("bSlider").value = sc.b;
+        document.getElementById("lSlider").value = sc.l;
+        document.getElementById("xSlider").value = sc.x;
+        document.getElementById("ySlider").value = sc.y;
+    }
+    buildScenarioRow();
+    render();
+}
+
+function buildScenarioRow() {
+    const wrap = document.getElementById("scenarioRow");
+    wrap.innerHTML = "";
+    for (const key of Object.keys(SCENARIOS)) {
+        const sc = SCENARIOS[key];
+        const btn = document.createElement("button");
+        btn.className = "scenario-btn" + (key === activeScenario ? " active" : "");
+        btn.innerHTML = `<div class="sc-title">${sc.label}</div><div class="sc-sub">${sc.sub}</div>`;
+        btn.onclick = () => applyScenario(key);
+        wrap.appendChild(btn);
+    }
+}
+
+/* ---------- Monotone cubic interpolation (Fritsch-Carlson) ---------- */
+function pchip(xs, ys) {
+    const n = xs.length;
+    const h = [], d = [];
+    for (let i = 0; i < n - 1; i++) { h.push(xs[i+1]-xs[i]); d.push((ys[i+1]-ys[i])/h[i]); }
+    const m = new Array(n);
+    m[0] = d[0]; m[n-1] = d[n-2];
+    for (let i = 1; i < n - 1; i++) {
+        if (d[i-1] * d[i] <= 0) m[i] = 0;
+        else {
+            const w1 = 2*h[i] + h[i-1], w2 = h[i] + 2*h[i-1];
+            m[i] = (w1 + w2) / (w1/d[i-1] + w2/d[i]);
+        }
+    }
+    return function(x) {
+        if (x <= xs[0]) return ys[0];
+        if (x >= xs[n-1]) return ys[n-1];
+        let i = 0;
+        while (x > xs[i+1]) i++;
+        const t = (x - xs[i]) / h[i];
+        const h00 = (1+2*t)*(1-t)*(1-t), h10 = t*(1-t)*(1-t),
+              h01 = t*t*(3-2*t), h11 = t*t*(t-1);
+        return h00*ys[i] + h10*h[i]*m[i] + h01*ys[i+1] + h11*h[i]*m[i+1];
+    };
+}
+
+function buildCurves(reportKey) {
+    const a = QTTR_DATA[reportKey].anchors;
+    const xs = Object.keys(a).map(Number).sort((p,q)=>p-q);
+    return {
+        xs,
+        opt: pchip(xs, xs.map(x => a[x][0])),
+        pess: pchip(xs, xs.map(x => a[x][1])),
+        maxT: xs[xs.length-1]
+    };
+}
+
+/* ---------- Log slider mapping ---------- */
+function logMap(v, lo, hi) { return lo * Math.pow(hi/lo, v/100); }
+function niceRound(x) {
+    const mag = Math.pow(10, Math.floor(Math.log10(x)));
+    return Math.round(x / (mag/4)) * (mag/4);
+}
+const B_LO = 2e6, B_HI = 100e6, L_LO = 50e6, L_HI = 500e6;
+
+function fmtMoney(v, sym) {
+    if (v >= 1e9) return sym + (v/1e9).toFixed(v % 1e9 ? 2 : 0) + "B";
+    if (v >= 1e6) return sym + (v/1e6).toFixed(v % 1e6 ? 1 : 0).replace(/\.0$/,"") + "M";
+    return sym + (v/1e3).toFixed(0) + "K";
+}
+function fmtDate(d) {
+    return d.toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" });
+}
+function fmtMonthYear(d) {
+    return d.toLocaleDateString("en-US", { year: "numeric", month: "long" });
+}
+
+/* ---------- Core computation ---------- */
+function compute() {
+    const now = new Date();
+    const symRaw = document.getElementById("currency").value;
+    const sym = symRaw === "$" ? "$" : symRaw;
+    const B = niceRound(logMap(+document.getElementById("bSlider").value, B_LO, B_HI));
+    const L = niceRound(logMap(+document.getElementById("lSlider").value, L_LO, L_HI));
+    const X = +document.getElementById("xSlider").value;
+    const Y = +document.getElementById("ySlider").value;
+    const R = (B / L) * 100;
+
+    const rpt = QTTR_DATA[state.report];
+    const pub = new Date(rpt.published + "T00:00:00");
+    const curves = buildCurves(state.report);
+    const eNow = Math.max(0, (now - pub) / MS_YEAR);          // today, report-time
+    const eAw = Math.max(0, (state.awareness - pub) / MS_YEAR); // awareness, report-time
+
+    // D: awareness -> commencement (frozen) or awareness -> today (accruing)
+    const start = (state.commenced && state.commenceDate) ? state.commenceDate : null;
+    const D = start
+        ? Math.max(0, (start - state.awareness) / MS_YEAR)
+        : Math.max(0, (now - state.awareness) / MS_YEAR);
+
+    // Window W in report-time: [a, b]
+    const a = eNow;
+    const eStart = start ? Math.max(0, (start - pub) / MS_YEAR) : eNow;
+    const b = eStart + X + Y;
+    const windowClosed = b <= a;
+    const beyond = b > curves.maxT;
+
+    const mass = f => Math.max(0, f(Math.min(b, curves.maxT)) - f(a));
+    const mOpt = windowClosed ? 0 : mass(curves.opt);
+    const mPess = windowClosed ? 0 : mass(curves.pess);
+
+    // Awareness-era window (both edges shifted to awareness date), current curve
+    const aAw = eAw, bAw = eAw + X + Y;
+    const massAw = f => Math.max(0, f(Math.min(bAw, curves.maxT)) - f(aAw));
+    const premOpt = mOpt - massAw(curves.opt);
+    const premPess = mPess - massAw(curves.pess);
+
+    // Crossing: first calendar t' in [0, maxT] where sliding-window mass >= R
+    function solveCross(f) {
+        const wm = t => Math.max(0, f(Math.min(t + X + Y, curves.maxT)) - f(t));
+        if (wm(0) >= R) return { atPub: true };
+        let prev = wm(0);
+        for (let t = 0.05; t <= curves.maxT; t += 0.05) {
+            const cur = wm(t);
+            if (cur >= R) {
+                let lo = t - 0.05, hi = t;
+                for (let i = 0; i < 40; i++) {
+                    const mid = (lo + hi) / 2;
+                    (wm(mid) < R) ? lo = mid : hi = mid;
+                }
+                return { t: (lo + hi) / 2 };
+            }
+            prev = cur;
+        }
+        return null;
+    }
+    function crossInfo(sol) {
+        if (!sol) return null;
+        if (sol.atPub) return { atPub: true, date: pub };
+        return { atPub: false, date: new Date(pub.getTime() + sol.t * MS_YEAR) };
+    }
+    const crossOpt = crossInfo(solveCross(curves.opt));
+    const crossPess = crossInfo(solveCross(curves.pess));
+
+    return { now, sym, B, L, X, Y, D, R, rpt, pub, curves,
+             eNow, eAw, start, a, b, windowClosed, beyond,
+             mOpt, mPess, premOpt, premPess, crossOpt, crossPess };
+}
+
+/* ---------- Render ---------- */
+function render() {
+    const c = compute();
+
+    document.getElementById("todayLabel").textContent = fmtDate(c.now);
+    document.getElementById("bValue").textContent = fmtMoney(c.B, c.sym);
+    document.getElementById("lValue").textContent = fmtMoney(c.L, c.sym);
+    document.getElementById("bMin").textContent = fmtMoney(B_LO, c.sym);
+    document.getElementById("bMax").textContent = fmtMoney(B_HI, c.sym);
+    document.getElementById("lMin").textContent = fmtMoney(L_LO, c.sym);
+    document.getElementById("lMax").textContent = fmtMoney(L_HI, c.sym);
+    document.getElementById("xValue").textContent = c.X + " years";
+    document.getElementById("yValue").textContent = c.Y + " years";
+    document.getElementById("dValue").textContent = c.D.toFixed(2) + " years";
+
+    const rStr = c.R < 0.1 ? c.R.toFixed(3) : c.R.toFixed(1);
+    document.getElementById("rValue").textContent = "R = " + rStr + "%";
+    document.getElementById("rCaption").textContent =
+        "Preventing a " + fmtMoney(c.L, c.sym) + " loss costs " + rStr +
+        " cents per dollar of exposure. Liability exposure indicated when the window mass P(W) exceeds this ratio.";
+
+    // D counter (frozen vs accruing)
+    const dBox = document.getElementById("dBox");
+    if (c.start) {
+        dBox.classList.add("frozen");
+        document.getElementById("dCounter").textContent =
+            "D = " + c.D.toFixed(2) + " years (frozen)";
+        document.getElementById("dCaptionDays").textContent =
+            "Fixed at commencement, " + fmtDate(c.start) + ". The window's right edge no longer slides.";
+    } else {
+        dBox.classList.remove("frozen");
+        document.getElementById("dCounter").textContent =
+            "D = " + c.D.toFixed(2) + " years (" + Math.floor(c.D * 365.25) + " days)";
+        document.getElementById("dCaptionDays").textContent =
+            "Accruing since " + fmtDate(state.awareness) + " \u2014 and counting.";
+    }
+
+    // Window summary
+    const rightDate = new Date(c.pub.getTime() + c.b * MS_YEAR);
+    const widthYrs = Math.max(0, c.b - c.a);
+    document.getElementById("windowSummary").innerHTML = c.windowClosed
+        ? "W has <strong>closed</strong>: all data harvested under breakable encryption has expired."
+        : "W = [today, " + (c.start ? "start" : "today") + " + Y + X] \u2192 closes <strong>" +
+          fmtMonthYear(rightDate) + "</strong> \u00b7 width " + widthYrs.toFixed(1) + " yrs \u00b7 " +
+          (c.start ? "frozen right edge \u2014 shrinking" : "sliding right edge \u2014 " +
+          "moves 1 day per day of inaction");
+
+    // Readouts (collapse band display when curves coincide, e.g. Mosca 2015)
+    const fmtBand = (lo, hi, dp) =>
+        Math.abs(hi - lo) < 0.05 ? hi.toFixed(dp) + "%" : lo.toFixed(dp) + "\u2013" + hi.toFixed(dp) + "%";
+    document.getElementById("pwValue").textContent = fmtBand(c.mPess, c.mOpt, 0);
+    document.getElementById("pwSub").textContent =
+        (c.beyond ? "Right edge beyond survey horizon (clamped) \u00b7 " : "") +
+        (Math.abs(c.mOpt - c.mPess) < 0.05 ? "point estimate, " : "pessimistic\u2013optimistic, ") + c.rpt.label;
+    document.getElementById("rReadout").textContent = rStr + "%";
+    const pStrPrem = v => (v >= 0 ? "+" : "") + v.toFixed(1);
+    document.getElementById("premiumValue").textContent =
+        pStrPrem(c.premPess) + " to " + pStrPrem(c.premOpt) + " pts";
+
+    const tstarEl = document.getElementById("tstarValue");
+    const tstarSub = document.getElementById("tstarSub");
+    if (!c.crossOpt) {
+        tstarEl.textContent = "Beyond horizon";
+        tstarSub.textContent = "Window mass never reaches R within the survey range";
+    } else {
+        const fmt = ci => ci.atPub ? "at or before publication" : fmtMonthYear(ci.date);
+        if (c.crossPess && (c.crossPess.atPub || c.crossPess.date < c.now)) {
+            tstarEl.textContent = c.crossPess.atPub ? "\u2264 " + fmtMonthYear(c.pub) : fmtMonthYear(c.crossPess.date);
+            tstarSub.textContent = "Crossed on both interpretations (optimistic: " + fmt(c.crossOpt) + ")";
+        } else if (c.crossOpt.atPub || c.crossOpt.date < c.now) {
+            tstarEl.textContent = c.crossOpt.atPub ? "\u2264 " + fmtMonthYear(c.pub) : fmtMonthYear(c.crossOpt.date);
+            tstarSub.textContent = "Crossed on optimistic read; pessimistic: " + (c.crossPess ? fmt(c.crossPess) : "beyond horizon");
+        } else {
+            tstarEl.textContent = fmt(c.crossOpt);
+            tstarSub.textContent = "First crossing (optimistic); pessimistic: " + (c.crossPess ? fmt(c.crossPess) : "beyond horizon");
+        }
+    }
+
+    renderVerdict(c, rStr);
+    renderChart(c);
+}
+
+function renderVerdict(c, rStr) {
+    const v = document.getElementById("verdict");
+    const pl = c.L * c.mPess / 100, pl2 = c.L * c.mOpt / 100;
+    const equiv = "Equivalent multiplicative form: P(W)\u00d7L = " +
+        fmtMoney(pl, c.sym) + "\u2013" + fmtMoney(pl2, c.sym) +
+        " against B = " + fmtMoney(c.B, c.sym) + ".";
+
+    if (c.windowClosed) {
+        v.className = "verdict closed";
+        v.innerHTML = "<h3>Window closed</h3>" +
+            "<p>Migration completed long enough ago that all data harvested under breakable encryption has exceeded its shelf life. No remaining HNDL exposure on these inputs.</p>";
+        return;
+    }
+
+    if (c.R < c.mPess) {
+        v.className = "verdict crossed";
+        v.innerHTML = "<h3>\u26a0\ufe0f Threshold crossed \u2014 on both interpretations</h3>" +
+            "<p>Your risk ratio <span class='mono'>R = " + rStr + "%</span> sits below even the <em>pessimistic</em> window mass <span class='mono'>P(W) = " + c.mPess.toFixed(0) + "%</span>. The probability that a CRQC arrives inside your vulnerability window exceeds your cost of prevention per dollar of exposure, no matter how conservatively the survey is interpreted." +
+            (!c.start ? " The window is still sliding: of today's mass, <span class='mono'>" + c.premPess.toFixed(1) + "</span> points accrued through procrastination alone." : "") +
+            " Whichever side of the line your final numbers fall, the protected position is the documented one: record this analysis and its date.</p>" +
+            "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>";
+    } else if (c.R < c.mOpt) {
+        v.className = "verdict contested";
+        v.innerHTML = "<h3>\u2696\ufe0f Contested zone</h3>" +
+            "<p>Your ratio <span class='mono'>R = " + rStr + "%</span> falls inside the interpretation band <span class='mono'>" + c.mPess.toFixed(0) + "\u2013" + c.mOpt.toFixed(0) + "%</span>. Reasonable minds can differ \u2014 which is precisely why a documented, contemporaneous analysis is the defensible position. An organization that never ran the numbers cannot claim the burden exceeded expected loss." +
+            (c.crossPess && !c.crossPess.atPub && c.crossPess.date > c.now ? " On current trends the pessimistic mass overtakes your ratio <span class='mono'>" + fmtMonthYear(c.crossPess.date) + "</span>." : "") + "</p>" +
+            "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>";
+    } else {
+        v.className = "verdict defensible";
+        v.innerHTML = "<h3>\u2705 Burden currently defensible \u2014 document it now</h3>" +
+            "<p>Your ratio <span class='mono'>R = " + rStr + "%</span> exceeds the optimistic window mass <span class='mono'>" + c.mOpt.toFixed(0) + "%</span>: prevention currently costs more per dollar of exposure than the expert-consensus probability of harm. This position erodes on a schedule \u2014 " +
+            (c.crossOpt ? "the sliding window reaches your ratio <span class='mono'>" + (c.crossOpt.atPub ? "at publication" : fmtMonthYear(c.crossOpt.date)) + "</span> on the optimistic read" + (c.crossPess ? ", " + (c.crossPess.atPub ? "at publication" : fmtMonthYear(c.crossPess.date)) + " on the pessimistic" : "") + "." : "no crossing occurs within the 30-year survey horizon.") +
+            " The Business Judgment Rule protects the informed decision, not the undocumented one: record this analysis and its date.</p>" +
+            "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>";
+    }
+}
+
+/* ---------- Chart ---------- */
+function renderChart(c) {
+    const svg = document.getElementById("chart");
+    const W = 920, H = 500, ML = 62, MR = 24, MT = 30, MB = 46;
+    const pw = W - ML - MR, ph = H - MT - MB;
+    const xSpan = c.curves.maxT;
+    const xPix = t => ML + (Math.max(0, Math.min(t, xSpan)) / xSpan) * pw;
+    const yPix = p => MT + (1 - p / 100) * ph;
+    const yearOf = t => new Date(c.pub.getTime() + t * MS_YEAR).getFullYear();
+
+    let s = "";
+    s += `<defs>
+      <linearGradient id="bandGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#14B8A6" stop-opacity="0.14"/>
+        <stop offset="100%" stop-color="#10B981" stop-opacity="0.24"/>
+      </linearGradient>
+    </defs>`;
+
+    for (let p = 0; p <= 100; p += 20) {
+        s += `<line x1="${ML}" y1="${yPix(p)}" x2="${W-MR}" y2="${yPix(p)}" stroke="#e2e8f0" stroke-width="1"/>`;
+        s += `<text x="${ML-8}" y="${yPix(p)+4}" text-anchor="end" font-size="11" fill="#94a3b8" font-family="JetBrains Mono, monospace">${p}%</text>`;
+    }
+    for (let t = 0; t <= xSpan; t += 5) {
+        s += `<line x1="${xPix(t)}" y1="${MT}" x2="${xPix(t)}" y2="${H-MB}" stroke="#f1f5f9" stroke-width="1"/>`;
+        s += `<text x="${xPix(t)}" y="${H-MB+18}" text-anchor="middle" font-size="11" fill="#94a3b8" font-family="JetBrains Mono, monospace">${yearOf(t)}</text>`;
+    }
+    s += `<text x="${ML + pw/2}" y="${H-6}" text-anchor="middle" font-size="11.5" fill="#64748b" font-family="DM Sans, sans-serif">CRQC arrival date Z (cumulative probability, ${c.rpt.label})</text>`;
+
+    const N = 160;
+    const sample = (f, t0, t1, n) => {
+        const pts = [];
+        for (let i = 0; i <= n; i++) {
+            const t = t0 + (i/n)*(t1-t0);
+            pts.push([xPix(t), yPix(f(Math.min(t, xSpan)))]);
+        }
+        return pts;
+    };
+    const path = pts => pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+    const rev = pts => pts.slice().reverse().map(p=>"L"+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+
+    const ptsO = sample(c.curves.opt, 0, xSpan, N);
+    const ptsP = sample(c.curves.pess, 0, xSpan, N);
+
+    // Full band (faint)
+    s += `<path d="${path(ptsO)} ${rev(ptsP)} Z" fill="url(#bandGrad)"/>`;
+
+    // ----- Vulnerability window W -----
+    const wa = Math.max(0, c.a), wb = Math.min(c.b, xSpan);
+    if (!c.windowClosed && wb > wa) {
+        s += `<rect x="${xPix(wa)}" y="${MT}" width="${xPix(wb)-xPix(wa)}" height="${ph}" fill="#8B5CF6" opacity="0.09"/>`;
+        s += `<line x1="${xPix(wa)}" y1="${MT}" x2="${xPix(wa)}" y2="${H-MB}" stroke="#7C3AED" stroke-width="2"/>`;
+        s += `<line x1="${xPix(wb)}" y1="${MT}" x2="${xPix(wb)}" y2="${H-MB}" stroke="#7C3AED" stroke-width="2"/>`;
+        s += `<text x="${xPix(wa)}" y="${MT-10}" text-anchor="middle" font-size="11" font-weight="700" fill="#7C3AED" font-family="DM Sans, sans-serif">today</text>`;
+        s += `<text x="${xPix(wb)}" y="${MT-10}" text-anchor="middle" font-size="11" font-weight="700" fill="#7C3AED" font-family="DM Sans, sans-serif">W closes${c.beyond ? " (30yr+)" : ""}</text>`;
+    }
+
+    // Ghost window at awareness (dashed outline)
+    const ga = Math.max(0, c.eAw), gb = Math.min(c.eAw + c.X + c.Y, xSpan);
+    if (gb > ga && Math.abs(ga - wa) > 0.05) {
+        s += `<rect x="${xPix(ga)}" y="${MT+4}" width="${xPix(gb)-xPix(ga)}" height="${ph-8}" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5 5" rx="3"/>`;
+        s += `<text x="${xPix(ga)+6}" y="${H-MB-10}" text-anchor="start" font-size="10.5" fill="#64748b" font-family="DM Sans, sans-serif">W at awareness</text>`;
+    }
+
+    // ----- Exposure areas inside W -----
+    if (!c.windowClosed && wb > wa && c.R < 100) {
+        // consensus exposure: R..pess where pess > R
+        const tP = firstAbove(c.curves.pess, c.R, wa, wb);
+        if (tP !== null) {
+            const top = sample(c.curves.pess, tP, wb, 60);
+            const bottom = [[xPix(wb), yPix(c.R)], [xPix(tP), yPix(c.R)]];
+            s += `<path d="${path(top)} L${bottom[0][0].toFixed(1)},${bottom[0][1].toFixed(1)} L${bottom[1][0].toFixed(1)},${bottom[1][1].toFixed(1)} Z" fill="#dc2626" opacity="0.32"/>`;
+        }
+        // contested exposure: max(pess,R)..opt where opt > R
+        const tO = firstAbove(c.curves.opt, c.R, wa, wb);
+        if (tO !== null) {
+            const top = sample(c.curves.opt, tO, wb, 60);
+            const botPts = [];
+            for (let i = 60; i >= 0; i--) {
+                const t = tO + (i/60)*(wb-tO);
+                botPts.push([xPix(t), yPix(Math.max(c.curves.pess(Math.min(t,xSpan)), c.R))]);
+            }
+            s += `<path d="${path(top)} ${botPts.map(p=>"L"+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ")} Z" fill="#f59e0b" opacity="0.30"/>`;
+        }
+    }
+
+    function firstAbove(f, r, t0, t1) {
+        if (f(Math.min(t0,xSpan)) >= r) return t0;
+        if (f(Math.min(t1,xSpan)) < r) return null;
+        let lo = t0, hi = t1;
+        for (let i = 0; i < 50; i++) {
+            const mid = (lo+hi)/2;
+            (f(Math.min(mid,xSpan)) < r) ? lo = mid : hi = mid;
+        }
+        return (lo+hi)/2;
+    }
+
+    // Curves on top
+    s += `<path d="${path(ptsO)}" fill="none" stroke="#10B981" stroke-width="2.5"/>`;
+    s += `<path d="${path(ptsP)}" fill="none" stroke="#14B8A6" stroke-width="2.5" stroke-dasharray="7 4"/>`;
+    for (const t of c.curves.xs) {
+        if (t === 0) continue;
+        s += `<circle cx="${xPix(t)}" cy="${yPix(c.curves.opt(t))}" r="3.5" fill="#10B981"/>`;
+        s += `<circle cx="${xPix(t)}" cy="${yPix(c.curves.pess(t))}" r="3.5" fill="#14B8A6"/>`;
+    }
+
+    // R line
+    const rY = yPix(Math.min(c.R, 100));
+    s += `<line x1="${ML}" y1="${rY}" x2="${W-MR}" y2="${rY}" stroke="#7C3AED" stroke-width="2.5" stroke-dasharray="10 5"/>`;
+    s += `<text x="${W-MR-4}" y="${rY-7}" text-anchor="end" font-size="12.5" font-weight="700" fill="#7C3AED" font-family="JetBrains Mono, monospace">R = ${c.R < 0.1 ? c.R.toFixed(3) : c.R.toFixed(1)}%</text>`;
+
+    // Legend
+    s += `<g font-family="DM Sans, sans-serif" font-size="11.5">
+        <line x1="${ML+10}" y1="${MT+14}" x2="${ML+38}" y2="${MT+14}" stroke="#10B981" stroke-width="2.5"/>
+        <text x="${ML+44}" y="${MT+18}" fill="#334155">optimistic interpretation</text>
+        <line x1="${ML+10}" y1="${MT+34}" x2="${ML+38}" y2="${MT+34}" stroke="#14B8A6" stroke-width="2.5" stroke-dasharray="7 4"/>
+        <text x="${ML+44}" y="${MT+38}" fill="#334155">pessimistic interpretation</text>
+        <rect x="${ML+10}" y="${MT+48}" width="28" height="11" fill="#8B5CF6" opacity="0.15"/>
+        <text x="${ML+44}" y="${MT+58}" fill="#334155">vulnerability window W</text>
+        <rect x="${ML+10}" y="${MT+68}" width="28" height="11" fill="#dc2626" opacity="0.32"/>
+        <text x="${ML+44}" y="${MT+78}" fill="#334155">exposure \u2014 both interpretations</text>
+        <rect x="${ML+10}" y="${MT+88}" width="28" height="11" fill="#f59e0b" opacity="0.30"/>
+        <text x="${ML+44}" y="${MT+98}" fill="#334155">exposure \u2014 contested (optimistic only)</text>
+    </g>`;
+
+    svg.innerHTML = s;
+}
+
+/* ---------- Report selector ---------- */
+function buildReportSelector() {
+    const wrap = document.getElementById("reportSelector");
+    wrap.innerHTML = "";
+    for (const key of Object.keys(QTTR_DATA).sort().reverse()) {
+        const r = QTTR_DATA[key];
+        const btn = document.createElement("button");
+        btn.className = "report-btn" + (key === state.report ? " active" : "");
+        btn.innerHTML = `<div class="rb-title">${r.label}</div><div class="rb-sub">${r.sub}</div>`;
+        btn.onclick = () => { state.report = key; buildReportSelector(); render(); };
+        wrap.appendChild(btn);
+    }
+}
+
+/* ---------- Scenario link (URL hash) ---------- */
+function encodeHash() {
+    const p = new URLSearchParams({
+        b: document.getElementById("bSlider").value,
+        l: document.getElementById("lSlider").value,
+        x: document.getElementById("xSlider").value,
+        y: document.getElementById("ySlider").value,
+        r: state.report,
+        aw: document.getElementById("awarenessDate").value,
+        sc: activeScenario
+    });
+    if (state.commenced && state.commenceDate)
+        p.set("cm", document.getElementById("commenceDate").value);
+    return "#" + p.toString();
+}
+function decodeHash() {
+    if (!location.hash || location.hash.length < 2) return;
+    try {
+        const p = new URLSearchParams(location.hash.slice(1));
+        if (p.get("b")) document.getElementById("bSlider").value = p.get("b");
+        if (p.get("l")) document.getElementById("lSlider").value = p.get("l");
+        if (p.get("x")) document.getElementById("xSlider").value = p.get("x");
+        if (p.get("y")) document.getElementById("ySlider").value = p.get("y");
+        if (p.get("r") && QTTR_DATA[p.get("r")]) state.report = p.get("r");
+        if (p.get("aw")) {
+            document.getElementById("awarenessDate").value = p.get("aw");
+            state.awareness = new Date(p.get("aw") + "T00:00:00");
+            document.querySelectorAll(".preset-btn").forEach(b =>
+                b.classList.toggle("active", b.dataset.date === p.get("aw")));
+        }
+        if (p.get("cm")) {
+            state.commenced = true;
+            document.getElementById("commenceCheck").checked = true;
+            const di = document.getElementById("commenceDate");
+            di.disabled = false; di.value = p.get("cm");
+            state.commenceDate = new Date(p.get("cm") + "T00:00:00");
+        }
+        if (p.get("sc") && SCENARIOS[p.get("sc")]) activeScenario = p.get("sc");
+    } catch (e) { /* malformed hash: ignore */ }
+}
+
+/* ---------- Document this analysis ---------- */
+function generateDocument() {
+    const c = compute();
+    const rStr = c.R < 0.1 ? c.R.toFixed(3) : c.R.toFixed(1);
+    const rightDate = new Date(c.pub.getTime() + c.b * MS_YEAR);
+    const verdictLine =
+        c.windowClosed ? "WINDOW CLOSED - no remaining HNDL exposure on these inputs" :
+        c.R < c.mPess ? "THRESHOLD CROSSED - R below P(W) on both interpretations" :
+        c.R < c.mOpt ? "CONTESTED ZONE - R inside the interpretation band" :
+        "BURDEN CURRENTLY DEFENSIBLE - R above optimistic P(W); position erodes on a schedule";
+    const lines = [
+        "MOSCA HAND THRESHOLD ANALYSIS - CONTEMPORANEOUS RECORD",
+        "Generated: " + c.now.toISOString() + " (" + fmtDate(c.now) + ")",
+        "Tool: ProteQC(R) Mosca Hand Threshold Evaluator, Educational Edition",
+        "",
+        "FORMULA: R < P(W)   [B < P\u00d7L, Carroll Towing, in threshold form]",
+        "",
+        "INPUTS",
+        "  Scenario preset ......... " + SCENARIOS[activeScenario].label,
+        "  B (migration burden) .... " + fmtMoney(c.B, c.sym),
+        "  L (loss magnitude) ...... " + fmtMoney(c.L, c.sym),
+        "  X (data shelf life) ..... " + c.X + " years",
+        "  Y (migration time) ...... " + c.Y + " years",
+        "  Awareness date .......... " + fmtDate(state.awareness),
+        "  Migration commenced ..... " + (c.start ? fmtDate(c.start) : "NO - window right edge still sliding"),
+        "  D (procrastination) ..... " + c.D.toFixed(2) + " years" + (c.start ? " (frozen at commencement)" : " (accruing)"),
+        "",
+        "PROBABILITY SOURCE",
+        "  Report .................. " + c.rpt.label + " (" + c.rpt.sub + ")",
+        "  Vulnerability window W .. [today, " + fmtMonthYear(rightDate) + "]" + (c.beyond ? " (right edge clamped at 30-yr survey horizon)" : ""),
+        "",
+        "RESULT",
+        "  R = B/L ................. " + rStr + "%",
+        "  P(W) mass ............... " + c.mPess.toFixed(1) + "% (pessimistic) to " + c.mOpt.toFixed(1) + "% (optimistic)",
+        "  Procrastination premium . " + (c.premPess>=0?"+":"") + c.premPess.toFixed(1) + " to " + (c.premOpt>=0?"+":"") + c.premOpt.toFixed(1) + " pts",
+        "  Verdict ................. " + verdictLine,
+        "",
+        "Scenario link: " + location.origin + location.pathname + encodeHash(),
+        "",
+        "Methodology: window mass P(W) = P(right) - P(left) on the report's cumulative",
+        "curve (Fritsch-Carlson monotone interpolation of Appendix A.4 anchors).",
+        "Mosca's Theorem (x+y>z) per Mosca, 16 IEEE Sec. & Priv. 38 (2018); procrastination",
+        "variable per the Mosca-Gomez formulation (Jaime Gomez Garcia, Europol Quantum",
+        "Safe Financial Forum / FS-ISAC PQC Working Group, 2025).",
+        "Educational framework, not legal advice. ProteQC.com | advisory@proteqc.com"
+    ];
+    return lines.join("\n");
+}
+
+/* ---------- Wiring ---------- */
+["bSlider","lSlider","xSlider","ySlider"].forEach(id =>
+    document.getElementById(id).addEventListener("input", () => {
+        if (activeScenario !== "custom") { activeScenario = "custom"; buildScenarioRow(); }
+        render();
+    }));
+document.getElementById("currency").addEventListener("input", render);
+
+document.getElementById("docBtn").addEventListener("click", () => {
+    const out = document.getElementById("docOutput");
+    document.getElementById("docText").value = generateDocument();
+    out.classList.add("show");
+    const ta = document.getElementById("docText");
+    ta.focus(); ta.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.getElementById("docBtn").textContent = "\u2705 Copied to clipboard \u2014 regenerate";
+    setTimeout(() => document.getElementById("docBtn").innerHTML = "\ud83d\udcdd Document this analysis", 2500);
+});
+
+document.getElementById("linkBtn").addEventListener("click", () => {
+    const url = location.origin + location.pathname + encodeHash();
+    history.replaceState(null, "", encodeHash());
+    const tmp = document.createElement("textarea");
+    tmp.value = url; document.body.appendChild(tmp);
+    tmp.select();
+    try { document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(tmp);
+    document.getElementById("linkBtn").textContent = "\u2705 Link copied";
+    setTimeout(() => document.getElementById("linkBtn").innerHTML = "\ud83d\udd17 Copy scenario link", 2500);
+});
+
+document.getElementById("lawBtn").addEventListener("click", () => {
+    document.getElementById("lawPanel").classList.toggle("show");
+});
+
+document.getElementById("pdfBtn").addEventListener("click", () => window.print());
+
+function fbThanks() {
+    document.getElementById("fbRow").style.display = "none";
+    document.getElementById("fbThanksMsg").style.display = "block";
+}
+
+document.querySelectorAll(".preset-btn").forEach(btn =>
+    btn.addEventListener("click", () => {
+        document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        state.awareness = new Date(btn.dataset.date + "T00:00:00");
+        document.getElementById("awarenessDate").value = btn.dataset.date;
+        render();
+    }));
+
+document.getElementById("awarenessDate").addEventListener("change", e => {
+    document.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
+    state.awareness = new Date(e.target.value + "T00:00:00");
+    render();
+});
+
+document.getElementById("commenceCheck").addEventListener("change", e => {
+    state.commenced = e.target.checked;
+    const dateInput = document.getElementById("commenceDate");
+    dateInput.disabled = !state.commenced;
+    if (state.commenced && !dateInput.value) {
+        dateInput.value = new Date().toISOString().slice(0, 10);
+    }
+    state.commenceDate = state.commenced && dateInput.value
+        ? new Date(dateInput.value + "T00:00:00") : null;
+    render();
+});
+
+document.getElementById("commenceDate").addEventListener("change", e => {
+    state.commenceDate = e.target.value ? new Date(e.target.value + "T00:00:00") : null;
+    render();
+});
+
+loadData().then(() => {
+    decodeHash();
+    buildScenarioRow();
+    buildReportSelector();
+    render();
+    setInterval(render, 30000);
+}).catch(err => {
+    document.getElementById("reportSelector").innerHTML =
+        '<div style="color:var(--danger);font-size:13.5px">Could not load survey data (data/manifest.json). ' +
+        'If running locally, serve this directory over HTTP.</div>';
+    console.error("Data load failed:", err);
+});
+</script>
+</body>
+</html>
