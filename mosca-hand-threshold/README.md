@@ -27,7 +27,8 @@ mosca-hand-threshold/
 │   ├── manifest.json     Lists the dataset files the loader fetches
 │   ├── qttr-2026.json    QTTR (Mar 2026) — current default
 │   ├── qttr-2024.json    QTTR 2024
-│   └── mosca-2015.json   Mosca 2015 historical point estimates
+│   ├── mosca-2015.json   Mosca 2015 historical point estimates
+│   └── awareness-events.json  Public notice signals (anchor picker + ladder)
 ├── fonts/                Self-hosted DM Sans + JetBrains Mono (variable, latin)
 ├── ProteQC_logo.png      ProteQC® registered-mark logo
 ├── favicon-*.png         Lotus mark favicons
@@ -54,6 +55,12 @@ selectable as history-on-demand.
 
 **Do not recompute or "correct" published anchor values in place** — a
 correction is itself a data commit with its reasoning in the message.
+
+To add an awareness signal (new regulation, intergovernmental statement,
+major vendor deployment): append it to `data/awareness-events.json` with
+date, tier, short label, and citation — one event per data commit. The
+scholarship tier is intentionally absent pending an editorial ruling; Shor
+1994 is never an anchor (see the article's two-boundary framework).
 
 ## Verifying locally
 
