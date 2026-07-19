@@ -361,6 +361,36 @@ select, input[type="date"] {
 .commence-row label { display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; }
 .commence-row input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--proteqc-teal); cursor: pointer; }
 
+/* Constructive-notice timeline */
+.nt-item {
+    display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+    padding: 8px 10px; border-left: 3px solid var(--border-light);
+    margin-left: 4px;
+}
+.nt-item.epi { border-left-style: dotted; opacity: 0.85; }
+.nt-item.sel { border-left-color: var(--proteqc-purple); background: rgba(139,92,246,0.06); border-radius: 0 8px 8px 0; }
+.nt-when { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 600; color: var(--primary); min-width: 92px; }
+.nt-chip {
+    font-size: 9.5px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
+    padding: 2px 8px; border-radius: 8px; color: white; background: var(--text-light);
+}
+.nt-chip.statute-regulation { background: var(--proteqc-purple-dark); }
+.nt-chip.standards { background: var(--proteqc-teal); }
+.nt-chip.intergovernmental { background: #4f46e5; }
+.nt-chip.survey { background: var(--proteqc-green); }
+.nt-chip.industry { background: #64748b; }
+.nt-chip.epistemic { background: transparent; color: var(--text-muted); border: 1px dotted var(--text-light); }
+.nt-label { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+.nt-cite { flex-basis: 100%; font-size: 11px; color: var(--text-light); margin-left: 106px; }
+.nt-use {
+    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600;
+    padding: 2px 10px; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--proteqc-teal); background: white; color: var(--proteqc-teal);
+}
+.nt-use:hover { background: var(--proteqc-teal); color: white; }
+.nt-epi-note { font-size: 11px; color: var(--text-muted); font-style: italic; }
+@media (max-width: 700px) { .nt-cite { margin-left: 0; } }
+
 .window-summary {
     font-family: 'JetBrains Mono', monospace; font-size: 13.5px;
     text-align: center; margin-top: 16px; padding: 12px;
@@ -471,6 +501,42 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
             <span>Updates at <a href="https://ProteQC.com" target="_blank" style="color:var(--proteqc-teal)">ProteQC.com</a></span>
         </div>
     </header>
+
+    <!-- ============ FOUNDATION 0: FROM FORESEEABILITY TO DUTY ============ -->
+    <div class="card">
+        <details class="transition">
+            <summary>
+                <div>
+                    <div class="step-header">Foundation</div>
+                    <div class="section-title">From Foreseeability to Duty</div>
+                    <div class="section-sub" style="margin-bottom:0">Before the arithmetic of breach: why the law asks anything of you at all.</div>
+                </div>
+                <span class="chev">&#9660;</span>
+            </summary>
+            <div class="transition-flow">
+                <div class="t-stage s1">
+                    <div class="t-tag">1994 &middot; Foreseeable</div>
+                    <div class="t-formula">harm perceivable</div>
+                    <div class="t-caption">Shor's proof makes the harm perceivable in principle &mdash; the article's <em>epistemic boundary</em>. &ldquo;The risk reasonably to be perceived defines the duty to be obeyed.&rdquo; <em>Palsgraf v. Long Island R.R.</em>, 248 N.Y. 339, 344 (1928). Perceivable &mdash; but not yet reasonably perceived outside cryptography.</div>
+                </div>
+                <div class="t-arrow">&rarr;</div>
+                <div class="t-stage s2">
+                    <div class="t-tag">The record accrues &middot; Chargeable</div>
+                    <div class="t-formula">notice accumulates</div>
+                    <div class="t-caption">Standards, statutes, surveys, and deployments pile up &mdash; the chart's notice strip. Constructive notice asks what a reasonable organization <strong>should have known</strong>, whether or not it looked.</div>
+                </div>
+                <div class="t-arrow">&rarr;</div>
+                <div class="t-stage s3">
+                    <div class="t-tag">Your anchor &middot; Duty</div>
+                    <div class="t-formula">the clock starts</div>
+                    <div class="t-caption">At some signal on that record, reasonable ignorance runs out for an organization of your kind. Duty crystallizes; from that date <strong>D</strong> accrues &mdash; and breach becomes measurable.</div>
+                </div>
+            </div>
+            <div class="t-closing">
+                Foreseeability is central to establishing duty; constructive notice is how general foreseeability becomes chargeable to a particular defendant; duty is where the clock starts. <strong>Whether</strong> the law asks anything of you is answered on this chain &mdash; <strong>how much</strong> it asks is arithmetic, and the next panel does the arithmetic.
+            </div>
+        </details>
+    </div>
 
     <!-- ============ TRANSITION: FROM CARROLL TOWING TO THE THRESHOLD FORM ============ -->
     <div class="card">
@@ -588,6 +654,14 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
                 <input type="date" id="commenceDate" disabled>
                 <span style="color:var(--text-muted);font-size:12.5px" id="commenceHint">Commencement freezes the window's right edge; W stops sliding and starts shrinking.</span>
             </div>
+
+            <details class="method" style="margin-top:14px">
+                <summary>&#128278; Constructive-notice timeline &mdash; the public record, with citations</summary>
+                <div class="method-body">
+                    <p>Foreseeability is central to establishing duty &mdash; and constructive notice is how foreseeability becomes chargeable to a particular organization. Each entry below is a dated public signal a fact-finder could point to; <em>use as anchor</em> sets your awareness date to it. Which signal starts your clock is a legal argument, not a computation &mdash; the record is what accumulates either way.</p>
+                    <div id="noticeTimeline"></div>
+                </div>
+            </details>
         </div>
 
         <div class="window-summary" id="windowSummary"></div>
@@ -652,7 +726,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
                 <p><strong>Interpolation.</strong> Monotone cubic (Fritsch&ndash;Carlson) through anchors at 0, 5, 10, 15, 20, 30 years from report publication, with <code>P(0) = 0</code>. Values beyond 30 years are clamped at the 30-year anchor and flagged.</p>
                 <p><strong>The window.</strong> <code>W = [today, start + X + Y]</code>. Left edge: a CRQC arriving today decrypts harvested data still within shelf life. Right edge: the last datum harvested before migration completes remains sensitive for X further years. <code>P(W) = P(right) &minus; P(left)</code> &mdash; the unconditional mass of Z inside W. (A conditional variant renormalizing on no-CRQC-today, <code>P(W)/(1 &minus; P(today))</code>, is more aggressive; the unconditional form is used here as the conservative default.) In the accompanying article's terms, W is the organization's own remaining slice of the Shor&ndash;Q-Day window: the global interval, open since Shor's 1994 proof and closing at Q-Day, within which harm is foreseeable but not yet manifest.</p>
                 <p><strong>Sliding vs. frozen.</strong> Until migration commences, the right edge is <code>today + X + Y</code> and W slides up the rising curve daily. Commencement freezes the right edge at <code>start + X + Y</code>; W then shrinks as the left edge (today) advances. The procrastination premium is <code>P(W today) &minus; P(W at awareness)</code>, both read on the current report's curve.</p>
-                <p><strong>Awareness anchors &amp; the notice gradient.</strong> The awareness date sets where D begins. The selector offers dated public signals &mdash; statutes and regulations in force, standards publications, intergovernmental statements, threat surveys, and industry deployments &mdash; each carried with its citation in the tool's data files. Which signal starts a particular organization's clock is a legal argument, not a computation: the tool takes the date you select (or your own documented date) and reports the consequences. The documentation block includes the full ladder &mdash; D measured from every listed signal &mdash; because the reasonableness of a claimed awareness date is naturally tested against the public record that preceded it. The chart's notice strip plots that record as a cumulative step line: <strong>counts, not weights</strong> &mdash; each signal adds one step regardless of tier, because assigning relative evidentiary weight to a regulation versus a product deployment is an argument for counsel (and the accompanying article), not a datum this tool asserts. The chart notes the <em>epistemic</em> tier separately, in a caption beneath the strip &mdash; Shor's algorithm (1994) and the founding of post-quantum cryptography as a field (2006): the issue's coming-into-existence, which per the accompanying article's two-boundary framework precedes any duty and is deliberately not selectable as an anchor. Existence made the harm foreseeable; it did not start anyone's clock.</p>
+                <p><strong>Awareness anchors &amp; the notice gradient.</strong> The awareness date sets where D begins. The selector offers dated public signals &mdash; statutes and regulations in force, standards publications, intergovernmental statements, threat surveys, and industry deployments &mdash; each carried with its citation in the tool's data files. Which signal starts a particular organization's clock is a legal argument, not a computation: the tool takes the date you select (or your own documented date) and reports the consequences. The documentation block includes the full ladder &mdash; D measured from every listed signal &mdash; because the reasonableness of a claimed awareness date is naturally tested against the public record that preceded it. The chart's notice strip plots that record as a cumulative step line: <strong>counts, not weights</strong> &mdash; each signal adds one step regardless of tier, because assigning relative evidentiary weight to a regulation versus a product deployment is an argument for counsel (and the accompanying article), not a datum this tool asserts. The chart notes the <em>epistemic</em> tier separately, in a caption beneath the strip &mdash; Shor's algorithm (1994) and the founding of post-quantum cryptography as a field (2006): the issue's coming-into-existence, which per the accompanying article's two-boundary framework precedes any duty and is deliberately not selectable as an anchor. Existence made the harm foreseeable; it did not start anyone's clock. The full record, with citations and per-event anchor selection, is in the constructive-notice timeline beneath the D control; the duty-side logic &mdash; foreseeability &rarr; notice &rarr; duty &rarr; breach &mdash; is laid out in the &ldquo;From Foreseeability to Duty&rdquo; panel at the top of the page.</p>
                 <p><strong>Crossing date t*.</strong> The first calendar date at which the sliding window's mass reaches R, found by forward scan with bisection refinement on each interpretation curve. If the mass already exceeded R at the report's publication, the crossing is reported as "at or before publication" rather than extrapolated to dates predating the survey.</p>
                 <p><strong>Theoretical lineage.</strong> The window construction restates Mosca's Theorem &mdash; exposure when <code>x + y &gt; z</code> &mdash; in probabilistic form. Michele Mosca, <em>Cybersecurity in an Era with Quantum Computers: Will We Be Ready?</em>, 16 IEEE Security &amp; Privacy 38 (2018). The procrastination variable D adopts the augmentation introduced by Jaime G&oacute;mez Garc&iacute;a, Chair of the Europol Quantum Safe Financial Forum, within the FS-ISAC PQC Working Group's collaborative work &mdash; the <strong>Mosca-G&oacute;mez formulation</strong>, <code>x + y + D &gt; z</code> (D is the formulation's delay term, elsewhere rendered p<sub>delay</sub>). See FS-ISAC PQC Working Grp., <em>The Timeline for Post-Quantum Cryptographic Migration</em> (Nov. 2025); Jaime G&oacute;mez Garc&iacute;a, <em>Perspectives on the Transition to PQC in the Financial Sector</em>, PKI Consortium PQC Conference (Jan. 16, 2025).</p>
                 <p><strong>Benchmark sources for B and L presets.</strong> Burden: OMB/ONCD, <em>Report on Post-Quantum Cryptography</em> (July 2024) (~$7.1B for federal civilian systems, 2025&ndash;2035); sector program models of $50&ndash;300M+ for a single large operator. Loss: IBM, <em>Cost of a Data Breach Report 2025</em> (U.S. average $10.22M; healthcare and financial costliest); Anthem 2015 breach aggregate &asymp;$171M ($115M class settlement + $16M OCR + $39.5M multistate AGs); UnitedHealth/Change Healthcare attack cost estimate $3.09B; Citi Institute (Feb. 2026) (systemic damage of a quantum-enabled attack on a major U.S. bank: $2.0&ndash;3.3T). Preset values are deliberately conservative within these ranges and are illustrative, not firm-specific.</p>
@@ -1496,6 +1570,41 @@ function buildAwSlider() {
     }
 }
 
+/* ---------- Constructive-notice timeline (expandable record) ---------- */
+const TIER_CHIP = {
+    "epistemic": "existence", "statute-regulation": "regulation",
+    "standards": "standards", "intergovernmental": "intergov",
+    "survey": "survey", "industry": "industry"
+};
+function buildNoticeTimeline() {
+    const wrap = document.getElementById("noticeTimeline");
+    wrap.innerHTML = "";
+    AWARENESS_EVENTS
+        .map((ev, i) => ({ ev, i }))
+        .sort((a, b) => a.ev.date < b.ev.date ? -1 : a.ev.date > b.ev.date ? 1 : a.i - b.i)
+        .forEach(({ ev, i }) => {
+            const epi = ev.tier === "epistemic";
+            const row = document.createElement("div");
+            row.className = "nt-item" + (epi ? " epi" : "");
+            row.dataset.idx = String(i);
+            row.innerHTML =
+                `<span class="nt-when">${evWhen(ev)}</span>` +
+                `<span class="nt-chip ${ev.tier}">${TIER_CHIP[ev.tier] || ev.tier}</span>` +
+                `<span class="nt-label">${ev.label}</span>` +
+                (epi ? `<span class="nt-epi-note">existence &mdash; precedes duty; not a notice anchor</span>`
+                     : `<button class="nt-use" type="button">use as anchor</button>`) +
+                `<span class="nt-cite">${ev.citation}</span>`;
+            if (!epi) row.querySelector(".nt-use").onclick = () => setAwareness(ev.date);
+            wrap.appendChild(row);
+        });
+    updateTimelineSel();
+}
+function updateTimelineSel() {
+    const v = document.getElementById("awarenessEvent").value;
+    document.querySelectorAll(".nt-item").forEach(row =>
+        row.classList.toggle("sel", row.dataset.idx === v));
+}
+
 // Central setter: every control routes through here so slider, list, date
 // field, and anchor label can never drift apart.
 function setAwareness(dateStr, opts = {}) {
@@ -1510,6 +1619,7 @@ function setAwareness(dateStr, opts = {}) {
     document.getElementById("awAnchorLabel").textContent =
         ev ? evWhen(ev) + " — " + ev.label
            : fmtDate(state.awareness) + " (custom)";
+    updateTimelineSel();
     render();
 }
 
@@ -1553,6 +1663,7 @@ document.getElementById("commenceDate").addEventListener("change", e => {
 loadData().then(() => {
     buildAwarenessSelect();
     buildAwSlider();
+    buildNoticeTimeline();
     setAwareness(document.getElementById("awarenessDate").value);
     decodeHash();
     buildScenarioRow();
