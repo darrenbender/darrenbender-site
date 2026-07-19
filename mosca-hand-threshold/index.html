@@ -701,6 +701,26 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
             </div>
         </div>
 
+        <details class="method" id="targetPanel" style="margin-top:18px">
+            <summary>&#127919; Advanced: Target Profile &mdash; the targeting factor T</summary>
+            <div class="method-body">
+                <p>The survey band above is the <strong>capability</strong> probability: the chance a CRQC exists inside your window. The Hand probability is the chance of harm <em>to you</em>, which the accompanying article's &sect;III.E decomposes as P = P<sub>c</sub> &times; P<sub>h</sub> &times; P<sub>d</sub> &mdash; capability, harvest, decryption prioritization. This panel collapses the latter two into a single <strong>targeting factor T</strong>, so the threshold reads <span style="font-family:'JetBrains Mono',monospace">R &lt; T&middot;P(W)</span>. The two are collapsed deliberately: harvest and prioritization are not independent &mdash; no adversary warehouses ciphertext it never expects to read, so data worth harvesting is data worth decrypting. <strong>T = 1.00 is the documented upper bound and the default</strong>; the anchor positions below are illustrative pedagogy, not threat-intelligence estimates.</p>
+                <div class="variable-section" style="margin:14px 0 6px">
+                    <div class="variable-label">T = Targeting Factor <span class="value-display purple" id="tValue">T = 1.00 &mdash; Upper bound</span></div>
+                    <input type="range" id="tSlider" min="0.10" max="1.00" step="0.05" value="1.00" aria-label="Targeting factor T">
+                    <div class="aw-ticks" id="tTicks" aria-hidden="true"></div>
+                    <div class="range-ticks"><span>0.10</span><span>1.00</span></div>
+                </div>
+                <div id="tAnchorList" style="font-size:12px; color:var(--text-muted); line-height:1.7"></div>
+                <div id="tReadout" style="display:none; margin-top:10px; padding:10px 14px; border-radius:10px; background:rgba(139,92,246,0.06); border:1px solid rgba(139,92,246,0.25); font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--primary)"></div>
+                <div id="tRationaleWrap" style="display:none; margin-top:12px">
+                    <div class="variable-label" style="font-size:13.5px">Target-profile rationale <span style="font-weight:400; color:var(--text-light); font-size:11.5px">(sector profile, plausible adversaries, data value &mdash; recorded in the documentation block)</span></div>
+                    <textarea id="tRationale" style="width:100%; min-height:64px; resize:vertical; font-family:'DM Sans',sans-serif; font-size:13px; padding:10px 12px; border:1px solid var(--border-light); border-radius:8px; background:#f8fafc; color:var(--text-dark)" placeholder="Why is this organization's ciphertext less likely to be harvested or prioritized? Leaving this empty flags the documented analysis."></textarea>
+                </div>
+                <p style="margin-top:12px; font-size:12.5px"><strong>This factor cuts both ways.</strong> Defense counsel will argue your T is low; plaintiffs will answer that harvesting is cheap and indiscriminate, that no adversary warehouses ciphertext it never expects to read, and that prioritization climbs over your data's whole confidentiality horizon as decryption capability spreads and cheapens. Lowering T is an affirmative judgment &mdash; document it. (Scenario links carry T but not your rationale; the documentation block is the record.)</p>
+            </div>
+        </details>
+
         <div class="verdict" id="verdict"></div>
 
         <div class="action-row">
@@ -715,7 +735,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
         </div>
         <div class="enterprise-panel" id="lawPanel">
             <div class="ep-badge">Enterprise Feature</div>
-            <p><strong>Live legal &amp; regulatory monitoring</strong> &mdash; the Enterprise edition of this evaluator links each input to the current state of applicable law for your jurisdiction and sector: NYDFS Part 500, HIPAA Security Rule, GLBA Safeguards, SEC cyber disclosure, DORA, and state UDAP enforcement &mdash; plus new case law bearing on unmanifested-harm standing and the evolving standard of care. Your X (retention obligations) and L (penalty exposure) update as the law does.</p>
+            <p><strong>Live legal &amp; regulatory monitoring</strong> &mdash; the Enterprise edition of this evaluator links each input to the current state of applicable law for your jurisdiction and sector: NYDFS Part 500, HIPAA Security Rule, GLBA Safeguards, SEC cyber disclosure, DORA, and state UDAP enforcement &mdash; plus new case law bearing on unmanifested-harm standing and the evolving standard of care. Your X (retention obligations) and L (penalty exposure) update as the law does &mdash; and calibrated target-profile advisory replaces the educational edition's illustrative T anchors with sector- and adversary-specific analysis.</p>
             <p style="margin-top:8px">Inquire: <a href="mailto:advisory@proteqc.com?subject=Enterprise%20Legal%20Monitoring%20%E2%80%94%20Mosca%20Hand%20Threshold%20Evaluator">advisory@proteqc.com</a> &middot; <a href="https://ProteQC.com" target="_blank">ProteQC.com</a></p>
         </div>
 
@@ -771,7 +791,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
             <div style="margin-top:6px">Commercial licensing: <a href="mailto:licensing@ProteQC.com" style="color:var(--proteqc-teal)">licensing@ProteQC.com</a> &middot; <a href="https://ProteQC.com" target="_blank" style="color:var(--proteqc-teal)">ProteQC.com</a></div>
         </div>
         <div style="margin-top:14px">Developed by ProteQC Limited</div>
-        <div class="disclaimer">This tool is provided for educational and informational purposes only and does not constitute legal advice, professional consultation, or a guarantee of legal outcomes. Consult qualified legal counsel before making decisions based on this analysis; no attorney-client relationship is created by its use. Probability estimates derive from published expert surveys (Global Risk Institute / evolutionQ Quantum Threat Timeline Reports; historical Mosca 2015 estimates) and involve substantial uncertainty.</div>
+        <div class="disclaimer">This tool is provided for educational and informational purposes only and does not constitute legal advice, professional consultation, or a guarantee of legal outcomes. Consult qualified legal counsel before making decisions based on this analysis; no attorney-client relationship is created by its use. Probability estimates derive from published expert surveys (Global Risk Institute / evolutionQ Quantum Threat Timeline Reports; historical Mosca 2015 estimates) and involve substantial uncertainty. The anchor values on the targeting-factor slider are illustrative pedagogy, not threat-intelligence estimates; no representation is made about any organization's actual harvest or prioritization likelihood.</div>
     </footer>
 </div>
 
@@ -824,6 +844,9 @@ function applyScenario(key) {
         document.getElementById("lSlider").value = sc.l;
         document.getElementById("xSlider").value = sc.x;
         document.getElementById("ySlider").value = sc.y;
+        // Every educational-edition preset ships T = 1.00 (the upper bound);
+        // per-sector T calibration is enterprise advisory scope.
+        document.getElementById("tSlider").value = "1.00";
     }
     buildScenarioRow();
     render();
@@ -942,22 +965,26 @@ function compute() {
     const premOpt = mOpt - massAw(curves.opt);
     const premPess = mPess - massAw(curves.pess);
 
-    // Crossing: first calendar t' in [0, maxT] where sliding-window mass >= R
+    // Targeting factor T (advanced panel): R < T·mass compares identically as
+    // mass ≥ R/T, so the scan below runs against Reff. T is a probability
+    // multiplier, never a time; T = 1.0 is the documented upper bound and
+    // leaves every number identical to the pre-feature tool.
+    const T = +document.getElementById("tSlider").value;
+    const Reff = R / T;
+
+    // Crossing: first calendar t' in [0, maxT] where sliding-window mass ≥ Reff
     function solveCross(f) {
         const wm = t => Math.max(0, f(Math.min(t + X + Y, curves.maxT)) - f(t));
-        if (wm(0) >= R) return { atPub: true };
-        let prev = wm(0);
+        if (wm(0) >= Reff) return { atPub: true };
         for (let t = 0.05; t <= curves.maxT; t += 0.05) {
-            const cur = wm(t);
-            if (cur >= R) {
+            if (wm(t) >= Reff) {
                 let lo = t - 0.05, hi = t;
                 for (let i = 0; i < 40; i++) {
                     const mid = (lo + hi) / 2;
-                    (wm(mid) < R) ? lo = mid : hi = mid;
+                    (wm(mid) < Reff) ? lo = mid : hi = mid;
                 }
                 return { t: (lo + hi) / 2 };
             }
-            prev = cur;
         }
         return null;
     }
@@ -971,7 +998,9 @@ function compute() {
 
     return { now, sym, B, L, X, Y, D, R, rpt, pub, curves,
              eNow, eAw, start, a, b, windowClosed, beyond,
-             mOpt, mPess, premOpt, premPess, crossOpt, crossPess };
+             mOpt, mPess, premOpt, premPess, crossOpt, crossPess,
+             T, Reff, effOpt: T * mOpt, effPess: T * mPess,
+             effPremOpt: T * premOpt, effPremPess: T * premPess };
 }
 
 /* ---------- Render ---------- */
@@ -1024,31 +1053,42 @@ function render() {
     // Readouts (collapse band display when curves coincide, e.g. Mosca 2015)
     const fmtBand = (lo, hi, dp) =>
         Math.abs(hi - lo) < 0.05 ? hi.toFixed(dp) + "%" : lo.toFixed(dp) + "\u2013" + hi.toFixed(dp) + "%";
+    const attn = c.T < 1;   // attenuated posture: T below the upper bound
     document.getElementById("pwValue").textContent = fmtBand(c.mPess, c.mOpt, 0);
     document.getElementById("pwSub").textContent =
         (c.beyond ? "Right edge beyond survey horizon (clamped) \u00b7 " : "") +
-        (Math.abs(c.mOpt - c.mPess) < 0.05 ? "point estimate, " : "pessimistic\u2013optimistic, ") + c.rpt.label;
+        (Math.abs(c.mOpt - c.mPess) < 0.05 ? "point estimate, " : "pessimistic\u2013optimistic, ") + c.rpt.label +
+        (attn ? " \u00b7 effective " + fmtBand(c.effPess, c.effOpt, 0) + " at T = " + c.T.toFixed(2) : "");
     document.getElementById("rReadout").textContent = rStr + "%";
     const pStrPrem = v => (v >= 0 ? "+" : "") + v.toFixed(1);
     document.getElementById("premiumValue").textContent =
-        pStrPrem(c.premPess) + " to " + pStrPrem(c.premOpt) + " pts";
+        pStrPrem(c.effPremPess) + " to " + pStrPrem(c.effPremOpt) + " pts" + (attn ? " (T-scaled)" : "");
+
+    // Advanced panel readout + rationale reveal
+    document.getElementById("tValue").textContent = "T = " + c.T.toFixed(2) + " \u2014 " + tAnchorLabel(c.T);
+    document.getElementById("tReadout").style.display = attn ? "block" : "none";
+    if (attn) document.getElementById("tReadout").textContent =
+        "P(W) " + fmtBand(c.mPess, c.mOpt, 0) + " \u2192 effective " +
+        fmtBand(c.effPess, c.effOpt, 0) + " at T = " + c.T.toFixed(2);
+    document.getElementById("tRationaleWrap").style.display = attn ? "block" : "none";
 
     const tstarEl = document.getElementById("tstarValue");
     const tstarSub = document.getElementById("tstarSub");
+    const tstarAt = attn ? " at T = " + c.T.toFixed(2) : "";
     if (!c.crossOpt) {
         tstarEl.textContent = "Beyond horizon";
-        tstarSub.textContent = "Window mass never reaches R within the survey range";
+        tstarSub.textContent = "Window mass never reaches R" + (attn ? "/T" : "") + " within the survey range";
     } else {
         const fmt = ci => ci.atPub ? "at or before publication" : fmtMonthYear(ci.date);
         if (c.crossPess && (c.crossPess.atPub || c.crossPess.date < c.now)) {
             tstarEl.textContent = c.crossPess.atPub ? "\u2264 " + fmtMonthYear(c.pub) : fmtMonthYear(c.crossPess.date);
-            tstarSub.textContent = "Crossed on both interpretations (optimistic: " + fmt(c.crossOpt) + ")";
+            tstarSub.textContent = "Crossed on both interpretations (optimistic: " + fmt(c.crossOpt) + ")" + tstarAt;
         } else if (c.crossOpt.atPub || c.crossOpt.date < c.now) {
             tstarEl.textContent = c.crossOpt.atPub ? "\u2264 " + fmtMonthYear(c.pub) : fmtMonthYear(c.crossOpt.date);
-            tstarSub.textContent = "Crossed on optimistic read; pessimistic: " + (c.crossPess ? fmt(c.crossPess) : "beyond horizon");
+            tstarSub.textContent = "Crossed on optimistic read; pessimistic: " + (c.crossPess ? fmt(c.crossPess) : "beyond horizon") + tstarAt;
         } else {
             tstarEl.textContent = fmt(c.crossOpt);
-            tstarSub.textContent = "First crossing (optimistic); pessimistic: " + (c.crossPess ? fmt(c.crossPess) : "beyond horizon");
+            tstarSub.textContent = "First crossing (optimistic); pessimistic: " + (c.crossPess ? fmt(c.crossPess) : "beyond horizon") + tstarAt;
         }
     }
 
@@ -1058,38 +1098,46 @@ function render() {
 
 function renderVerdict(c, rStr) {
     const v = document.getElementById("verdict");
-    const pl = c.L * c.mPess / 100, pl2 = c.L * c.mOpt / 100;
-    const equiv = "Equivalent multiplicative form: P(W)\u00d7L = " +
+    const attn = c.T < 1;
+    const atT = attn ? " (at T = " + c.T.toFixed(2) + ")" : "";
+    // The upper-bound reading must always accompany an attenuated verdict:
+    // the user never sees an attenuated DEFENSIBLE without the T = 1.0 answer.
+    const upperWord = c.windowClosed ? "WINDOW CLOSED"
+        : c.R < c.mPess ? "THRESHOLD CROSSED" : c.R < c.mOpt ? "CONTESTED" : "DEFENSIBLE";
+    const upperLine = attn && !c.windowClosed
+        ? "<p style='font-size:12.5px;font-weight:600;color:var(--text-muted);border-top:1px solid rgba(0,0,0,0.08);padding-top:8px;margin-top:4px'>At the upper bound (T = 1.0): " + upperWord + ".</p>" : "";
+    const pl = c.L * c.effPess / 100, pl2 = c.L * c.effOpt / 100;
+    const equiv = "Equivalent multiplicative form: " + (attn ? "T\u00b7P(W)\u00d7L" : "P(W)\u00d7L") + " = " +
         fmtMoney(pl, c.sym) + "\u2013" + fmtMoney(pl2, c.sym) +
         " against B = " + fmtMoney(c.B, c.sym) + ".";
 
     if (c.windowClosed) {
         v.className = "verdict closed";
         v.innerHTML = "<h3>Window closed</h3>" +
-            "<p>Migration completed long enough ago that all data harvested under breakable encryption has exceeded its shelf life. No remaining HNDL exposure on these inputs.</p>";
+            "<p>Migration completed long enough ago that all data harvested under breakable encryption has exceeded its shelf life. No remaining HNDL exposure on these inputs at any targeting factor.</p>";
         return;
     }
 
-    if (c.R < c.mPess) {
+    if (c.R < c.effPess) {
         v.className = "verdict crossed";
-        v.innerHTML = "<h3>\u26a0\ufe0f Threshold crossed \u2014 on both interpretations</h3>" +
-            "<p>Your risk ratio <span class='mono'>R = " + rStr + "%</span> sits below even the <em>pessimistic</em> window mass <span class='mono'>P(W) = " + c.mPess.toFixed(0) + "%</span>. The probability that a CRQC arrives inside your vulnerability window exceeds your cost of prevention per dollar of exposure, no matter how conservatively the survey is interpreted." +
-            (!c.start ? " The window is still sliding: of today's mass, <span class='mono'>" + c.premPess.toFixed(1) + "</span> points accrued through procrastination alone." : "") +
+        v.innerHTML = "<h3>\u26a0\ufe0f Threshold crossed \u2014 on both interpretations" + atT + "</h3>" +
+            "<p>Your risk ratio <span class='mono'>R = " + rStr + "%</span> sits below even the <em>pessimistic</em> " + (attn ? "effective mass <span class='mono'>T\u00b7P(W) = " + c.effPess.toFixed(0) + "%</span>" : "window mass <span class='mono'>P(W) = " + c.mPess.toFixed(0) + "%</span>") + ". The probability that a CRQC arrives inside your vulnerability window" + (attn ? ", even attenuated by your documented target profile," : "") + " exceeds your cost of prevention per dollar of exposure, no matter how conservatively the survey is interpreted." +
+            (!c.start ? " The window is still sliding: of today's mass, <span class='mono'>" + c.effPremPess.toFixed(1) + "</span> points accrued through procrastination alone." : "") +
             " Whichever side of the line your final numbers fall, the protected position is the documented one: record this analysis and its date.</p>" +
-            "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>";
-    } else if (c.R < c.mOpt) {
+            "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>" + upperLine;
+    } else if (c.R < c.effOpt) {
         v.className = "verdict contested";
-        v.innerHTML = "<h3>\u2696\ufe0f Contested zone</h3>" +
-            "<p>Your ratio <span class='mono'>R = " + rStr + "%</span> falls inside the interpretation band <span class='mono'>" + c.mPess.toFixed(0) + "\u2013" + c.mOpt.toFixed(0) + "%</span>. Reasonable minds can differ \u2014 which is precisely why a documented, contemporaneous analysis is the defensible position. An organization that never ran the numbers cannot claim the burden exceeded expected loss." +
+        v.innerHTML = "<h3>\u2696\ufe0f Contested zone" + atT + "</h3>" +
+            "<p>Your ratio <span class='mono'>R = " + rStr + "%</span> falls inside the " + (attn ? "effective interpretation band <span class='mono'>T\u00b7P(W) = " + c.effPess.toFixed(0) + "\u2013" + c.effOpt.toFixed(0) + "%</span>" : "interpretation band <span class='mono'>" + c.mPess.toFixed(0) + "\u2013" + c.mOpt.toFixed(0) + "%</span>") + ". Reasonable minds can differ \u2014 which is precisely why a documented, contemporaneous analysis is the defensible position. An organization that never ran the numbers cannot claim the burden exceeded expected loss." +
             (c.crossPess && !c.crossPess.atPub && c.crossPess.date > c.now ? " On current trends the pessimistic mass overtakes your ratio <span class='mono'>" + fmtMonthYear(c.crossPess.date) + "</span>." : "") + "</p>" +
-            "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>";
+            "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>" + upperLine;
     } else {
         v.className = "verdict defensible";
-        v.innerHTML = "<h3>\u2705 Burden currently defensible \u2014 document it now</h3>" +
-            "<p>Your ratio <span class='mono'>R = " + rStr + "%</span> exceeds the optimistic window mass <span class='mono'>" + c.mOpt.toFixed(0) + "%</span>: prevention currently costs more per dollar of exposure than the expert-consensus probability of harm. This position erodes on a schedule \u2014 " +
+        v.innerHTML = "<h3>\u2705 Burden currently defensible \u2014 document it now" + atT + "</h3>" +
+            "<p>Your ratio <span class='mono'>R = " + rStr + "%</span> exceeds the optimistic " + (attn ? "effective mass <span class='mono'>T\u00b7P(W) = " + c.effOpt.toFixed(0) + "%</span>" : "window mass <span class='mono'>" + c.mOpt.toFixed(0) + "%</span>") + ": prevention currently costs more per dollar of exposure than the " + (attn ? "attenuated" : "expert-consensus") + " probability of harm. This position erodes on a schedule \u2014 " +
             (c.crossOpt ? "the sliding window reaches your ratio <span class='mono'>" + (c.crossOpt.atPub ? "at publication" : fmtMonthYear(c.crossOpt.date)) + "</span> on the optimistic read" + (c.crossPess ? ", " + (c.crossPess.atPub ? "at publication" : fmtMonthYear(c.crossPess.date)) + " on the pessimistic" : "") + "." : "no crossing occurs within the 30-year survey horizon.") +
             " The Business Judgment Rule protects the informed decision, not the undocumented one: record this analysis and its date.</p>" +
-            "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>";
+            "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>" + upperLine;
     }
 }
 
@@ -1178,23 +1226,26 @@ function renderChart(c) {
     }
 
     // ----- Exposure areas inside W (drawn only over the visible frame) -----
+    // Shaded against the effective threshold Reff = R/T: R < T·mass ⟺
+    // mass > R/T, so the published curves stay untouched and only the
+    // comparison line moves. At T = 1.0, Reff ≡ R (regression-identical).
     const wbVis = Math.min(wb, tVis);
-    if (!c.windowClosed && wbVis > wa && c.R < 100) {
-        // consensus exposure: R..pess where pess > R
-        const tP = firstAbove(c.curves.pess, c.R, wa, wbVis);
+    if (!c.windowClosed && wbVis > wa && c.Reff < 100) {
+        // consensus exposure: Reff..pess where pess > Reff
+        const tP = firstAbove(c.curves.pess, c.Reff, wa, wbVis);
         if (tP !== null) {
             const top = sample(c.curves.pess, tP, wbVis, 60);
-            const bottom = [[xPix(wbVis), yPix(c.R)], [xPix(tP), yPix(c.R)]];
+            const bottom = [[xPix(wbVis), yPix(c.Reff)], [xPix(tP), yPix(c.Reff)]];
             s += `<path d="${path(top)} L${bottom[0][0].toFixed(1)},${bottom[0][1].toFixed(1)} L${bottom[1][0].toFixed(1)},${bottom[1][1].toFixed(1)} Z" fill="#dc2626" opacity="0.32"/>`;
         }
-        // contested exposure: max(pess,R)..opt where opt > R
-        const tO = firstAbove(c.curves.opt, c.R, wa, wbVis);
+        // contested exposure: max(pess,Reff)..opt where opt > Reff
+        const tO = firstAbove(c.curves.opt, c.Reff, wa, wbVis);
         if (tO !== null) {
             const top = sample(c.curves.opt, tO, wbVis, 60);
             const botPts = [];
             for (let i = 60; i >= 0; i--) {
                 const t = tO + (i/60)*(wbVis-tO);
-                botPts.push([xPix(t), yPix(Math.max(c.curves.pess(Math.min(t,xSpan)), c.R))]);
+                botPts.push([xPix(t), yPix(Math.max(c.curves.pess(Math.min(t,xSpan)), c.Reff))]);
             }
             s += `<path d="${path(top)} ${botPts.map(p=>"L"+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ")} Z" fill="#f59e0b" opacity="0.30"/>`;
         }
@@ -1220,10 +1271,17 @@ function renderChart(c) {
         s += `<circle cx="${xPix(t)}" cy="${yPix(c.curves.pess(t))}" r="3.5" fill="#14B8A6"/>`;
     }
 
-    // R line
+    // R line; at T < 1 a second, lighter dashed line marks the effective
+    // threshold R/T the exposure shading answers to (curves stay untouched —
+    // no attenuated survey curve is ever drawn)
     const rY = yPix(Math.min(c.R, 100));
     s += `<line x1="${ML}" y1="${rY}" x2="${W-MR}" y2="${rY}" stroke="#7C3AED" stroke-width="2.5" stroke-dasharray="10 5"/>`;
     s += `<text x="${W-MR-4}" y="${rY-7}" text-anchor="end" font-size="12.5" font-weight="700" fill="#7C3AED" font-family="JetBrains Mono, monospace">R = ${c.R < 0.1 ? c.R.toFixed(3) : c.R.toFixed(1)}%</text>`;
+    if (c.T < 1 && c.Reff <= 100) {
+        const reY = yPix(c.Reff);
+        s += `<line x1="${ML}" y1="${reY}" x2="${W-MR}" y2="${reY}" stroke="#a78bfa" stroke-width="2" stroke-dasharray="4 5"/>`;
+        s += `<text x="${W-MR-4}" y="${reY-7}" text-anchor="end" font-size="11.5" font-weight="700" fill="#a78bfa" font-family="JetBrains Mono, monospace">R/T = ${c.Reff.toFixed(1)}% (T = ${c.T.toFixed(2)})</text>`;
+    }
 
     // ---- Notice-accrual strip: the public record as a cumulative step line
     // (counts, not weights — each signal adds one step regardless of tier;
@@ -1277,7 +1335,7 @@ function renderChart(c) {
     // (the plot's left edge), so the legend always sits inside the window
     // shading and needs the plate to stay readable.
     s += `<g font-family="DM Sans, sans-serif" font-size="11.5">
-        <rect x="${ML+2}" y="${MT+2}" width="266" height="106" rx="8" fill="white" opacity="0.88" stroke="#e2e8f0"/>
+        <rect x="${ML+2}" y="${MT+2}" width="266" height="${c.T < 1 ? 126 : 106}" rx="8" fill="white" opacity="0.88" stroke="#e2e8f0"/>
         <line x1="${ML+10}" y1="${MT+14}" x2="${ML+38}" y2="${MT+14}" stroke="#10B981" stroke-width="2.5"/>
         <text x="${ML+44}" y="${MT+18}" fill="#334155">optimistic interpretation</text>
         <line x1="${ML+10}" y1="${MT+34}" x2="${ML+38}" y2="${MT+34}" stroke="#14B8A6" stroke-width="2.5" stroke-dasharray="7 4"/>
@@ -1288,6 +1346,8 @@ function renderChart(c) {
         <text x="${ML+44}" y="${MT+78}" fill="#334155">exposure \u2014 both interpretations</text>
         <rect x="${ML+10}" y="${MT+88}" width="28" height="11" fill="#f59e0b" opacity="0.30"/>
         <text x="${ML+44}" y="${MT+98}" fill="#334155">exposure \u2014 contested (optimistic only)</text>
+        ${c.T < 1 ? `<line x1="${ML+10}" y1="${MT+114}" x2="${ML+38}" y2="${MT+114}" stroke="#a78bfa" stroke-width="2" stroke-dasharray="4 5"/>
+        <text x="${ML+44}" y="${MT+118}" fill="#334155">effective threshold R/T at T = ${c.T.toFixed(2)}</text>` : ""}
     </g>`;
 
     // ---- Timeline bracket below the axis: D (awareness \u2192 start), Y
@@ -1360,6 +1420,8 @@ function encodeHash() {
     });
     if (state.commenced && state.commenceDate)
         p.set("cm", document.getElementById("commenceDate").value);
+    const tv = document.getElementById("tSlider").value;
+    if (+tv < 1) p.set("t", tv); // T appended last, omitted at the 1.0 upper bound
     return "#" + p.toString();
 }
 function decodeHash() {
@@ -1388,6 +1450,11 @@ function decodeHash() {
             state.commenceDate = new Date(p.get("cm") + "T00:00:00");
         }
         if (p.get("sc") && SCENARIOS[p.get("sc")]) activeScenario = p.get("sc");
+        if (p.get("t")) { // absent in older links -> slider stays at 1.0
+            const tv = +p.get("t");
+            if (tv >= 0.1 && tv <= 1)
+                document.getElementById("tSlider").value = String(tv);
+        }
     } catch (e) { /* malformed hash: ignore */ }
 }
 
@@ -1396,17 +1463,24 @@ function generateDocument() {
     const c = compute();
     const rStr = c.R < 0.1 ? c.R.toFixed(3) : c.R.toFixed(1);
     const rightDate = new Date(c.pub.getTime() + c.b * MS_YEAR);
+    const attn = c.T < 1;
+    const effWord = attn ? "T*P(W)" : "P(W)";
     const verdictLine =
         c.windowClosed ? "WINDOW CLOSED - no remaining HNDL exposure on these inputs" :
-        c.R < c.mPess ? "THRESHOLD CROSSED - R below P(W) on both interpretations" :
-        c.R < c.mOpt ? "CONTESTED ZONE - R inside the interpretation band" :
-        "BURDEN CURRENTLY DEFENSIBLE - R above optimistic P(W); position erodes on a schedule";
+        c.R < c.effPess ? "THRESHOLD CROSSED - R below " + effWord + " on both interpretations" :
+        c.R < c.effOpt ? "CONTESTED ZONE - R inside the " + (attn ? "effective " : "") + "interpretation band" :
+        "BURDEN CURRENTLY DEFENSIBLE - R above optimistic " + effWord + "; position erodes on a schedule";
+    const upperVerdict =
+        c.windowClosed ? "WINDOW CLOSED" :
+        c.R < c.mPess ? "THRESHOLD CROSSED" :
+        c.R < c.mOpt ? "CONTESTED ZONE" : "BURDEN CURRENTLY DEFENSIBLE";
+    const rationale = (document.getElementById("tRationale").value || "").trim();
     const lines = [
         "MOSCA HAND THRESHOLD ANALYSIS - CONTEMPORANEOUS RECORD",
         "Generated: " + c.now.toISOString() + " (" + fmtDate(c.now) + ")",
         "Tool: ProteQC(R) Mosca Hand Threshold Evaluator, Educational Edition",
         "",
-        "FORMULA: R < P(W)   [B < P\u00d7L, Carroll Towing, in threshold form]",
+        "FORMULA: R < " + (attn ? "T*P(W)" : "P(W)") + "   [B < P\u00d7L, Carroll Towing, in threshold form]",
         "",
         "INPUTS",
         "  Scenario preset ......... " + SCENARIOS[activeScenario].label,
@@ -1417,6 +1491,16 @@ function generateDocument() {
         "  Awareness date .......... " + fmtDate(state.awareness),
         "  Migration commenced ..... " + (c.start ? fmtDate(c.start) : "NO - window right edge still sliding"),
         "  D (procrastination) ..... " + c.D.toFixed(2) + " years" + (c.start ? " (frozen at commencement)" : " (accruing)"),
+        "  T (targeting factor) .... " + c.T.toFixed(2) + " - " + tAnchorLabel(c.T) +
+            (attn ? "" : " (upper bound; harvest and prioritization assumed)"),
+        ...(attn ? [
+        "  Target-profile rationale " + (rationale
+            ? "" : "\u26a0 NO RATIONALE RECORDED - lowering T is an affirmative"),
+        ...(rationale
+            ? rationale.split("\n").map((l, i) => (i === 0 ? "    " : "    ") + l)
+            : ["    judgment; document the sector profile, plausible adversaries,",
+               "    and data value that support it"])
+        ] : []),
         "",
         "NOTICE LADDER - D if awareness ran from each public signal",
         "(constructive-notice gradient: the later the claimed awareness date,",
@@ -1435,14 +1519,25 @@ function generateDocument() {
         "",
         "RESULT",
         "  R = B/L ................. " + rStr + "%",
-        "  P(W) mass ............... " + c.mPess.toFixed(1) + "% (pessimistic) to " + c.mOpt.toFixed(1) + "% (optimistic)",
-        "  Procrastination premium . " + (c.premPess>=0?"+":"") + c.premPess.toFixed(1) + " to " + (c.premOpt>=0?"+":"") + c.premOpt.toFixed(1) + " pts",
-        "  Verdict ................. " + verdictLine,
+        "  P(W) mass (raw) ......... " + c.mPess.toFixed(1) + "% (pessimistic) to " + c.mOpt.toFixed(1) + "% (optimistic)",
+        ...(attn ? [
+        "  Effective T*P(W) ........ " + c.effPess.toFixed(1) + "% (pessimistic) to " + c.effOpt.toFixed(1) + "% (optimistic) at T = " + c.T.toFixed(2)
+        ] : []),
+        "  Procrastination premium . " + (c.effPremPess>=0?"+":"") + c.effPremPess.toFixed(1) + " to " + (c.effPremOpt>=0?"+":"") + c.effPremOpt.toFixed(1) + " pts" + (attn ? " (T-scaled)" : ""),
+        "  Verdict ................. " + verdictLine + (attn ? " (at T = " + c.T.toFixed(2) + ")" : ""),
+        ...(attn ? [
+        "  At the upper bound ...... T = 1.00: " + upperVerdict
+        ] : []),
         "",
         "Scenario link: " + location.origin + location.pathname + encodeHash(),
         "",
         "Methodology: window mass P(W) = P(right) - P(left) on the report's cumulative",
         "curve (Fritsch-Carlson monotone interpolation of Appendix A.4 anchors).",
+        ...(attn ? [
+        "The probability term is the capability probability P(W) attenuated by a",
+        "documented targeting factor T per the decomposition in Post-Quantum",
+        "Negligence sec. III.E (T collapses the harvest and prioritization factors)."
+        ] : []),
         "Mosca's Theorem (x+y>z) per Mosca, 16 IEEE Sec. & Priv. 38 (2018); procrastination",
         "variable per the Mosca-Gomez formulation (Jaime Gomez Garcia, Europol Quantum",
         "Safe Financial Forum / FS-ISAC PQC Working Group, 2025).",
@@ -1605,6 +1700,38 @@ function updateTimelineSel() {
         row.classList.toggle("sel", row.dataset.idx === v));
 }
 
+/* ---------- Targeting factor T (Advanced: Target Profile) ----------
+   T collapses the harvest and prioritization probabilities into one
+   multiplier on P(W). Anchor positions are illustrative pedagogy, not
+   threat-intelligence estimates. T is a probability multiplier, never
+   a time; 1.00 is the documented upper bound and the default. */
+const T_ANCHORS = [
+    { v: 1.00, name: "Upper bound", desc: "assume harvested and prioritized; the §III.C reading (default)" },
+    { v: 0.75, name: "High-value target", desc: "defense-industrial, critical infrastructure, systemically important financial, diplomatic/government" },
+    { v: 0.45, name: "Regulated-sector target", desc: "regional financial, healthcare, insurers, large professional services" },
+    { v: 0.20, name: "Low-profile target", desc: "limited adversary interest; short-lived or low-value ciphertext" }
+];
+function tAnchorLabel(t) {
+    let best = T_ANCHORS[0];
+    for (const a of T_ANCHORS)
+        if (Math.abs(a.v - t) < Math.abs(best.v - t)) best = a;
+    return best.name + (Math.abs(best.v - t) > 0.024 ? " (nearest anchor)" : "");
+}
+function buildTargetPanel() {
+    const ticks = document.getElementById("tTicks");
+    ticks.innerHTML = "";
+    for (const a of T_ANCHORS) {
+        const sp = document.createElement("span");
+        sp.style.left = ((a.v - 0.10) / 0.90 * 100) + "%";
+        sp.title = a.v.toFixed(2) + " — " + a.name;
+        ticks.appendChild(sp);
+    }
+    document.getElementById("tAnchorList").innerHTML = T_ANCHORS.map(a =>
+        `<div><span style="font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--proteqc-purple-dark)">${a.v.toFixed(2)}</span> — <strong>${a.name}</strong>: ${a.desc}</div>`).join("") +
+        `<div style="margin-top:4px;font-style:italic">Anchors are illustrative pedagogy, not calibrated values. Calibrated target-profile analysis is enterprise advisory scope.</div>`;
+}
+document.getElementById("tSlider").addEventListener("input", render);
+
 // Central setter: every control routes through here so slider, list, date
 // field, and anchor label can never drift apart.
 function setAwareness(dateStr, opts = {}) {
@@ -1664,6 +1791,7 @@ loadData().then(() => {
     buildAwarenessSelect();
     buildAwSlider();
     buildNoticeTimeline();
+    buildTargetPanel();
     setAwareness(document.getElementById("awarenessDate").value);
     decodeHash();
     buildScenarioRow();
