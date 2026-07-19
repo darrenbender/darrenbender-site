@@ -303,6 +303,17 @@ input[type="range"]::-moz-range-thumb {
 .enterprise-panel a { color: var(--proteqc-purple-dark); font-weight: 600; }
 
 .controls-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; align-items: center; }
+.aw-slider-wrap { margin-bottom: 10px; }
+.aw-ticks { position: relative; height: 7px; margin: 2px 10px 0; }
+.aw-ticks span {
+    position: absolute; width: 2px; height: 7px; border-radius: 1px;
+    background: #cbd5e1; transform: translateX(-50%);
+}
+.aw-ticks span.epi { background: transparent; border-left: 2px dotted #cbd5e1; }
+.aw-anchor-label {
+    color: var(--proteqc-purple-dark); font-weight: 600;
+    max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 select, input[type="date"] {
     font-family: 'DM Sans', sans-serif; font-size: 14px;
     padding: 8px 12px; border: 1px solid var(--border-light);
@@ -555,7 +566,12 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
 
         <div class="variable-section">
             <div class="variable-label">D = Cryptographic Procrastination <span class="value-display purple" id="dValue"></span></div>
-            <div class="variable-description">Elapsed time between awareness and commencement of migration. Anchor awareness to the public signal your organization's clock arguably runs from &mdash; the later the claimed date, the more of this record precedes it &mdash; or set your own documented date:</div>
+            <div class="variable-description">Elapsed time between awareness and commencement of migration. Slide along the public record &mdash; the thumb snaps to each notice event &mdash; or anchor precisely with the list and date field below. The later the claimed date, the more of this record precedes it:</div>
+            <div class="aw-slider-wrap">
+                <input type="range" id="awSlider" min="0" max="4217" step="1" value="3627" aria-label="Awareness date along the public notice record">
+                <div class="aw-ticks" id="awTicks" aria-hidden="true"></div>
+                <div class="range-ticks"><span>2015</span><span class="aw-anchor-label" id="awAnchorLabel"></span><span>today</span></div>
+            </div>
             <div class="controls-row">
                 <select id="awarenessEvent"></select>
                 <input type="date" id="awarenessDate" value="2024-12-06">
@@ -1266,11 +1282,7 @@ function decodeHash() {
         if (p.get("x")) document.getElementById("xSlider").value = p.get("x");
         if (p.get("y")) document.getElementById("ySlider").value = p.get("y");
         if (p.get("r") && QTTR_DATA[p.get("r")]) state.report = p.get("r");
-        if (p.get("aw")) {
-            document.getElementById("awarenessDate").value = p.get("aw");
-            state.awareness = new Date(p.get("aw") + "T00:00:00");
-            syncAwarenessSelect();
-        }
+        if (p.get("aw")) setAwareness(p.get("aw"));
         if (p.get("cm")) {
             state.commenced = true;
             document.getElementById("commenceCheck").checked = true;
@@ -1425,17 +1437,77 @@ function syncAwarenessSelect() {
     const i = AWARENESS_EVENTS.findIndex(e => e.date === cur && e.tier !== "epistemic");
     sel.value = i >= 0 ? String(i) : "custom";
 }
+
+/* ---------- Awareness anchor slider ----------
+   The slider rides the public notice record (2015 -> today) and snaps to
+   events. It sets the AWARENESS DATE only; D stays derived from it — the
+   evidentiary chain (dated anchor -> computed delay) is never bypassed. */
+const AW0 = new Date("2015-01-01T00:00:00");
+const DAY_MS = 86400000;
+const SNAP_DAYS = 60;
+const awDayOf = dateStr => Math.round((new Date(dateStr + "T00:00:00") - AW0) / DAY_MS);
+const noticeEvents = () => AWARENESS_EVENTS.filter(e => e.tier !== "epistemic");
+
+function nearestEvent(day) {
+    let best = null, bestGap = Infinity;
+    for (const ev of noticeEvents()) {
+        const gap = Math.abs(awDayOf(ev.date) - day);
+        if (gap < bestGap) { bestGap = gap; best = ev; }
+    }
+    return bestGap <= SNAP_DAYS ? best : null;
+}
+
+function buildAwSlider() {
+    const slider = document.getElementById("awSlider");
+    slider.max = String(Math.floor((new Date() - AW0) / DAY_MS));
+    const ticks = document.getElementById("awTicks");
+    ticks.innerHTML = "";
+    for (const ev of AWARENESS_EVENTS) {
+        const day = awDayOf(ev.date);
+        if (day < 0 || day > +slider.max) continue; // epistemic pre-2015 events lie off-track
+        const t = document.createElement("span");
+        if (ev.tier === "epistemic") t.className = "epi";
+        t.style.left = (day / +slider.max * 100) + "%";
+        t.title = evWhen(ev) + " — " + ev.label;
+        ticks.appendChild(t);
+    }
+}
+
+// Central setter: every control routes through here so slider, list, date
+// field, and anchor label can never drift apart.
+function setAwareness(dateStr, opts = {}) {
+    state.awareness = new Date(dateStr + "T00:00:00");
+    document.getElementById("awarenessDate").value = dateStr;
+    if (!opts.fromSlider) {
+        const slider = document.getElementById("awSlider");
+        slider.value = String(Math.max(0, Math.min(+slider.max, awDayOf(dateStr))));
+    }
+    syncAwarenessSelect();
+    const ev = AWARENESS_EVENTS[+document.getElementById("awarenessEvent").value] || null;
+    document.getElementById("awAnchorLabel").textContent =
+        ev ? evWhen(ev) + " — " + ev.label
+           : fmtDate(state.awareness) + " (custom)";
+    render();
+}
+
+document.getElementById("awSlider").addEventListener("input", e => {
+    // While dragging: magnetic in effect (the nearby event's date is applied)
+    // but the thumb is left alone so it doesn't fight the finger.
+    const day = +e.target.value;
+    const ev = nearestEvent(day);
+    setAwareness(ev ? ev.date : new Date(AW0.getTime() + day * DAY_MS).toISOString().slice(0, 10), { fromSlider: true });
+});
+document.getElementById("awSlider").addEventListener("change", e => {
+    // On release, settle the thumb onto the snapped position.
+    const ev = nearestEvent(+e.target.value);
+    if (ev) setAwareness(ev.date);
+});
 document.getElementById("awarenessEvent").addEventListener("change", e => {
     if (e.target.value === "custom") { document.getElementById("awarenessDate").focus(); return; }
-    const ev = AWARENESS_EVENTS[+e.target.value];
-    document.getElementById("awarenessDate").value = ev.date;
-    state.awareness = new Date(ev.date + "T00:00:00");
-    render();
+    setAwareness(AWARENESS_EVENTS[+e.target.value].date);
 });
 document.getElementById("awarenessDate").addEventListener("change", e => {
-    state.awareness = new Date(e.target.value + "T00:00:00");
-    syncAwarenessSelect();
-    render();
+    setAwareness(e.target.value);
 });
 
 document.getElementById("commenceCheck").addEventListener("change", e => {
@@ -1457,6 +1529,8 @@ document.getElementById("commenceDate").addEventListener("change", e => {
 
 loadData().then(() => {
     buildAwarenessSelect();
+    buildAwSlider();
+    setAwareness(document.getElementById("awarenessDate").value);
     decodeHash();
     buildScenarioRow();
     buildReportSelector();
