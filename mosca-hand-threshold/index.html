@@ -303,6 +303,17 @@ input[type="range"]::-moz-range-thumb {
 .enterprise-panel a { color: var(--proteqc-purple-dark); font-weight: 600; }
 
 .controls-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; align-items: center; }
+.aw-slider-wrap { margin-bottom: 10px; }
+.aw-ticks { position: relative; height: 7px; margin: 2px 10px 0; }
+.aw-ticks span {
+    position: absolute; width: 2px; height: 7px; border-radius: 1px;
+    background: #cbd5e1; transform: translateX(-50%);
+}
+.aw-ticks span.epi { background: transparent; border-left: 2px dotted #cbd5e1; }
+.aw-anchor-label {
+    color: var(--proteqc-purple-dark); font-weight: 600;
+    max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 select, input[type="date"] {
     font-family: 'DM Sans', sans-serif; font-size: 14px;
     padding: 8px 12px; border: 1px solid var(--border-light);
@@ -555,7 +566,12 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
 
         <div class="variable-section">
             <div class="variable-label">D = Cryptographic Procrastination <span class="value-display purple" id="dValue"></span></div>
-            <div class="variable-description">Elapsed time between awareness and commencement of migration. Anchor awareness to the public signal your organization's clock arguably runs from &mdash; the later the claimed date, the more of this record precedes it &mdash; or set your own documented date:</div>
+            <div class="variable-description">Elapsed time between awareness and commencement of migration. Slide along the public record &mdash; the thumb snaps to each notice event &mdash; or anchor precisely with the list and date field below. The later the claimed date, the more of this record precedes it:</div>
+            <div class="aw-slider-wrap">
+                <input type="range" id="awSlider" min="0" max="4217" step="1" value="3627" aria-label="Awareness date along the public notice record">
+                <div class="aw-ticks" id="awTicks" aria-hidden="true"></div>
+                <div class="range-ticks"><span>2015</span><span class="aw-anchor-label" id="awAnchorLabel"></span><span>today</span></div>
+            </div>
             <div class="controls-row">
                 <select id="awarenessEvent"></select>
                 <input type="date" id="awarenessDate" value="2024-12-06">
@@ -638,7 +654,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
                 <p><strong>Sliding vs. frozen.</strong> Until migration commences, the right edge is <code>today + X + Y</code> and W slides up the rising curve daily. Commencement freezes the right edge at <code>start + X + Y</code>; W then shrinks as the left edge (today) advances. The procrastination premium is <code>P(W today) &minus; P(W at awareness)</code>, both read on the current report's curve.</p>
                 <p><strong>Awareness anchors &amp; the notice gradient.</strong> The awareness date sets where D begins. The selector offers dated public signals &mdash; statutes and regulations in force, standards publications, intergovernmental statements, threat surveys, and industry deployments &mdash; each carried with its citation in the tool's data files. Which signal starts a particular organization's clock is a legal argument, not a computation: the tool takes the date you select (or your own documented date) and reports the consequences. The documentation block includes the full ladder &mdash; D measured from every listed signal &mdash; because the reasonableness of a claimed awareness date is naturally tested against the public record that preceded it. Two hollow markers chart the <em>epistemic</em> tier &mdash; Shor's algorithm (1994) and the founding of post-quantum cryptography as a field (2006): the issue's coming-into-existence, which per the accompanying article's two-boundary framework precedes any duty and is deliberately not selectable as an anchor. Existence made the harm foreseeable; it did not start anyone's clock.</p>
                 <p><strong>Crossing date t*.</strong> The first calendar date at which the sliding window's mass reaches R, found by forward scan with bisection refinement on each interpretation curve. If the mass already exceeded R at the report's publication, the crossing is reported as "at or before publication" rather than extrapolated to dates predating the survey.</p>
-                <p><strong>Theoretical lineage.</strong> The window construction restates Mosca's Theorem &mdash; exposure when <code>x + y &gt; z</code> &mdash; in probabilistic form. Michele Mosca, <em>Cybersecurity in an Era with Quantum Computers: Will We Be Ready?</em>, 16 IEEE Security &amp; Privacy 38 (2018). The procrastination variable D adopts the augmentation introduced by Jaime G&oacute;mez Garc&iacute;a, Chair of the Europol Quantum Safe Financial Forum, within the FS-ISAC PQC Working Group's collaborative work &mdash; the <strong>Mosca-G&oacute;mez formulation</strong>, <code>x + y + p<sub>delay</sub> &gt; z</code> (this tool's D corresponds to p<sub>delay</sub>). See FS-ISAC PQC Working Grp., <em>The Timeline for Post-Quantum Cryptographic Migration</em> (Nov. 2025); Jaime G&oacute;mez Garc&iacute;a, <em>Perspectives on the Transition to PQC in the Financial Sector</em>, PKI Consortium PQC Conference (Jan. 16, 2025).</p>
+                <p><strong>Theoretical lineage.</strong> The window construction restates Mosca's Theorem &mdash; exposure when <code>x + y &gt; z</code> &mdash; in probabilistic form. Michele Mosca, <em>Cybersecurity in an Era with Quantum Computers: Will We Be Ready?</em>, 16 IEEE Security &amp; Privacy 38 (2018). The procrastination variable D adopts the augmentation introduced by Jaime G&oacute;mez Garc&iacute;a, Chair of the Europol Quantum Safe Financial Forum, within the FS-ISAC PQC Working Group's collaborative work &mdash; the <strong>Mosca-G&oacute;mez formulation</strong>, <code>x + y + D &gt; z</code> (D is the formulation's delay term, elsewhere rendered p<sub>delay</sub>). See FS-ISAC PQC Working Grp., <em>The Timeline for Post-Quantum Cryptographic Migration</em> (Nov. 2025); Jaime G&oacute;mez Garc&iacute;a, <em>Perspectives on the Transition to PQC in the Financial Sector</em>, PKI Consortium PQC Conference (Jan. 16, 2025).</p>
                 <p><strong>Benchmark sources for B and L presets.</strong> Burden: OMB/ONCD, <em>Report on Post-Quantum Cryptography</em> (July 2024) (~$7.1B for federal civilian systems, 2025&ndash;2035); sector program models of $50&ndash;300M+ for a single large operator. Loss: IBM, <em>Cost of a Data Breach Report 2025</em> (U.S. average $10.22M; healthcare and financial costliest); Anthem 2015 breach aggregate &asymp;$171M ($115M class settlement + $16M OCR + $39.5M multistate AGs); UnitedHealth/Change Healthcare attack cost estimate $3.09B; Citi Institute (Feb. 2026) (systemic damage of a quantum-enabled attack on a major U.S. bank: $2.0&ndash;3.3T). Preset values are deliberately conservative within these ranges and are illustrative, not firm-specific.</p>
                 <p><strong>Threshold logic.</strong> Liability exposure indicated when <code>R &lt; P(W)</code>, where <code>R = B/L</code> &mdash; algebraically the Learned Hand condition <code>B &lt; P&times;L</code> for <code>L &gt; 0</code> (United States v. Carroll Towing Co., 159 F.2d 169 (2d Cir. 1947)), with P made organization-specific as the window mass.</p>
                 <p><strong>Severity taper (future refinement).</strong> Arrival early in W (before migration completes) is catastrophic; arrival late in W harms only not-yet-expired harvested data, decaying to zero at the right edge. This refines L, not P, and is reserved for the enterprise analysis.</p>
@@ -1213,7 +1229,7 @@ function renderChart(c) {
         // math clamps to this report's curve origin (methodology, \u00a77.1).
         const preSurvey = state.awareness < c.pub;
         s += `<text x="${xCal(Math.max(0, awCal))}" y="${yBr-9}" text-anchor="start" font-size="9.5" fill="#94a3b8" font-family="DM Sans, sans-serif">awareness${preSurvey ? " (pre-survey)" : ""}${!dLabelShown && c.D > 0.005 ? ` \u2014 D ${c.D.toFixed(1)}y${c.start ? " frozen" : " accruing"}` : ""}</text>`;
-        s += `<text x="${ML + pw/2}" y="${yCap}" text-anchor="middle" font-size="10.5" fill="#64748b" font-family="DM Sans, sans-serif">x + y + p_delay &gt; z (Mosca\u2013G\u00f3mez): from awareness, W's right edge sits D + Y + X out \u2014 the window closes only when the last harvested datum ages out</text>`;
+        s += `<text x="${ML + pw/2}" y="${yCap}" text-anchor="middle" font-size="10.5" fill="#64748b" font-family="DM Sans, sans-serif">x + y + D &gt; z (Mosca\u2013G\u00f3mez): from awareness, W's right edge sits D + Y + X out \u2014 the window closes only when the last harvested datum ages out</text>`;
     }
 
     svg.innerHTML = s;
@@ -1266,11 +1282,7 @@ function decodeHash() {
         if (p.get("x")) document.getElementById("xSlider").value = p.get("x");
         if (p.get("y")) document.getElementById("ySlider").value = p.get("y");
         if (p.get("r") && QTTR_DATA[p.get("r")]) state.report = p.get("r");
-        if (p.get("aw")) {
-            document.getElementById("awarenessDate").value = p.get("aw");
-            state.awareness = new Date(p.get("aw") + "T00:00:00");
-            syncAwarenessSelect();
-        }
+        if (p.get("aw")) setAwareness(p.get("aw"));
         if (p.get("cm")) {
             state.commenced = true;
             document.getElementById("commenceCheck").checked = true;
@@ -1425,17 +1437,77 @@ function syncAwarenessSelect() {
     const i = AWARENESS_EVENTS.findIndex(e => e.date === cur && e.tier !== "epistemic");
     sel.value = i >= 0 ? String(i) : "custom";
 }
+
+/* ---------- Awareness anchor slider ----------
+   The slider rides the public notice record (2015 -> today) and snaps to
+   events. It sets the AWARENESS DATE only; D stays derived from it — the
+   evidentiary chain (dated anchor -> computed delay) is never bypassed. */
+const AW0 = new Date("2015-01-01T00:00:00");
+const DAY_MS = 86400000;
+const SNAP_DAYS = 60;
+const awDayOf = dateStr => Math.round((new Date(dateStr + "T00:00:00") - AW0) / DAY_MS);
+const noticeEvents = () => AWARENESS_EVENTS.filter(e => e.tier !== "epistemic");
+
+function nearestEvent(day) {
+    let best = null, bestGap = Infinity;
+    for (const ev of noticeEvents()) {
+        const gap = Math.abs(awDayOf(ev.date) - day);
+        if (gap < bestGap) { bestGap = gap; best = ev; }
+    }
+    return bestGap <= SNAP_DAYS ? best : null;
+}
+
+function buildAwSlider() {
+    const slider = document.getElementById("awSlider");
+    slider.max = String(Math.floor((new Date() - AW0) / DAY_MS));
+    const ticks = document.getElementById("awTicks");
+    ticks.innerHTML = "";
+    for (const ev of AWARENESS_EVENTS) {
+        const day = awDayOf(ev.date);
+        if (day < 0 || day > +slider.max) continue; // epistemic pre-2015 events lie off-track
+        const t = document.createElement("span");
+        if (ev.tier === "epistemic") t.className = "epi";
+        t.style.left = (day / +slider.max * 100) + "%";
+        t.title = evWhen(ev) + " — " + ev.label;
+        ticks.appendChild(t);
+    }
+}
+
+// Central setter: every control routes through here so slider, list, date
+// field, and anchor label can never drift apart.
+function setAwareness(dateStr, opts = {}) {
+    state.awareness = new Date(dateStr + "T00:00:00");
+    document.getElementById("awarenessDate").value = dateStr;
+    if (!opts.fromSlider) {
+        const slider = document.getElementById("awSlider");
+        slider.value = String(Math.max(0, Math.min(+slider.max, awDayOf(dateStr))));
+    }
+    syncAwarenessSelect();
+    const ev = AWARENESS_EVENTS[+document.getElementById("awarenessEvent").value] || null;
+    document.getElementById("awAnchorLabel").textContent =
+        ev ? evWhen(ev) + " — " + ev.label
+           : fmtDate(state.awareness) + " (custom)";
+    render();
+}
+
+document.getElementById("awSlider").addEventListener("input", e => {
+    // While dragging: magnetic in effect (the nearby event's date is applied)
+    // but the thumb is left alone so it doesn't fight the finger.
+    const day = +e.target.value;
+    const ev = nearestEvent(day);
+    setAwareness(ev ? ev.date : new Date(AW0.getTime() + day * DAY_MS).toISOString().slice(0, 10), { fromSlider: true });
+});
+document.getElementById("awSlider").addEventListener("change", e => {
+    // On release, settle the thumb onto the snapped position.
+    const ev = nearestEvent(+e.target.value);
+    if (ev) setAwareness(ev.date);
+});
 document.getElementById("awarenessEvent").addEventListener("change", e => {
     if (e.target.value === "custom") { document.getElementById("awarenessDate").focus(); return; }
-    const ev = AWARENESS_EVENTS[+e.target.value];
-    document.getElementById("awarenessDate").value = ev.date;
-    state.awareness = new Date(ev.date + "T00:00:00");
-    render();
+    setAwareness(AWARENESS_EVENTS[+e.target.value].date);
 });
 document.getElementById("awarenessDate").addEventListener("change", e => {
-    state.awareness = new Date(e.target.value + "T00:00:00");
-    syncAwarenessSelect();
-    render();
+    setAwareness(e.target.value);
 });
 
 document.getElementById("commenceCheck").addEventListener("change", e => {
@@ -1457,6 +1529,8 @@ document.getElementById("commenceDate").addEventListener("change", e => {
 
 loadData().then(() => {
     buildAwarenessSelect();
+    buildAwSlider();
+    setAwareness(document.getElementById("awarenessDate").value);
     decodeHash();
     buildScenarioRow();
     buildReportSelector();
