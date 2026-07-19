@@ -517,13 +517,13 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
                 <div class="t-stage s1">
                     <div class="t-tag">1994 &middot; Foreseeable</div>
                     <div class="t-formula">harm perceivable</div>
-                    <div class="t-caption">Shor's proof makes the harm perceivable in principle &mdash; the article's <em>epistemic boundary</em>. &ldquo;The risk reasonably to be perceived defines the duty to be obeyed.&rdquo; <em>Palsgraf v. Long Island R.R.</em>, 248 N.Y. 339, 344 (1928). Perceivable &mdash; but not yet reasonably perceived outside cryptography.</div>
+                    <div class="t-caption">Shor's proof makes the harm perceivable in principle &mdash; the article's <em>epistemic boundary</em>. Foreseeability has never required certainty: a risk is foreseeable when a reasonable person would recognize it and take it into account. Restatement (Third) of Torts &sect; 3 (2010). Perceivable &mdash; but in 1994, recognized almost nowhere outside cryptography.</div>
                 </div>
                 <div class="t-arrow">&rarr;</div>
                 <div class="t-stage s2">
                     <div class="t-tag">The record accrues &middot; Chargeable</div>
                     <div class="t-formula">notice accumulates</div>
-                    <div class="t-caption">Standards, statutes, surveys, and deployments pile up &mdash; the chart's notice strip. Constructive notice asks what a reasonable organization <strong>should have known</strong>, whether or not it looked.</div>
+                    <div class="t-caption">Standards, statutes, surveys, and deployments pile up &mdash; the chart's notice strip. Each institutional action tightens the foreseeability determination (the article's <em>ratchet</em>), until the question a court asks is no longer &ldquo;could you have known?&rdquo; but &ldquo;how could you not have known?&rdquo;</div>
                 </div>
                 <div class="t-arrow">&rarr;</div>
                 <div class="t-stage s3">
@@ -1507,9 +1507,13 @@ const TIER_LABELS = {
     "survey": "Threat surveys",
     "industry": "Industry signals"
 };
-// Big-picture events carry granularity "year": dated Jan 1, shown as the year
-const evWhen = ev => ev.granularity === "year"
-    ? ev.date.slice(0, 4) : fmtDate(new Date(ev.date + "T00:00:00"));
+// Big-picture events carry granularity "year" (dated Jan 1, shown as the
+// year) or "month" (dated the 1st, shown as "Mar 2025")
+const evWhen = ev =>
+    ev.granularity === "year" ? ev.date.slice(0, 4)
+  : ev.granularity === "month" ? new Date(ev.date + "T00:00:00")
+        .toLocaleDateString("en-US", { year: "numeric", month: "short" })
+  : fmtDate(new Date(ev.date + "T00:00:00"));
 function buildAwarenessSelect() {
     const sel = document.getElementById("awarenessEvent");
     sel.innerHTML = '<option value="custom">Custom date…</option>';
