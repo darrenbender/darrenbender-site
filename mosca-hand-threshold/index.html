@@ -601,8 +601,8 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
 
         <div class="report-selector" id="reportSelector"></div>
 
-        <div class="chart-wrap"><svg id="chart" viewBox="0 0 920 580" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QTTR band with vulnerability window, risk ratio line, exposure area, and a D/Y/X timeline bracket from awareness to window close"></svg></div>
-        <div class="chart-footnote">Cumulative probability of a CRQC (RSA-2048 in &lt;24h) by calendar date, monotone-interpolated between the report's five survey anchors. The time axis is fixed at 2015&ndash;2045 across all reports, so each survey's curve plots at its true calendar position; survey years beyond 2045 lie off-frame, and values beyond the 30-year survey horizon are clamped. Dots on the axis mark the public awareness signals (hover for details); the selected anchor is highlighted.</div>
+        <div class="chart-wrap"><svg id="chart" viewBox="0 0 920 626" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QTTR band with vulnerability window, risk ratio line, exposure area, a cumulative constructive-notice strip, and a D/Y/X timeline bracket from awareness to window close"></svg></div>
+        <div class="chart-footnote">Cumulative probability of a CRQC (RSA-2048 in &lt;24h) by calendar date, monotone-interpolated between the report's five survey anchors. The time axis is fixed at 2015&ndash;2045 across all reports, so each survey's curve plots at its true calendar position; survey years beyond 2045 lie off-frame, and values beyond the 30-year survey horizon are clamped. The strip below the axis plots the cumulative public notice record as a step line &mdash; counts, not weights &mdash; with a dot per signal (hover for details) and the selected anchor highlighted.</div>
 
         <div class="readout-grid">
             <div class="readout-cell">
@@ -652,7 +652,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
                 <p><strong>Interpolation.</strong> Monotone cubic (Fritsch&ndash;Carlson) through anchors at 0, 5, 10, 15, 20, 30 years from report publication, with <code>P(0) = 0</code>. Values beyond 30 years are clamped at the 30-year anchor and flagged.</p>
                 <p><strong>The window.</strong> <code>W = [today, start + X + Y]</code>. Left edge: a CRQC arriving today decrypts harvested data still within shelf life. Right edge: the last datum harvested before migration completes remains sensitive for X further years. <code>P(W) = P(right) &minus; P(left)</code> &mdash; the unconditional mass of Z inside W. (A conditional variant renormalizing on no-CRQC-today, <code>P(W)/(1 &minus; P(today))</code>, is more aggressive; the unconditional form is used here as the conservative default.) In the accompanying article's terms, W is the organization's own remaining slice of the Shor&ndash;Q-Day window: the global interval, open since Shor's 1994 proof and closing at Q-Day, within which harm is foreseeable but not yet manifest.</p>
                 <p><strong>Sliding vs. frozen.</strong> Until migration commences, the right edge is <code>today + X + Y</code> and W slides up the rising curve daily. Commencement freezes the right edge at <code>start + X + Y</code>; W then shrinks as the left edge (today) advances. The procrastination premium is <code>P(W today) &minus; P(W at awareness)</code>, both read on the current report's curve.</p>
-                <p><strong>Awareness anchors &amp; the notice gradient.</strong> The awareness date sets where D begins. The selector offers dated public signals &mdash; statutes and regulations in force, standards publications, intergovernmental statements, threat surveys, and industry deployments &mdash; each carried with its citation in the tool's data files. Which signal starts a particular organization's clock is a legal argument, not a computation: the tool takes the date you select (or your own documented date) and reports the consequences. The documentation block includes the full ladder &mdash; D measured from every listed signal &mdash; because the reasonableness of a claimed awareness date is naturally tested against the public record that preceded it. Two hollow markers chart the <em>epistemic</em> tier &mdash; Shor's algorithm (1994) and the founding of post-quantum cryptography as a field (2006): the issue's coming-into-existence, which per the accompanying article's two-boundary framework precedes any duty and is deliberately not selectable as an anchor. Existence made the harm foreseeable; it did not start anyone's clock.</p>
+                <p><strong>Awareness anchors &amp; the notice gradient.</strong> The awareness date sets where D begins. The selector offers dated public signals &mdash; statutes and regulations in force, standards publications, intergovernmental statements, threat surveys, and industry deployments &mdash; each carried with its citation in the tool's data files. Which signal starts a particular organization's clock is a legal argument, not a computation: the tool takes the date you select (or your own documented date) and reports the consequences. The documentation block includes the full ladder &mdash; D measured from every listed signal &mdash; because the reasonableness of a claimed awareness date is naturally tested against the public record that preceded it. The chart's notice strip plots that record as a cumulative step line: <strong>counts, not weights</strong> &mdash; each signal adds one step regardless of tier, because assigning relative evidentiary weight to a regulation versus a product deployment is an argument for counsel (and the accompanying article), not a datum this tool asserts. The chart notes the <em>epistemic</em> tier separately, in a caption beneath the strip &mdash; Shor's algorithm (1994) and the founding of post-quantum cryptography as a field (2006): the issue's coming-into-existence, which per the accompanying article's two-boundary framework precedes any duty and is deliberately not selectable as an anchor. Existence made the harm foreseeable; it did not start anyone's clock.</p>
                 <p><strong>Crossing date t*.</strong> The first calendar date at which the sliding window's mass reaches R, found by forward scan with bisection refinement on each interpretation curve. If the mass already exceeded R at the report's publication, the crossing is reported as "at or before publication" rather than extrapolated to dates predating the survey.</p>
                 <p><strong>Theoretical lineage.</strong> The window construction restates Mosca's Theorem &mdash; exposure when <code>x + y &gt; z</code> &mdash; in probabilistic form. Michele Mosca, <em>Cybersecurity in an Era with Quantum Computers: Will We Be Ready?</em>, 16 IEEE Security &amp; Privacy 38 (2018). The procrastination variable D adopts the augmentation introduced by Jaime G&oacute;mez Garc&iacute;a, Chair of the Europol Quantum Safe Financial Forum, within the FS-ISAC PQC Working Group's collaborative work &mdash; the <strong>Mosca-G&oacute;mez formulation</strong>, <code>x + y + D &gt; z</code> (D is the formulation's delay term, elsewhere rendered p<sub>delay</sub>). See FS-ISAC PQC Working Grp., <em>The Timeline for Post-Quantum Cryptographic Migration</em> (Nov. 2025); Jaime G&oacute;mez Garc&iacute;a, <em>Perspectives on the Transition to PQC in the Financial Sector</em>, PKI Consortium PQC Conference (Jan. 16, 2025).</p>
                 <p><strong>Benchmark sources for B and L presets.</strong> Burden: OMB/ONCD, <em>Report on Post-Quantum Cryptography</em> (July 2024) (~$7.1B for federal civilian systems, 2025&ndash;2035); sector program models of $50&ndash;300M+ for a single large operator. Loss: IBM, <em>Cost of a Data Breach Report 2025</em> (U.S. average $10.22M; healthcare and financial costliest); Anthem 2015 breach aggregate &asymp;$171M ($115M class settlement + $16M OCR + $39.5M multistate AGs); UnitedHealth/Change Healthcare attack cost estimate $3.09B; Citi Institute (Feb. 2026) (systemic damage of a quantum-enabled attack on a major U.S. bank: $2.0&ndash;3.3T). Preset values are deliberately conservative within these ranges and are illustrative, not firm-specific.</p>
@@ -1024,7 +1024,9 @@ function renderChart(c) {
     const svg = document.getElementById("chart");
     // MB grew 46 -> 126 with H 500 -> 580: the plot area is pixel-identical,
     // and the extra 80px below the axis hosts the D/Y/X timeline bracket.
-    const W = 920, H = 580, ML = 62, MR = 24, MT = 30, MB = 126;
+    // MB grew 126 -> 172 with H 580 -> 626: the plot area stays pixel-identical;
+    // the added 46px hosts the notice-accrual strip between axis and bracket.
+    const W = 920, H = 626, ML = 62, MR = 24, MT = 30, MB = 172;
     const pw = W - ML - MR, ph = H - MT - MB;
     // Static calendar frame, 2015 (Mosca's first predictions) to 2045: every
     // report's curve plots at its true calendar position, so switching reports
@@ -1044,6 +1046,10 @@ function renderChart(c) {
       <linearGradient id="bandGrad" x1="0" y1="0" x2="1" y2="0">
         <stop offset="0%" stop-color="#14B8A6" stop-opacity="0.14"/>
         <stop offset="100%" stop-color="#10B981" stop-opacity="0.24"/>
+      </linearGradient>
+      <linearGradient id="noticeGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.05"/>
+        <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.22"/>
       </linearGradient>
     </defs>`;
 
@@ -1145,28 +1151,45 @@ function renderChart(c) {
     s += `<line x1="${ML}" y1="${rY}" x2="${W-MR}" y2="${rY}" stroke="#7C3AED" stroke-width="2.5" stroke-dasharray="10 5"/>`;
     s += `<text x="${W-MR-4}" y="${rY-7}" text-anchor="end" font-size="12.5" font-weight="700" fill="#7C3AED" font-family="JetBrains Mono, monospace">R = ${c.R < 0.1 ? c.R.toFixed(3) : c.R.toFixed(1)}%</text>`;
 
-    // Awareness-event markers on the axis line: the public notice record at
-    // its true calendar positions; the selected anchor is highlighted, and
-    // same-date events stack vertically — the ramp-up made visible.
-    // Epistemic-tier events pre-dating the frame collapse into a left-edge
-    // caption: the issue is older than any notice anchor.
+    // ---- Notice-accrual strip: the public record as a cumulative step line
+    // (counts, not weights — each signal adds one step regardless of tier;
+    // relative weighting is the article's argument, not this tool's datum).
+    // Same-date events share one riser, so the 2026 surge reads as a cliff.
+    // Epistemic-tier events are excluded by construction: existence is not
+    // notice; those predating the frame collapse into the caption below.
     const selDate = document.getElementById("awarenessDate").value;
-    const preFrame = [];
-    let stackX = -1, stackN = 0;
-    for (const ev of AWARENESS_EVENTS) {
-        const evCal = (new Date(ev.date + "T00:00:00") - CAL0) / MS_YEAR;
-        if (evCal < 0) { if (ev.tier === "epistemic") preFrame.push(ev); continue; }
-        if (evCal > CAL_SPAN) continue;
-        const x = xCal(evCal);
-        stackN = Math.abs(x - stackX) < 4 ? stackN + 1 : 0;
-        stackX = x;
-        const cy = H - MB - stackN * 9;
-        const epi = ev.tier === "epistemic";
-        const selEv = !epi && ev.date === selDate;
-        s += `<circle cx="${x}" cy="${cy}" r="${selEv ? 4.5 : 3}" fill="${epi ? "none" : selEv ? "#7C3AED" : "#cbd5e1"}" stroke="${epi ? "#94a3b8" : "white"}" stroke-width="1"><title>${evWhen(ev)} — ${ev.label}</title></circle>`;
+    const stripTop = 480, stripBot = 518;
+    const todayCal = (c.now - CAL0) / MS_YEAR;
+    const preFrame = AWARENESS_EVENTS.filter(ev =>
+        ev.tier === "epistemic" && (new Date(ev.date + "T00:00:00") - CAL0) < 0);
+    const stripEvs = noticeEvents()
+        .map(ev => ({ ev, cal: (new Date(ev.date + "T00:00:00") - CAL0) / MS_YEAR }))
+        .filter(e => e.cal >= 0 && e.cal <= todayCal)
+        .sort((a, b) => a.cal - b.cal);
+    const nEv = stripEvs.length;
+    if (nEv) {
+        const yCnt = k => stripBot - (k / nEv) * (stripBot - stripTop - 4);
+        let dStep = `M${ML},${stripBot}`;
+        const dots = [];
+        stripEvs.forEach((e, i) => {
+            const x = xCal(e.cal);
+            dStep += ` L${x.toFixed(1)},${yCnt(i).toFixed(1)} L${x.toFixed(1)},${yCnt(i + 1).toFixed(1)}`;
+            dots.push({ x, y: yCnt(i + 1), ev: e.ev });
+        });
+        const xToday = xCal(todayCal);
+        dStep += ` L${xToday.toFixed(1)},${yCnt(nEv).toFixed(1)}`;
+        s += `<line x1="${ML}" y1="${stripBot}" x2="${W-MR}" y2="${stripBot}" stroke="#e2e8f0" stroke-width="1"/>`;
+        s += `<path d="${dStep} L${xToday.toFixed(1)},${stripBot} L${ML},${stripBot} Z" fill="url(#noticeGrad)"/>`;
+        s += `<path d="${dStep}" fill="none" stroke="#7C3AED" stroke-width="1.8"/>`;
+        s += `<text x="${ML+4}" y="${stripTop+3}" text-anchor="start" font-size="9.5" fill="#94a3b8" font-family="DM Sans, sans-serif">constructive notice — cumulative public record (counts, not weights)</text>`;
+        s += `<text x="${xToday+7}" y="${yCnt(nEv)+3.5}" text-anchor="start" font-size="10" font-weight="600" fill="#7C3AED" font-family="JetBrains Mono, monospace">${nEv} signals</text>`;
+        for (const d of dots) {
+            const selEv = d.ev.date === selDate;
+            s += `<circle cx="${d.x.toFixed(1)}" cy="${d.y.toFixed(1)}" r="${selEv ? 4.5 : 2.8}" fill="${selEv ? "#7C3AED" : "white"}" stroke="#7C3AED" stroke-width="1.4"><title>${evWhen(d.ev)} — ${d.ev.label}</title></circle>`;
+        }
     }
     if (preFrame.length) {
-        s += `<text x="${ML}" y="556" text-anchor="start" font-size="9.5" fill="#94a3b8" font-family="DM Sans, sans-serif">◂ ${preFrame.map(ev => evWhen(ev) + " " + ev.label).join(" · ")} — the issue predates the frame; existence is not notice</text>`;
+        s += `<text x="${ML}" y="602" text-anchor="start" font-size="9.5" fill="#94a3b8" font-family="DM Sans, sans-serif">◂ ${preFrame.map(ev => evWhen(ev) + " " + ev.label).join(" · ")} — the issue predates the frame; existence is foreseeability in principle, not chargeable notice</text>`;
     }
 
     // Ghost-window label, on a backing plate: painted after the curves and
@@ -1209,7 +1232,7 @@ function renderChart(c) {
             { c0: startCal + c.Y, c1: startCal + c.Y + c.X, letter: "X", years: c.X,
               desc: "harvested data ages out", color: "#10B981" }
         ];
-        const yBr = 496, yLab = 514, yCap = 538;
+        const yBr = 542, yLab = 560, yCap = 584;
         let dLabelShown = false;
         for (const sg of segs) {
             const x0 = xCal(sg.c0), x1 = xCal(sg.c1), wSeg = x1 - x0;
