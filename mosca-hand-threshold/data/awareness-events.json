@@ -1,47 +1,151 @@
 {
-  "comment": "Public awareness signals for the constructive-notice gradient: candidate dates from which an organization's awareness clock could be argued to run. Each entry needs date (ISO), tier, label, and citation; granularity 'year' means the event is dated big-picture to Jan 1 and displayed as the year only. Adding an event is a data commit — include the citation and keep labels short. Tier order in the UI: statute-regulation, standards, intergovernmental, survey, industry. The EPISTEMIC tier (per Darren's ruling of 2026-07-18, modifying guardrail B-1) marks the issue's coming-into-existence — Shor's algorithm, the founding of the PQC field — and is DISPLAY-ONLY: never selectable as an awareness anchor, never in the notice ladder; existence precedes duty (manuscript Part II.A). The Mosca 2015/2018 scholarship question remains open pending ruling. Events dated 2026 carry citations marked 'full citation pending' — supplied by Darren, to be completed by data commit.",
+  "comment": "Public awareness signals for the constructive-notice gradient: candidate dates from which an organization's awareness clock could be argued to run. Each entry needs date (ISO), tier, label, and citation; granularity 'year' means the event is dated big-picture to Jan 1 and displayed as the year only; 'month' means dated to the 1st and displayed as month + year. Adding an event is a data commit — include the citation and keep labels short. Tier order in the UI: statute-regulation, standards, intergovernmental, survey, industry. The EPISTEMIC tier (per Darren's ruling of 2026-07-18, modifying guardrail B-1) marks the issue's coming-into-existence — Shor's algorithm, the founding of the PQC field — and is DISPLAY-ONLY: never selectable as an awareness anchor, never in the notice ladder; existence precedes duty (manuscript Part II.A). The Mosca 2015/2018 scholarship question remains open pending ruling. Events dated 2026 carry citations marked 'full citation pending' — supplied by Darren, to be completed by data commit.",
   "events": [
-    { "date": "1994-01-01", "tier": "epistemic", "granularity": "year", "label": "Shor's algorithm",
-      "citation": "Peter W. Shor, Algorithms for Quantum Computation: Discrete Logarithms and Factoring, Proc. 35th Ann. Symp. on Foundations of Computer Science 124 (1994)" },
-    { "date": "2006-01-01", "tier": "epistemic", "granularity": "year", "label": "Post-quantum cryptography emerges as a field",
-      "citation": "PQCrypto 2006: First International Workshop on Post-Quantum Cryptography (Leuven, May 2006); term attributed to D.J. Bernstein" },
-    { "date": "2016-12-20", "tier": "standards", "label": "NIST opens PQC standardization",
-      "citation": "NIST, Announcing Request for Nominations for Public-Key Post-Quantum Cryptographic Algorithms, 81 Fed. Reg. 92787 (Dec. 20, 2016)" },
-    { "date": "2022-09-07", "tier": "statute-regulation", "label": "NSA CNSA 2.0 advisory",
-      "citation": "NSA, Commercial National Security Algorithm Suite 2.0 (Sept. 7, 2022)" },
-    { "date": "2022-11-18", "tier": "statute-regulation", "label": "OMB M-23-02 migration memo",
-      "citation": "OMB, Memorandum M-23-02, Migrating to Post-Quantum Cryptography (Nov. 18, 2022)" },
-    { "date": "2022-12-21", "tier": "statute-regulation", "label": "Quantum Computing Cybersecurity Preparedness Act",
-      "citation": "Pub. L. No. 117-260, 136 Stat. 2389 (2022)" },
-    { "date": "2023-08-15", "tier": "industry", "label": "Chrome ships hybrid post-quantum key agreement",
-      "citation": "Google, Protecting Chrome Traffic with Hybrid Kyber KEM, Chromium Blog (Aug. 2023; Chrome 116)" },
-    { "date": "2024-02-21", "tier": "industry", "label": "Apple iMessage PQ3 protocol",
-      "citation": "Apple Security Engineering, iMessage with PQ3 (Feb. 21, 2024)" },
-    { "date": "2024-06-07", "tier": "intergovernmental", "label": "UN proclaims Int'l Year of Quantum 2025",
-      "citation": "G.A. Res. 78/287 (June 7, 2024)" },
-    { "date": "2024-08-13", "tier": "standards", "label": "NIST PQC standards final (FIPS 203/204/205)",
-      "citation": "NIST, FIPS 203, 204, 205 (Aug. 13, 2024)" },
-    { "date": "2024-09-25", "tier": "intergovernmental", "label": "G7 Cyber Expert Group quantum statement",
-      "citation": "G7 CEG, Planning for the Opportunities and Risks of Quantum Computing (Sept. 25, 2024)" },
-    { "date": "2024-10-17", "tier": "statute-regulation", "label": "NIS2 transposition deadline",
-      "citation": "Directive (EU) 2022/2555, art. 41 (transposition due Oct. 17, 2024)" },
-    { "date": "2024-12-06", "tier": "survey", "label": "QTTR 2024 published",
-      "citation": "GRI/evolutionQ, Quantum Threat Timeline Report 2024 (Dec. 6, 2024)" },
-    { "date": "2025-01-17", "tier": "statute-regulation", "label": "DORA applies",
-      "citation": "Regulation (EU) 2022/2554, art. 64 (applies from Jan. 17, 2025)" },
-    { "date": "2025-01-01", "tier": "intergovernmental", "granularity": "year", "label": "Europol QSFF call to action",
-      "citation": "Europol Quantum Safe Financial Forum, Quantum Safe Financial Forum: A Call to Action (Feb. 2025)" },
-    { "date": "2026-01-01", "tier": "intergovernmental", "granularity": "year", "label": "Europol QSFF report",
-      "citation": "Europol Quantum Safe Financial Forum report (2026) (full citation pending)" },
-    { "date": "2026-01-01", "tier": "intergovernmental", "granularity": "year", "label": "G7 Cyber Expert Group statement",
-      "citation": "G7 CEG statement (2026) (full citation pending)" },
-    { "date": "2026-01-01", "tier": "intergovernmental", "granularity": "year", "label": "Quantum security on the Davos agenda",
-      "citation": "World Economic Forum, Davos (2026) (full citation pending)" },
-    { "date": "2026-01-01", "tier": "statute-regulation", "granularity": "year", "label": "U.S. executive order on quantum",
-      "citation": "Exec. Order (2026) (full citation pending)" },
-    { "date": "2026-01-01", "tier": "industry", "granularity": "year", "label": "European bank CEOs' joint letter",
-      "citation": "Joint letter of European bank chief executives (2026) (full citation pending)" },
-    { "date": "2026-03-09", "tier": "survey", "label": "QTTR (Mar 2026) published",
-      "citation": "GRI/evolutionQ, Quantum Threat Timeline Report (Mar. 9, 2026)" }
+    {
+      "date": "1994-01-01",
+      "tier": "epistemic",
+      "granularity": "year",
+      "label": "Shor's algorithm",
+      "citation": "Peter W. Shor, Algorithms for Quantum Computation: Discrete Logarithms and Factoring, Proc. 35th Ann. Symp. on Foundations of Computer Science 124 (1994)"
+    },
+    {
+      "date": "2006-01-01",
+      "tier": "epistemic",
+      "granularity": "year",
+      "label": "Post-quantum cryptography emerges as a field",
+      "citation": "PQCrypto 2006: First International Workshop on Post-Quantum Cryptography (Leuven, May 2006); term attributed to D.J. Bernstein"
+    },
+    {
+      "date": "2016-12-20",
+      "tier": "standards",
+      "label": "NIST opens PQC standardization",
+      "citation": "NIST, Announcing Request for Nominations for Public-Key Post-Quantum Cryptographic Algorithms, 81 Fed. Reg. 92787 (Dec. 20, 2016)"
+    },
+    {
+      "date": "2022-09-07",
+      "tier": "statute-regulation",
+      "label": "NSA CNSA 2.0 advisory",
+      "citation": "NSA, Commercial National Security Algorithm Suite 2.0 (Sept. 7, 2022)"
+    },
+    {
+      "date": "2022-11-18",
+      "tier": "statute-regulation",
+      "label": "OMB M-23-02 migration memo",
+      "citation": "OMB, Memorandum M-23-02, Migrating to Post-Quantum Cryptography (Nov. 18, 2022)"
+    },
+    {
+      "date": "2022-12-21",
+      "tier": "statute-regulation",
+      "label": "Quantum Computing Cybersecurity Preparedness Act",
+      "citation": "Pub. L. No. 117-260, 136 Stat. 2389 (2022)"
+    },
+    {
+      "date": "2023-08-15",
+      "tier": "industry",
+      "label": "Chrome ships hybrid post-quantum key agreement",
+      "citation": "Google, Protecting Chrome Traffic with Hybrid Kyber KEM, Chromium Blog (Aug. 2023; Chrome 116)"
+    },
+    {
+      "date": "2024-02-21",
+      "tier": "industry",
+      "label": "Apple iMessage PQ3 protocol",
+      "citation": "Apple Security Engineering, iMessage with PQ3 (Feb. 21, 2024)"
+    },
+    {
+      "date": "2024-06-07",
+      "tier": "intergovernmental",
+      "label": "UN proclaims Int'l Year of Quantum 2025",
+      "citation": "G.A. Res. 78/287 (June 7, 2024)"
+    },
+    {
+      "date": "2024-08-13",
+      "tier": "standards",
+      "label": "NIST PQC standards final (FIPS 203/204/205)",
+      "citation": "NIST, FIPS 203, 204, 205 (Aug. 13, 2024)"
+    },
+    {
+      "date": "2024-09-25",
+      "tier": "intergovernmental",
+      "label": "G7 Cyber Expert Group quantum statement",
+      "citation": "G7 CEG, Planning for the Opportunities and Risks of Quantum Computing (Sept. 25, 2024)"
+    },
+    {
+      "date": "2024-10-17",
+      "tier": "statute-regulation",
+      "label": "NIS2 transposition deadline",
+      "citation": "Directive (EU) 2022/2555, art. 41 (transposition due Oct. 17, 2024)"
+    },
+    {
+      "date": "2024-12-06",
+      "tier": "survey",
+      "label": "QTTR 2024 published",
+      "citation": "GRI/evolutionQ, Quantum Threat Timeline Report 2024 (Dec. 6, 2024)"
+    },
+    {
+      "date": "2025-01-01",
+      "tier": "intergovernmental",
+      "granularity": "year",
+      "label": "Europol QSFF call to action",
+      "citation": "Europol Quantum Safe Financial Forum, Quantum Safe Financial Forum: A Call to Action (Feb. 2025)"
+    },
+    {
+      "date": "2025-01-17",
+      "tier": "statute-regulation",
+      "label": "DORA applies",
+      "citation": "Regulation (EU) 2022/2554, art. 64 (applies from Jan. 17, 2025)"
+    },
+    {
+      "date": "2025-03-01",
+      "tier": "statute-regulation",
+      "granularity": "month",
+      "label": "NCSC migration timelines (UK)",
+      "citation": "NCSC, Timelines for Migration to Post-Quantum Cryptography (Mar. 2025) (three-phase roadmap)"
+    },
+    {
+      "date": "2025-11-01",
+      "tier": "industry",
+      "granularity": "month",
+      "label": "FS-ISAC PQC migration position paper",
+      "citation": "FS-ISAC Post-Quantum Cryptography Working Grp., The Timeline for Post-Quantum Cryptographic Migration: A Position Paper on the Financial Sector's Global Transition (Nov. 2025)"
+    },
+    {
+      "date": "2026-01-01",
+      "tier": "intergovernmental",
+      "granularity": "year",
+      "label": "Europol QSFF report",
+      "citation": "Europol Quantum Safe Financial Forum report (2026) (full citation pending)"
+    },
+    {
+      "date": "2026-01-01",
+      "tier": "intergovernmental",
+      "granularity": "year",
+      "label": "G7 CEG coordinated PQC roadmap",
+      "citation": "G7 Cyber Expert Grp., Advancing a Coordinated Roadmap for the Transition to Post-Quantum Cryptography in the Financial Sector (Jan. 2026)"
+    },
+    {
+      "date": "2026-01-01",
+      "tier": "intergovernmental",
+      "granularity": "year",
+      "label": "Quantum security on the Davos agenda",
+      "citation": "World Economic Forum, Davos (2026) (full citation pending)"
+    },
+    {
+      "date": "2026-03-09",
+      "tier": "survey",
+      "label": "QTTR (Mar 2026) published",
+      "citation": "GRI/evolutionQ, Quantum Threat Timeline Report (Mar. 9, 2026)"
+    },
+    {
+      "date": "2026-06-22",
+      "tier": "statute-regulation",
+      "label": "Exec. Order 14,412 — PQC migration deadlines",
+      "citation": "Exec. Order No. 14,412, Securing the Nation Against Advanced Cryptographic Attacks, 91 Fed. Reg. 38,483 (June 25, 2026) (signed June 22, 2026; federal migration deadlines Dec. 31, 2030/2031, extended to federal contractors)"
+    },
+    {
+      "date": "2026-07-07",
+      "tier": "industry",
+      "label": "ECB supervisory letter to bank CEOs",
+      "citation": "Letter from Claudia Buch, Chair of the Supervisory Bd., Eur. Cent. Bank, to the CEOs of Significant Institutions (July 7, 2026) (PQC adoption “must start now”; dedicated quantum letter announced as forthcoming)"
+    }
   ]
 }
