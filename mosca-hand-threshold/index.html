@@ -705,7 +705,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
         <details class="method" id="targetPanel" style="margin-top:18px">
             <summary>&#127919; Advanced: Target Profile &mdash; the targeting factor T</summary>
             <div class="method-body">
-                <p>The survey band above is the <strong>capability</strong> probability: the chance a CRQC exists inside your window. The Hand probability is the chance of harm <em>to you</em>, which the accompanying article's &sect;III.E decomposes as P = P<sub>c</sub> &times; P<sub>h</sub> &times; P<sub>d</sub> &mdash; capability, harvest, decryption prioritization. This panel collapses the latter two into a single <strong>targeting factor T</strong>, so the threshold reads <span style="font-family:'JetBrains Mono',monospace">R &lt; T&middot;P(W)</span>. The two are collapsed deliberately: harvest and prioritization are not independent &mdash; no adversary warehouses ciphertext it never expects to read, so data worth harvesting is data worth decrypting. <strong>T = 1.00 is the documented upper bound and the default</strong>; the anchor positions below are illustrative pedagogy, not threat-intelligence estimates.</p>
+                <p>The survey band above is the <strong>capability</strong> probability: the chance a CRQC exists inside your window. The Hand probability is the chance of harm <em>to you</em>, which the accompanying article's &sect;III.E decomposes as P = P<sub>c</sub> &times; P<sub>h</sub> &times; P<sub>d</sub> &mdash; capability, harvest, decryption prioritization. This panel collapses the latter two into a single <strong>targeting factor T</strong>, so the threshold reads <span style="font-family:'JetBrains Mono',monospace">R &lt; T &times; P(W)</span>. The two are collapsed deliberately: harvest and prioritization are not independent &mdash; no adversary warehouses ciphertext it never expects to read, so data worth harvesting is data worth decrypting. <strong>T = 1.00 is the documented upper bound and the default</strong>; the anchor positions below are illustrative pedagogy, not threat-intelligence estimates.</p>
                 <div class="variable-section" style="margin:14px 0 6px">
                     <div class="variable-label">T = Targeting Factor <span class="value-display purple" id="tValue">T = 1.00 &mdash; Upper bound</span></div>
                     <input type="range" id="tSlider" min="0.10" max="1.00" step="0.05" value="1.00" aria-label="Targeting factor T">
@@ -977,7 +977,7 @@ function compute() {
     const premOpt = mOpt - massAw(curves.opt);
     const premPess = mPess - massAw(curves.pess);
 
-    // Targeting factor T (advanced panel): R < T·mass compares identically as
+    // Targeting factor T (advanced panel): R < T × mass compares identically as
     // mass ≥ R/T, so the scan below runs against Reff. T is a probability
     // multiplier, never a time; T = 1.0 is the documented upper bound and
     // leaves every number identical to the pre-feature tool.
@@ -1131,7 +1131,7 @@ function renderVerdict(c, rStr) {
     const upperLine = attn && !c.windowClosed
         ? "<p style='font-size:12.5px;font-weight:600;color:var(--text-muted);border-top:1px solid rgba(0,0,0,0.08);padding-top:8px;margin-top:4px'>At the upper bound (T = 1.0): " + upperWord + ".</p>" : "";
     const pl = c.L * c.effPess / 100, pl2 = c.L * c.effOpt / 100;
-    const equiv = "Equivalent multiplicative form: " + (attn ? "T\u00b7P(W)\u00d7L" : "P(W)\u00d7L") + " = " +
+    const equiv = "Equivalent multiplicative form: " + (attn ? "T\u00d7P(W)\u00d7L" : "P(W)\u00d7L") + " = " +
         fmtMoney(pl, c.sym) + "\u2013" + fmtMoney(pl2, c.sym) +
         " against B = " + fmtMoney(c.B, c.sym) + ".";
 
@@ -1145,20 +1145,20 @@ function renderVerdict(c, rStr) {
     if (c.R < c.effPess) {
         v.className = "verdict crossed";
         v.innerHTML = "<h3>\u26a0\ufe0f Threshold crossed \u2014 on both interpretations" + atT + "</h3>" +
-            "<p>Your risk ratio <span class='mono'>R = " + rStr + "%</span> sits below even the <em>pessimistic</em> " + (attn ? "effective mass <span class='mono'>T\u00b7P(W) = " + c.effPess.toFixed(0) + "%</span>" : "window mass <span class='mono'>P(W) = " + c.mPess.toFixed(0) + "%</span>") + ". The probability that a CRQC arrives inside your vulnerability window" + (attn ? ", even attenuated by your documented target profile," : "") + " exceeds your cost of prevention per dollar of exposure, no matter how conservatively the survey is interpreted." +
+            "<p>Your risk ratio <span class='mono'>R = " + rStr + "%</span> sits below even the <em>pessimistic</em> " + (attn ? "effective mass <span class='mono'>T \u00d7 P(W) = " + c.effPess.toFixed(0) + "%</span>" : "window mass <span class='mono'>P(W) = " + c.mPess.toFixed(0) + "%</span>") + ". The probability that a CRQC arrives inside your vulnerability window" + (attn ? ", even attenuated by your documented target profile," : "") + " exceeds your cost of prevention per dollar of exposure, no matter how conservatively the survey is interpreted." +
             (!c.start ? " The window is still sliding: of today's mass, <span class='mono'>" + c.effPremPess.toFixed(1) + "</span> points accrued through procrastination alone." : "") +
             " Whichever side of the line your final numbers fall, the protected position is the documented one: record this analysis and its date.</p>" +
             "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>" + upperLine;
     } else if (c.R < c.effOpt) {
         v.className = "verdict contested";
         v.innerHTML = "<h3>\u2696\ufe0f Contested zone" + atT + "</h3>" +
-            "<p>Your ratio <span class='mono'>R = " + rStr + "%</span> falls inside the " + (attn ? "effective interpretation band <span class='mono'>T\u00b7P(W) = " + c.effPess.toFixed(0) + "\u2013" + c.effOpt.toFixed(0) + "%</span>" : "interpretation band <span class='mono'>" + c.mPess.toFixed(0) + "\u2013" + c.mOpt.toFixed(0) + "%</span>") + ". Reasonable minds can differ \u2014 which is precisely why a documented, contemporaneous analysis is the defensible position. An organization that never ran the numbers cannot claim the burden exceeded expected loss." +
+            "<p>Your ratio <span class='mono'>R = " + rStr + "%</span> falls inside the " + (attn ? "effective interpretation band <span class='mono'>T \u00d7 P(W) = " + c.effPess.toFixed(0) + "\u2013" + c.effOpt.toFixed(0) + "%</span>" : "interpretation band <span class='mono'>" + c.mPess.toFixed(0) + "\u2013" + c.mOpt.toFixed(0) + "%</span>") + ". Reasonable minds can differ \u2014 which is precisely why a documented, contemporaneous analysis is the defensible position. An organization that never ran the numbers cannot claim the burden exceeded expected loss." +
             (c.crossPess && !c.crossPess.atPub && c.crossPess.date > c.now ? " On current trends the pessimistic mass overtakes your ratio <span class='mono'>" + fmtMonthYear(c.crossPess.date) + "</span>." : "") + "</p>" +
             "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>" + upperLine;
     } else {
         v.className = "verdict defensible";
         v.innerHTML = "<h3>\u2705 Burden currently defensible \u2014 document it now" + atT + "</h3>" +
-            "<p>Your ratio <span class='mono'>R = " + rStr + "%</span> exceeds the optimistic " + (attn ? "effective mass <span class='mono'>T\u00b7P(W) = " + c.effOpt.toFixed(0) + "%</span>" : "window mass <span class='mono'>" + c.mOpt.toFixed(0) + "%</span>") + ": prevention currently costs more per dollar of exposure than the " + (attn ? "attenuated" : "expert-consensus") + " probability of harm. This position erodes on a schedule \u2014 " +
+            "<p>Your ratio <span class='mono'>R = " + rStr + "%</span> exceeds the optimistic " + (attn ? "effective mass <span class='mono'>T \u00d7 P(W) = " + c.effOpt.toFixed(0) + "%</span>" : "window mass <span class='mono'>" + c.mOpt.toFixed(0) + "%</span>") + ": prevention currently costs more per dollar of exposure than the " + (attn ? "attenuated" : "expert-consensus") + " probability of harm. This position erodes on a schedule \u2014 " +
             (c.crossOpt ? "the sliding window reaches your ratio <span class='mono'>" + (c.crossOpt.atPub ? "at publication" : fmtMonthYear(c.crossOpt.date)) + "</span> on the optimistic read" + (c.crossPess ? ", " + (c.crossPess.atPub ? "at publication" : fmtMonthYear(c.crossPess.date)) + " on the pessimistic" : "") + "." : "no crossing occurs within the 30-year survey horizon.") +
             " The Business Judgment Rule protects the informed decision, not the undocumented one: record this analysis and its date.</p>" +
             "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>" + upperLine;
@@ -1247,7 +1247,7 @@ function renderChart(c) {
     }
 
     // ----- Exposure areas inside W (drawn only over the visible frame) -----
-    // Shaded against the effective threshold Reff = R/T: R < T·mass ⟺
+    // Shaded against the effective threshold Reff = R/T: R < T × mass ⟺
     // mass > R/T, so the published curves stay untouched and only the
     // comparison line moves. At T = 1.0, Reff ≡ R (regression-identical).
     const wbVis = Math.min(wb, tVis);
@@ -1444,7 +1444,7 @@ function generateDocument() {
     const rStr = c.R < 0.1 ? c.R.toFixed(3) : c.R.toFixed(1);
     const rightDate = new Date(c.pub.getTime() + c.b * MS_YEAR);
     const attn = c.T < 1;
-    const effWord = attn ? "T*P(W)" : "P(W)";
+    const effWord = attn ? "T×P(W)" : "P(W)";
     const verdictLine =
         c.windowClosed ? "WINDOW CLOSED - no remaining HNDL exposure on these inputs" :
         c.R < c.effPess ? "THRESHOLD CROSSED - R below " + effWord + " on both interpretations" :
@@ -1460,7 +1460,7 @@ function generateDocument() {
         "Generated: " + c.now.toISOString() + " (" + fmtDate(c.now) + ")",
         "Tool: ProteQC(R) Mosca Hand Threshold Evaluator, Educational Edition",
         "",
-        "FORMULA: R < " + (attn ? "T*P(W)" : "P(W)") + "   [B < P\u00d7L, Carroll Towing, in threshold form]",
+        "FORMULA: R < " + (attn ? "T\u00d7P(W)" : "P(W)") + "   [B < P\u00d7L, Carroll Towing, in threshold form]",
         "",
         "INPUTS",
         "  Scenario preset ......... " + SCENARIOS[activeScenario].label,
@@ -1505,7 +1505,7 @@ function generateDocument() {
         "  R = B/L ................. " + rStr + "%",
         "  P(W) mass (raw) ......... " + c.mPess.toFixed(1) + "% (pessimistic) to " + c.mOpt.toFixed(1) + "% (optimistic)",
         ...(attn ? [
-        "  Effective T*P(W) ........ " + c.effPess.toFixed(1) + "% (pessimistic) to " + c.effOpt.toFixed(1) + "% (optimistic) at T = " + c.T.toFixed(2)
+        "  Effective T × P(W) ...... " + c.effPess.toFixed(1) + "% (pessimistic) to " + c.effOpt.toFixed(1) + "% (optimistic) at T = " + c.T.toFixed(2)
         ] : []),
         "  Procrastination premium . " + (c.effPremPess>=0?"+":"") + c.effPremPess.toFixed(1) + " to " + (c.effPremOpt>=0?"+":"") + c.effPremOpt.toFixed(1) + " pts" + (attn ? " (T-scaled)" : ""),
         "  Verdict ................. " + verdictLine + (attn ? " (at T = " + c.T.toFixed(2) + ")" : ""),
