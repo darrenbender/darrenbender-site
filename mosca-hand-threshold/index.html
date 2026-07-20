@@ -643,30 +643,6 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
                 <select id="awarenessEvent"></select>
                 <input type="date" id="awarenessDate" value="2024-12-06">
             </div>
-            <div class="d-counter" id="dBox">
-                <span class="accruing-dot"></span>
-                <div>
-                    <div class="d-value" id="dCounter">D = 0.00 years</div>
-                    <div class="d-caption" id="dCaptionDays">Accruing since awareness date &mdash; and counting.</div>
-                </div>
-            </div>
-            <div class="commence-row">
-                <label><input type="checkbox" id="commenceCheck"> Migration commenced</label>
-                <input type="date" id="commenceDate" disabled>
-                <span style="color:var(--text-muted);font-size:12.5px" id="commenceHint">Commencement freezes the window's right edge; W stops sliding and starts shrinking.</span>
-            </div>
-
-            <div class="commence-row">
-                <label for="govDate" style="cursor:default">Governance commenced</label>
-                <input type="date" id="govDate">
-                <span style="color:var(--text-muted);font-size:12.5px">First minuted board or executive engagement with quantum risk &mdash; board discussion recorded, cryptographic inventory commissioned, executive lead designated. If none is documented, leave unset: the tool assumes none.</span>
-            </div>
-            <div id="dateOrderWarn" style="display:none; margin-top:8px; padding:10px 14px; border-radius:10px; background:rgba(220,38,38,0.07); border:1px solid rgba(220,38,38,0.35); font-size:12.5px; color:var(--danger)"></div>
-            <div id="govEvidenceWrap" style="display:none; margin-top:10px">
-                <div class="variable-label" style="font-size:13.5px">Governance evidence <span style="font-weight:400; color:var(--text-light); font-size:11.5px">(minute date, resolution, designation &mdash; recorded in the documentation block)</span></div>
-                <textarea id="govEvidence" style="width:100%; min-height:52px; resize:vertical; font-family:'DM Sans',sans-serif; font-size:13px; padding:10px 12px; border:1px solid var(--border-light); border-radius:8px; background:#f8fafc; color:var(--text-dark)" placeholder="e.g., Board minutes of [date], resolution commissioning cryptographic inventory; CISO designated executive lead. Setting a governance date without evidence flags the documented analysis."></textarea>
-            </div>
-
             <details class="method" style="margin-top:14px">
                 <summary>&#128278; Constructive-notice timeline &mdash; the public record, with citations</summary>
                 <div class="method-body">
@@ -674,6 +650,34 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
                     <div id="noticeTimeline"></div>
                 </div>
             </details>
+            <div class="commence-row">
+                <label for="govDate" style="cursor:default">Governance commenced</label>
+                <input type="date" id="govDate">
+                <span style="color:var(--text-muted);font-size:12.5px">First minuted board or executive engagement with quantum risk &mdash; board discussion recorded, cryptographic inventory commissioned, executive lead designated. If none is documented, leave unset: the tool assumes none.</span>
+            </div>
+
+            <div id="govEvidenceWrap" style="display:none; margin-top:10px">
+                <div class="variable-label" style="font-size:13.5px">Governance evidence <span style="font-weight:400; color:var(--text-light); font-size:11.5px">(minute date, resolution, designation &mdash; recorded in the documentation block)</span></div>
+                <textarea id="govEvidence" style="width:100%; min-height:52px; resize:vertical; font-family:'DM Sans',sans-serif; font-size:13px; padding:10px 12px; border:1px solid var(--border-light); border-radius:8px; background:#f8fafc; color:var(--text-dark)" placeholder="e.g., Board minutes of [date], resolution commissioning cryptographic inventory; CISO designated executive lead. Setting a governance date without evidence flags the documented analysis."></textarea>
+            </div>
+
+            <div class="commence-row">
+                <label><input type="checkbox" id="commenceCheck"> Migration commenced</label>
+                <input type="date" id="commenceDate" disabled>
+                <span style="color:var(--text-muted);font-size:12.5px" id="commenceHint">Commencement freezes the window's right edge; W stops sliding and starts shrinking. If a governance date applies, set it above first &mdash; governance precedes commencement.</span>
+            </div>
+
+            <div id="dateOrderWarn" style="display:none; margin-top:8px; padding:10px 14px; border-radius:10px; background:rgba(220,38,38,0.07); border:1px solid rgba(220,38,38,0.35); font-size:12.5px; color:var(--danger)"></div>
+
+            <div class="d-counter" id="dBox">
+                <span class="accruing-dot"></span>
+                <div>
+                    <div class="d-value" id="dCounter">D = 0.00 years</div>
+                    <div class="d-caption" id="dCaptionDays">Accruing since awareness date &mdash; and counting.</div>
+                </div>
+            </div>
+
+            
         </div>
 
         <div class="window-summary" id="windowSummary"></div>
