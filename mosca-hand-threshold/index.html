@@ -661,6 +661,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
                 <input type="date" id="govDate">
                 <span style="color:var(--text-muted);font-size:12.5px">First minuted board or executive engagement with quantum risk &mdash; board discussion recorded, cryptographic inventory commissioned, executive lead designated. If none is documented, leave unset: the tool assumes none.</span>
             </div>
+            <div id="dateOrderWarn" style="display:none; margin-top:8px; padding:10px 14px; border-radius:10px; background:rgba(220,38,38,0.07); border:1px solid rgba(220,38,38,0.35); font-size:12.5px; color:var(--danger)"></div>
             <div id="govEvidenceWrap" style="display:none; margin-top:10px">
                 <div class="variable-label" style="font-size:13.5px">Governance evidence <span style="font-weight:400; color:var(--text-light); font-size:11.5px">(minute date, resolution, designation &mdash; recorded in the documentation block)</span></div>
                 <textarea id="govEvidence" style="width:100%; min-height:52px; resize:vertical; font-family:'DM Sans',sans-serif; font-size:13px; padding:10px 12px; border:1px solid var(--border-light); border-radius:8px; background:#f8fafc; color:var(--text-dark)" placeholder="e.g., Board minutes of [date], resolution commissioning cryptographic inventory; CISO designated executive lead. Setting a governance date without evidence flags the documented analysis."></textarea>
@@ -1482,9 +1483,18 @@ function decodeHash() {
         }
         if (p.get("sc") && SCENARIOS[p.get("sc")]) activeScenario = p.get("sc");
         if (p.get("g")) { // absent in older links -> no governance date, no credit
-            document.getElementById("govDate").value = p.get("g");
-            state.govDate = new Date(p.get("g") + "T00:00:00");
-            document.getElementById("govEvidenceWrap").style.display = "block";
+            // Sanitize crafted links: governance after commencement is
+            // incoherent (commencement is a governed act). Drop g to the
+            // conservative default - no governance, no runway credit.
+            if (p.get("cm") && p.get("g") > p.get("cm")) {
+                dateOrderWarn("This link carried a governance date (" + p.get("g") + ") after its migration-commencement date (" + p.get("cm") + "), which the tool does not allow - commencement is itself a governed act. The governance date was ignored; no runway credit is applied.");
+            } else {
+                const gd = document.getElementById("govDate");
+                gd.value = p.get("g");
+                gd.dataset.prev = p.get("g");
+                state.govDate = new Date(p.get("g") + "T00:00:00");
+                document.getElementById("govEvidenceWrap").style.display = "block";
+            }
         }
         if (p.get("t")) { // absent in older links -> slider stays at 1.0
             const tv = +p.get("t");
@@ -1932,26 +1942,62 @@ document.getElementById("awarenessDate").addEventListener("change", e => {
     setAwareness(e.target.value);
 });
 
+// Date-order guard: commencement is itself a governed act, so migration may
+// never predate governance (G ≤ M). Three layers: native picker bounds
+// (min/max), handler rejection with a visible callout, and hash
+// sanitization in decodeHash for crafted links.
+function syncDateBounds() {
+    const cd = document.getElementById("commenceDate");
+    const gd = document.getElementById("govDate");
+    gd.max = cd.value || new Date().toISOString().slice(0, 10); // governance: never after commencement, never in the future
+    cd.min = gd.value || "";                                    // commencement: never before governance
+}
+function dateOrderWarn(msg) {
+    const w = document.getElementById("dateOrderWarn");
+    w.style.display = msg ? "block" : "none";
+    if (msg) w.textContent = msg;
+}
+
 document.getElementById("commenceCheck").addEventListener("change", e => {
     state.commenced = e.target.checked;
     const dateInput = document.getElementById("commenceDate");
     dateInput.disabled = !state.commenced;
     if (state.commenced && !dateInput.value) {
         dateInput.value = new Date().toISOString().slice(0, 10);
+        dateInput.dataset.prev = dateInput.value;
     }
     state.commenceDate = state.commenced && dateInput.value
         ? new Date(dateInput.value + "T00:00:00") : null;
+    syncDateBounds();
     render();
 });
 
 document.getElementById("commenceDate").addEventListener("change", e => {
-    state.commenceDate = e.target.value ? new Date(e.target.value + "T00:00:00") : null;
+    const v = e.target.value;
+    if (v && state.govDate && new Date(v + "T00:00:00") < state.govDate) {
+        dateOrderWarn("Migration commenced (" + fmtDate(new Date(v + "T00:00:00")) + ") cannot precede governance commenced (" + fmtDate(state.govDate) + "): commencement is itself a governed act, so the tool requires governance on or before commencement. The date was not applied.");
+        e.target.value = e.target.dataset.prev || "";
+        return;
+    }
+    dateOrderWarn(null);
+    e.target.dataset.prev = v;
+    state.commenceDate = v ? new Date(v + "T00:00:00") : null;
+    syncDateBounds();
     render();
 });
 
 document.getElementById("govDate").addEventListener("change", e => {
-    state.govDate = e.target.value ? new Date(e.target.value + "T00:00:00") : null;
+    const v = e.target.value;
+    if (v && state.commenceDate && new Date(v + "T00:00:00") > state.commenceDate) {
+        dateOrderWarn("Governance commenced (" + fmtDate(new Date(v + "T00:00:00")) + ") cannot postdate migration commenced (" + fmtDate(state.commenceDate) + "): commencement is itself a governed act, so the tool requires governance on or before commencement. The date was not applied.");
+        e.target.value = e.target.dataset.prev || "";
+        return;
+    }
+    dateOrderWarn(null);
+    e.target.dataset.prev = v;
+    state.govDate = v ? new Date(v + "T00:00:00") : null;
     document.getElementById("govEvidenceWrap").style.display = state.govDate ? "block" : "none";
+    syncDateBounds();
     render();
 });
 
@@ -1962,6 +2008,7 @@ loadData().then(() => {
     buildTargetPanel();
     setAwareness(document.getElementById("awarenessDate").value);
     decodeHash();
+    syncDateBounds();
     buildScenarioRow();
     buildReportSelector();
     render();
