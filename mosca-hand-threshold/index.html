@@ -656,6 +656,16 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
                 <span style="color:var(--text-muted);font-size:12.5px" id="commenceHint">Commencement freezes the window's right edge; W stops sliding and starts shrinking.</span>
             </div>
 
+            <div class="commence-row">
+                <label for="govDate" style="cursor:default">Governance commenced</label>
+                <input type="date" id="govDate">
+                <span style="color:var(--text-muted);font-size:12.5px">First minuted board or executive engagement with quantum risk &mdash; board discussion recorded, cryptographic inventory commissioned, executive lead designated. If none is documented, leave unset: the tool assumes none.</span>
+            </div>
+            <div id="govEvidenceWrap" style="display:none; margin-top:10px">
+                <div class="variable-label" style="font-size:13.5px">Governance evidence <span style="font-weight:400; color:var(--text-light); font-size:11.5px">(minute date, resolution, designation &mdash; recorded in the documentation block)</span></div>
+                <textarea id="govEvidence" style="width:100%; min-height:52px; resize:vertical; font-family:'DM Sans',sans-serif; font-size:13px; padding:10px 12px; border:1px solid var(--border-light); border-radius:8px; background:#f8fafc; color:var(--text-dark)" placeholder="e.g., Board minutes of [date], resolution commissioning cryptographic inventory; CISO designated executive lead. Setting a governance date without evidence flags the documented analysis."></textarea>
+            </div>
+
             <details class="method" style="margin-top:14px">
                 <summary>&#128278; Constructive-notice timeline &mdash; the public record, with citations</summary>
                 <div class="method-body">
@@ -681,7 +691,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
 
         <div class="readout-grid">
             <div class="readout-cell">
-                <div class="rc-label">P(W) &mdash; window mass</div>
+                <div class="rc-label">P<sub>c</sub>(W) &mdash; capability mass</div>
                 <div class="rc-value" id="pwValue">&mdash;</div>
                 <div class="rc-sub" id="pwSub"></div>
             </div>
@@ -703,11 +713,11 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
         </div>
 
         <details class="method" id="targetPanel" style="margin-top:18px">
-            <summary>&#127919; Advanced: Target Profile &mdash; the targeting factor T</summary>
+            <summary>&#127919; Advanced: Target Profile &mdash; the harvest-and-prioritization factor P<sub>h</sub>&middot;P<sub>d</sub></summary>
             <div class="method-body">
-                <p>The survey band above is the <strong>capability</strong> probability: the chance a CRQC exists inside your window. The Hand probability is the chance of harm <em>to you</em>, which the accompanying article's &sect;III.E decomposes as P = P<sub>c</sub> &times; P<sub>h</sub> &times; P<sub>d</sub> &mdash; capability, harvest, decryption prioritization. This panel collapses the latter two into a single <strong>targeting factor T</strong>, so the threshold reads <span style="font-family:'JetBrains Mono',monospace">R &lt; T &times; P(W)</span>. The two are collapsed deliberately: harvest and prioritization are not independent &mdash; no adversary warehouses ciphertext it never expects to read, so data worth harvesting is data worth decrypting. <strong>T = 1.00 is the documented upper bound and the default</strong>; the anchor positions below are illustrative pedagogy, not threat-intelligence estimates.</p>
+                <p>The survey band above is the <strong>capability</strong> probability: the chance a CRQC exists inside your window. The Hand probability is the chance of harm <em>to you</em>, which the accompanying article's &sect;III.E decomposes as P = P<sub>c</sub> &times; P<sub>h</sub> &times; P<sub>d</sub> &mdash; capability, harvest, decryption prioritization. This panel supplies the latter two as a single factor <strong>P<sub>h</sub>&middot;P<sub>d</sub></strong>; the survey band above is P<sub>c</sub>(W), and the headline threshold R &lt; P(W) reads the composed Hand probability, <span style="font-family:'JetBrains Mono',monospace">P(W) = P<sub>c</sub>(W) &times; P<sub>h</sub>&middot;P<sub>d</sub></span>. The two are collapsed deliberately: harvest and prioritization are not independent &mdash; no adversary warehouses ciphertext it never expects to read, so data worth harvesting is data worth decrypting. <strong>P<sub>h</sub>&middot;P<sub>d</sub> = 1.00 is the documented upper bound and the default</strong>; the anchor positions below are illustrative pedagogy, not threat-intelligence estimates.</p>
                 <div class="variable-section" style="margin:14px 0 6px">
-                    <div class="variable-label">T = Targeting Factor <span class="value-display purple" id="tValue">T = 1.00 &mdash; Upper bound</span></div>
+                    <div class="variable-label">P<sub>h</sub>&middot;P<sub>d</sub> = Harvest-and-Prioritization Factor <span class="value-display purple" id="tValue">Ph&middot;Pd = 1.00 &mdash; Upper bound</span></div>
                     <input type="range" id="tSlider" min="0.10" max="1.00" step="0.05" value="1.00" aria-label="Targeting factor T">
                     <div class="aw-ticks" id="tTicks" aria-hidden="true"></div>
                     <div class="range-ticks"><span>0.10</span><span>1.00</span></div>
@@ -718,7 +728,8 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
                     <div class="variable-label" style="font-size:13.5px">Target-profile rationale <span style="font-weight:400; color:var(--text-light); font-size:11.5px">(sector profile, plausible adversaries, data value &mdash; recorded in the documentation block)</span></div>
                     <textarea id="tRationale" style="width:100%; min-height:64px; resize:vertical; font-family:'DM Sans',sans-serif; font-size:13px; padding:10px 12px; border:1px solid var(--border-light); border-radius:8px; background:#f8fafc; color:var(--text-dark)" placeholder="Why is this organization's ciphertext less likely to be harvested or prioritized? Leaving this empty flags the documented analysis."></textarea>
                 </div>
-                <p style="margin-top:12px; font-size:12.5px"><strong>This factor cuts both ways.</strong> Defense counsel will argue your T is low; plaintiffs will answer that harvesting is cheap and indiscriminate, that no adversary warehouses ciphertext it never expects to read, and that prioritization climbs over your data's whole confidentiality horizon as decryption capability spreads and cheapens. Lowering T is an affirmative judgment &mdash; document it. (Scenario links carry T but not your rationale; the documentation block is the record.)</p>
+                <p style="margin-top:12px; font-size:12.5px"><strong>This factor cuts both ways.</strong> Defense counsel will argue your T is low; plaintiffs will answer that harvesting is cheap and indiscriminate, that no adversary warehouses ciphertext it never expects to read, and that prioritization climbs over your data's whole confidentiality horizon as decryption capability spreads and cheapens. Lowering P<sub>h</sub>&middot;P<sub>d</sub> is an affirmative judgment &mdash; document it. (Scenario links carry the factor but not your rationale; the documentation block is the record.)</p>
+                <p style="margin-top:10px; font-size:12.5px"><strong>Fast and slow variables.</strong> P<sub>c</sub> is the fast variable &mdash; resurveyed annually, it swings with each QTTR edition. P<sub>h</sub>&middot;P<sub>d</sub> is the slow variable &mdash; a target-profile judgment, stable quarter to quarter &mdash; but it ratchets upward: harvest is an absorbing state (collected ciphertext never becomes uncollected; migration protects future traffic, not the warehouse), decryption capacity compounds (Gidney 2019&ndash;2025: a ~20&times; resource reduction), reaching progressively less attractive targets, and data accumulation grows the target itself. Re-estimate annually on the QTTR cadence; downward revisions demand extraordinary justification &mdash; a documented 0.60 that becomes 0.40 two years later reads as motivated reasoning. The documentation block timestamps your estimate against the survey edition in force.</p>
             </div>
         </details>
 
@@ -745,13 +756,13 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
             <div class="method-body">
                 <p><strong>Anchors.</strong> Averaged cumulative probabilities computed from the raw expert response counts published in each report's Appendix A.4, using the report's own optimistic/pessimistic bin assignments. QTTR 2024 (n=32, published Dec 6, 2024); the March 2026 QTTR (n=26, published Mar 9, 2026), referred to in the accompanying article as the March 2026 Quantum Threat Timeline Report. Cross-checked against values stated in each report's body (e.g., Mar 2026: ~15% optimistic at 5 years; 28&ndash;49% at 10 years; 51&ndash;70% at 15 years). Read in sequence, the selectable curves trace the foreseeability ratchet the article describes: each survey cycle has moved the consensus probability upward, tightening the duty inside the window since long before most organizations knew the window existed.</p>
                 <p><strong>Interpolation.</strong> Monotone cubic (Fritsch&ndash;Carlson) through anchors at 0, 5, 10, 15, 20, 30 years from report publication, with <code>P(0) = 0</code>. Values beyond 30 years are clamped at the 30-year anchor and flagged.</p>
-                <p><strong>The window.</strong> <code>W = [today, start + X + Y]</code>. Left edge: a CRQC arriving today decrypts harvested data still within shelf life. Right edge: the last datum harvested before migration completes remains sensitive for X further years. <code>P(W) = P(right) &minus; P(left)</code> &mdash; the unconditional mass of Z inside W. (A conditional variant renormalizing on no-CRQC-today, <code>P(W)/(1 &minus; P(today))</code>, is more aggressive; the unconditional form is used here as the conservative default.) In the accompanying article's terms, W is the organization's own remaining slice of the Shor&ndash;Q-Day window: the global interval, open since Shor's 1994 proof and closing at Q-Day, within which harm is foreseeable but not yet manifest.</p>
+                <p><strong>The window.</strong> <code>W = [today, start + X + Y]</code>. Left edge: a CRQC arriving today decrypts harvested data still within shelf life. Right edge: the last datum harvested before migration completes remains sensitive for X further years. <code>P<sub>c</sub>(W) = P<sub>c</sub>(right) &minus; P<sub>c</sub>(left)</code> &mdash; the unconditional capability mass of Z inside W; the composed Hand probability is <code>P(W) = P<sub>c</sub>(W) &times; P<sub>h</sub>&middot;P<sub>d</sub></code>. (A conditional variant renormalizing on no-CRQC-today, <code>P<sub>c</sub>(W)/(1 &minus; P<sub>c</sub>(today))</code>, is more aggressive; the unconditional form is used here as the conservative default.) In the accompanying article's terms, W is the organization's own remaining slice of the Shor&ndash;Q-Day window: the global interval, open since Shor's 1994 proof and closing at Q-Day, within which harm is foreseeable but not yet manifest.</p>
                 <p><strong>Sliding vs. frozen.</strong> Until migration commences, the right edge is <code>today + X + Y</code> and W slides up the rising curve daily. Commencement freezes the right edge at <code>start + X + Y</code>; W then shrinks as the left edge (today) advances. The procrastination premium is <code>P(W today) &minus; P(W at awareness)</code>, both read on the current report's curve.</p>
-                <p><strong>Awareness anchors &amp; the notice gradient.</strong> The awareness date sets where D begins. The selector offers dated public signals &mdash; statutes and regulations in force, standards publications, intergovernmental statements, threat surveys, and industry deployments &mdash; each carried with its citation in the tool's data files. Which signal starts a particular organization's clock is a legal argument, not a computation: the tool takes the date you select (or your own documented date) and reports the consequences. The documentation block includes the full ladder &mdash; D measured from every listed signal &mdash; because the reasonableness of a claimed awareness date is naturally tested against the public record that preceded it. Step 2's notice strip &mdash; drawn directly above the awareness slider, sharing its 2015&ndash;today track, so the thumb climbs the record it selects from &mdash; plots that record as a cumulative step line: <strong>counts, not weights</strong> &mdash; each signal adds one step regardless of tier, because assigning relative evidentiary weight to a regulation versus a product deployment is an argument for counsel (and the accompanying article), not a datum this tool asserts. The strip notes the <em>epistemic</em> tier separately, in a caption on its baseline &mdash; Shor's algorithm (1994) and the founding of post-quantum cryptography as a field (2006): the issue's coming-into-existence, which per the accompanying article's two-boundary framework precedes any duty and is deliberately not selectable as an anchor. Existence made the harm foreseeable; it did not start anyone's clock. One boundary within the record carries structural weight: NIST announced the finalized FIPS 203, 204, and 205 on <strong>August 13, 2024</strong>, and migration to the finalized standards could not have commenced before they existed (announced August 13; published in the Federal Register August 14 &mdash; 89 Fed. Reg. 66,052 (Aug. 14, 2024)). D measured from an earlier anchor therefore decomposes into two clocks: <em>notice delay</em> &mdash; anchor to finalization, time on notice while the finalized standards did not yet exist &mdash; and <em>feasibility delay</em> &mdash; finalization to commencement, time the standards existed and migration to them had not begun. The strip marks the boundary with a dashed rule, the D counter reports the split, and the documentation block flags pre-standards anchors. See <em>Post-Quantum Negligence</em> &sect;III.A (two-clock decomposition of the procrastination variable). The boundary is an argument marker, not an absolution: cryptographic inventory, crypto-agility, and vendor engagement were feasible throughout the notice period, and pre-standard deployments on draft-stable algorithms &mdash; Chrome's X25519Kyber768 hybrid (Chromium Blog, Aug. 10, 2023), Signal's PQXDH (Sept. 19, 2023), and Apple's iMessage PQ3 (Feb. 21, 2024, expressly framed against harvest-now-decrypt-later) &mdash; show migration-adjacent action was possible before finalization; evidence each side will read its own way. Feasibility was also organization-relative: this boundary marks the earliest theoretical date &mdash; the standards' existence &mdash; while organizations dependent on vendor libraries, HSM firmware, or certified implementations faced feasibility dates trailing into 2025&ndash;2026 (HQC selection and vendor availability; FN-DSA still pending). The educational edition keeps the single global boundary as the conservative, simple reading; per-organization feasibility dating is enterprise advisory territory. The full record, with citations and per-event anchor selection, is in the constructive-notice timeline beneath the D control; the duty-side logic &mdash; foreseeability &rarr; notice &rarr; duty &rarr; breach &mdash; is laid out in the &ldquo;From Foreseeability to Duty&rdquo; panel at the top of the page.</p>
+                <p><strong>Awareness anchors &amp; the notice gradient.</strong> The awareness date sets where D begins. The selector offers dated public signals &mdash; statutes and regulations in force, standards publications, intergovernmental statements, threat surveys, and industry deployments &mdash; each carried with its citation in the tool's data files. Which signal starts a particular organization's clock is a legal argument, not a computation: the tool takes the date you select (or your own documented date) and reports the consequences. The documentation block includes the full ladder &mdash; D measured from every listed signal &mdash; because the reasonableness of a claimed awareness date is naturally tested against the public record that preceded it. Step 2's notice strip &mdash; drawn directly above the awareness slider, sharing its 2015&ndash;today track, so the thumb climbs the record it selects from &mdash; plots that record as a cumulative step line: <strong>counts, not weights</strong> &mdash; each signal adds one step regardless of tier, because assigning relative evidentiary weight to a regulation versus a product deployment is an argument for counsel (and the accompanying article), not a datum this tool asserts. The strip notes the <em>epistemic</em> tier separately, in a caption on its baseline &mdash; Shor's algorithm (1994) and the founding of post-quantum cryptography as a field (2006): the issue's coming-into-existence, which per the accompanying article's two-boundary framework precedes any duty and is deliberately not selectable as an anchor. Existence made the harm foreseeable; it did not start anyone's clock. One boundary within the record carries structural weight: NIST announced the finalized FIPS 203, 204, and 205 on <strong>August 13, 2024</strong>, and migration to the finalized standards could not have commenced before they existed (announced August 13; published in the Federal Register August 14 &mdash; 89 Fed. Reg. 66,052 (Aug. 14, 2024)). D measured from an earlier anchor therefore decomposes into two clocks: <em>notice delay</em> &mdash; the aggregate name for the anchor-to-finalization stretch, time on notice while the finalized standards did not yet exist &mdash; and <em>feasibility delay</em> &mdash; finalization to commencement, time the standards existed and migration to them had not begun. When a governance date is documented, the notice-delay stretch resolves further into <em>governance delay</em> (anchor to first minuted engagement &mdash; notice accruing with no recorded response) and <em>preparation runway</em> (governance to finalization &mdash; documented diligence, excluded from D by definition: a number labeled procrastination must not include diligence, or it impeaches itself). Notice delay and governance delay are never interchangeable &mdash; the first is the undifferentiated aggregate, the second the culpable component a governance record isolates. Without a documented governance date the tool credits no runway: undocumented governance earns zero credit, the same conservative-default pattern as the harvest-and-prioritization factor. The strip marks the boundary with a dashed rule, the D counter reports the split, and the documentation block flags pre-standards anchors. See <em>Post-Quantum Negligence</em> &sect;III.A (two-clock decomposition of the procrastination variable). The boundary is an argument marker, not an absolution: cryptographic inventory, crypto-agility, and vendor engagement were feasible throughout the notice period, and pre-standard deployments on draft-stable algorithms &mdash; Chrome's X25519Kyber768 hybrid (Chromium Blog, Aug. 10, 2023), Signal's PQXDH (Sept. 19, 2023), and Apple's iMessage PQ3 (Feb. 21, 2024, expressly framed against harvest-now-decrypt-later) &mdash; show migration-adjacent action was possible before finalization; evidence each side will read its own way. Feasibility was also organization-relative: this boundary marks the earliest theoretical date &mdash; the standards' existence &mdash; while organizations dependent on vendor libraries, HSM firmware, or certified implementations faced feasibility dates trailing into 2025&ndash;2026 (HQC selection and vendor availability; FN-DSA still pending). The educational edition keeps the single global boundary as the conservative, simple reading; per-organization feasibility dating is enterprise advisory territory. The full record, with citations and per-event anchor selection, is in the constructive-notice timeline beneath the D control; the duty-side logic &mdash; foreseeability &rarr; notice &rarr; duty &rarr; breach &mdash; is laid out in the &ldquo;From Foreseeability to Duty&rdquo; panel at the top of the page.</p>
                 <p><strong>Crossing date t*.</strong> The first calendar date at which the sliding window's mass reaches R, found by forward scan with bisection refinement on each interpretation curve. If the mass already exceeded R at the report's publication, the crossing is reported as "at or before publication" rather than extrapolated to dates predating the survey.</p>
-                <p><strong>Theoretical lineage.</strong> The window construction restates Mosca's Theorem &mdash; exposure when <code>x + y &gt; z</code> &mdash; in probabilistic form. Michele Mosca, <em>Cybersecurity in an Era with Quantum Computers: Will We Be Ready?</em>, 16 IEEE Security &amp; Privacy 38 (2018). The procrastination variable D adopts the augmentation introduced by Jaime G&oacute;mez Garc&iacute;a, Chair of the Europol Quantum Safe Financial Forum, within the FS-ISAC PQC Working Group's collaborative work &mdash; the <strong>Mosca-G&oacute;mez formulation</strong>, <code>x + y + D &gt; z</code> (D is the formulation's delay term, elsewhere rendered p<sub>delay</sub>). See FS-ISAC PQC Working Grp., <em>The Timeline for Post-Quantum Cryptographic Migration</em> (Nov. 2025); Jaime G&oacute;mez Garc&iacute;a, <em>Perspectives on the Transition to PQC in the Financial Sector</em>, PKI Consortium PQC Conference (Jan. 16, 2025).</p>
+                <p><strong>Theoretical lineage.</strong> The window construction restates Mosca's Theorem &mdash; exposure when <code>x + y &gt; z</code> &mdash; in probabilistic form. Michele Mosca, <em>Cybersecurity in an Era with Quantum Computers: Will We Be Ready?</em>, 16 IEEE Security &amp; Privacy 38 (2018). The procrastination variable D adopts the augmentation introduced by Jaime G&oacute;mez Garc&iacute;a, Chair of the Europol Quantum Safe Financial Forum, within the FS-ISAC PQC Working Group's collaborative work &mdash; the <strong>Mosca-G&oacute;mez formulation</strong>, <code>x + y + D &gt; z</code> (D is the formulation's delay term, elsewhere rendered p<sub>delay</sub>). Under the article's own definition &mdash; delay from when migration <em>could have begun</em> &mdash; the formulation's delay term corresponds to D<sub>f</sub>, the feasibility delay; governance delay D<sub>g</sub> enters the inequality only through spillover (preparation unfinished at finalization lengthens D<sub>f</sub>) and enters the law through the fiduciary lens (companion article in progress). See FS-ISAC PQC Working Grp., <em>The Timeline for Post-Quantum Cryptographic Migration</em> (Nov. 2025); Jaime G&oacute;mez Garc&iacute;a, <em>Perspectives on the Transition to PQC in the Financial Sector</em>, PKI Consortium PQC Conference (Jan. 16, 2025).</p>
                 <p><strong>Benchmark sources for B and L presets.</strong> Burden: OMB/ONCD, <em>Report on Post-Quantum Cryptography</em> (July 2024) (~$7.1B for federal civilian systems, 2025&ndash;2035); sector program models of $50&ndash;300M+ for a single large operator. Loss: IBM, <em>Cost of a Data Breach Report 2025</em> (U.S. average $10.22M; healthcare and financial costliest); Anthem 2015 breach aggregate &asymp;$171M ($115M class settlement + $16M OCR + $39.5M multistate AGs); UnitedHealth/Change Healthcare attack cost estimate $3.09B; Citi Institute (Feb. 2026) (systemic damage of a quantum-enabled attack on a major U.S. bank: $2.0&ndash;3.3T). Preset values are deliberately conservative within these ranges and are illustrative, not firm-specific.</p>
-                <p><strong>Threshold logic.</strong> Liability exposure indicated when <code>R &lt; P(W)</code>, where <code>R = B/L</code> &mdash; algebraically the Learned Hand condition <code>B &lt; P&times;L</code> for <code>L &gt; 0</code> (United States v. Carroll Towing Co., 159 F.2d 169 (2d Cir. 1947)), with P made organization-specific as the window mass.</p>
+                <p><strong>Threshold logic.</strong> Liability exposure indicated when <code>R &lt; P(W)</code>, where <code>R = B/L</code> &mdash; algebraically the Learned Hand condition <code>B &lt; P&times;L</code> for <code>L &gt; 0</code> (United States v. Carroll Towing Co., 159 F.2d 169 (2d Cir. 1947)), with P made organization-specific as the composed window probability <code>P<sub>c</sub>(W) &times; P<sub>h</sub>&middot;P<sub>d</sub></code>.</p>
                 <p><strong>Severity taper (future refinement).</strong> Arrival early in W (before migration completes) is catastrophic; arrival late in W harms only not-yet-expired harvested data, decaying to zero at the right edge. This refines L, not P, and is reserved for the enterprise analysis.</p>
             </div>
         </details>
@@ -759,7 +770,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
         <details class="method">
             <summary>&#9888;&#65039; Limitations &mdash; what this tool does not assess</summary>
             <div class="method-body">
-                <p>This is an educational framework for one negligence-analysis lens. It does not model: <strong>regulatory compliance mandates</strong> (NIST, NSA CNSA 2.0, sector-specific rules); <strong>industry standards and peer behavior</strong>; <strong>insurance coverage and requirements</strong>; <strong>vendor and ecosystem readiness</strong>; <strong>technical feasibility</strong> of migration for specific systems; <strong>data classification nuances</strong> (different data types carry different X); <strong>operational impacts</strong> during migration; or the <strong>severity taper</strong> within the window (early CRQC arrival is catastrophic, late arrival harms only unexpired harvested data &mdash; an expected-loss refinement reserved for enterprise analysis).</p>
+                <p>This is an educational framework for one negligence-analysis lens. It does not model: <strong>regulatory compliance mandates</strong> (NIST, NSA CNSA 2.0, sector-specific rules); <strong>industry standards and peer behavior</strong>; <strong>insurance coverage and requirements</strong>; <strong>vendor and ecosystem readiness</strong>; <strong>technical feasibility</strong> of migration for specific systems; <strong>data classification nuances</strong> (different data types carry different X); <strong>operational impacts</strong> during migration; or the <strong>severity taper</strong> within the window (early CRQC arrival is catastrophic, late arrival harms only unexpired harvested data &mdash; an expected-loss refinement reserved for enterprise analysis). Relatedly, a scalar P<sub>h</sub>&middot;P<sub>d</sub> applied across the whole window underweights late-window arrivals: P<sub>d</sub> ramps up across W just as the severity taper ramps L down across it &mdash; both within-window gradients are scalar-simplified here, conservative in opposite directions, and both are enterprise refinements.</p>
                 <p><strong>Recommended next steps:</strong> consult qualified legal counsel on your risk profile; engage cybersecurity experts on feasibility; review applicable regulatory requirements; conduct data classification to identify HNDL-sensitive holdings; and document your decision-making process regardless of the timeline you choose &mdash; the documentation itself is the governance.</p>
                 <p><strong>Resources:</strong> <a href="https://csrc.nist.gov/projects/post-quantum-cryptography" target="_blank">NIST Post-Quantum Cryptography Project</a> &middot; <a href="https://media.defense.gov/2022/Sep/07/2003071834/-1/-1/0/CSI_CNSA_2.0_ALGORITHMS_.PDF" target="_blank">NSA CNSA 2.0 Advisory</a> &middot; <a href="https://globalriskinstitute.org/publication/quantum-threat-timeline-report/" target="_blank">GRI / evolutionQ Quantum Threat Timeline Reports</a> &middot; Mosca, <em>Cybersecurity in an Era with Quantum Computers</em>, 16 IEEE Sec. &amp; Priv. 38 (2018) &middot; <em>United States v. Carroll Towing Co.</em>, 159 F.2d 169 (2d Cir. 1947) &middot; FS-ISAC PQC Working Group publications.</p>
             </div>
@@ -792,7 +803,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
             <div style="margin-top:6px">Commercial licensing: <a href="mailto:licensing@ProteQC.com" style="color:var(--proteqc-teal)">licensing@ProteQC.com</a> &middot; <a href="https://ProteQC.com" target="_blank" style="color:var(--proteqc-teal)">ProteQC.com</a></div>
         </div>
         <div style="margin-top:14px">Developed by ProteQC Limited</div>
-        <div class="disclaimer">This tool is provided for educational and informational purposes only and does not constitute legal advice, professional consultation, or a guarantee of legal outcomes. Consult qualified legal counsel before making decisions based on this analysis; no attorney-client relationship is created by its use. Probability estimates derive from published expert surveys (Global Risk Institute / evolutionQ Quantum Threat Timeline Reports; historical Mosca 2015 estimates) and involve substantial uncertainty. The anchor values on the targeting-factor slider are illustrative pedagogy, not threat-intelligence estimates; no representation is made about any organization's actual harvest or prioritization likelihood.</div>
+        <div class="disclaimer">This tool is provided for educational and informational purposes only and does not constitute legal advice, professional consultation, or a guarantee of legal outcomes. Consult qualified legal counsel before making decisions based on this analysis; no attorney-client relationship is created by its use. Probability estimates derive from published expert surveys (Global Risk Institute / evolutionQ Quantum Threat Timeline Reports; historical Mosca 2015 estimates) and involve substantial uncertainty. The anchor values on the harvest-and-prioritization slider are illustrative pedagogy, not threat-intelligence estimates; no representation is made about any organization's actual harvest or prioritization likelihood.</div>
     </footer>
 </div>
 
@@ -834,7 +845,8 @@ const state = {
     report: null,
     awareness: new Date("2024-12-06T00:00:00"),
     commenced: false,
-    commenceDate: null
+    commenceDate: null,
+    govDate: null // governance commenced (G); null = none documented, no runway credit
 };
 
 /* ---------- Sector scenarios (b and l are the sourced values directly,
@@ -856,7 +868,7 @@ function applyScenario(key) {
         document.getElementById("lSlider").value = sc.l;
         document.getElementById("xSlider").value = sc.x;
         document.getElementById("ySlider").value = sc.y;
-        // Every educational-edition preset ships T = 1.00 (the upper bound);
+        // Every educational-edition preset ships Ph·Pd = 1.00 (the upper bound);
         // per-sector T calibration is enterprise advisory scope.
         document.getElementById("tSlider").value = "1.00";
     }
@@ -954,11 +966,33 @@ function compute() {
     const eNow = Math.max(0, (now - pub) / MS_YEAR);          // today, report-time
     const eAw = Math.max(0, (state.awareness - pub) / MS_YEAR); // awareness, report-time
 
-    // D: awareness -> commencement (frozen) or awareness -> today (accruing)
+    // D: awareness -> commencement (frozen) or awareness -> today (accruing).
+    // Timeline points: N (awareness) -> G (governance) -> F (FIPS_FINAL) ->
+    // M (migration start, or today). Three display segments:
+    //   governance delay  Dg = N -> G   (notice accruing, no minuted response)
+    //   preparation runway     G -> F   (documented diligence - EXCLUDED from D)
+    //   feasibility delay Df = F -> M   (procrastination proper; the paper's
+    //                                    Mosca-Gomez delay term, "could have begun")
+    // D = Dg + Df. Without a documented G, Dg spans N -> F and the runway does
+    // not exist, so D equals the undecomposed span exactly (conservative
+    // default: undocumented governance earns zero credit). If G > F, no
+    // diligence preceded feasibility: Dg = N -> G, runway = 0, Df = G -> M,
+    // and D again excludes nothing. All segments clamp at 0; never negative.
     const start = (state.commenced && state.commenceDate) ? state.commenceDate : null;
-    const D = start
-        ? Math.max(0, (start - state.awareness) / MS_YEAR)
-        : Math.max(0, (now - state.awareness) / MS_YEAR);
+    const M = start || now;
+    const G = state.govDate;
+    const spanD = Math.max(0, (M - state.awareness) / MS_YEAR);
+    let Dg, runway, Df, D;
+    if (G) {
+        Dg = Math.max(0, (Math.min(G, M) - state.awareness) / MS_YEAR);
+        runway = Math.max(0, (Math.min(FIPS_FINAL, M) - Math.max(G, state.awareness)) / MS_YEAR);
+        Df = Math.max(0, (M - Math.max(FIPS_FINAL, G)) / MS_YEAR);
+        D = Dg + Df;
+    } else {
+        Dg = null; runway = 0;
+        Df = Math.max(0, (M - FIPS_FINAL) / MS_YEAR);
+        D = spanD;
+    }
 
     // Window W in report-time: [a, b]
     const a = eNow;
@@ -977,9 +1011,9 @@ function compute() {
     const premOpt = mOpt - massAw(curves.opt);
     const premPess = mPess - massAw(curves.pess);
 
-    // Targeting factor T (advanced panel): R < T × mass compares identically as
+    // Ph·Pd factor (advanced panel): R < Ph·Pd × mass compares identically as
     // mass ≥ R/T, so the scan below runs against Reff. T is a probability
-    // multiplier, never a time; T = 1.0 is the documented upper bound and
+    // multiplier, never a time; 1.00 is the documented upper bound and
     // leaves every number identical to the pre-feature tool.
     const T = +document.getElementById("tSlider").value;
     const Reff = R / T;
@@ -1008,7 +1042,7 @@ function compute() {
     const crossOpt = crossInfo(solveCross(curves.opt));
     const crossPess = crossInfo(solveCross(curves.pess));
 
-    return { now, sym, B, L, X, Y, D, R, rpt, pub, curves,
+    return { now, sym, B, L, X, Y, D, Dg, runway, Df, G, M, spanD, R, rpt, pub, curves,
              eNow, eAw, start, a, b, windowClosed, beyond,
              mOpt, mPess, premOpt, premPess, crossOpt, crossPess,
              T, Reff, effOpt: T * mOpt, effPess: T * mPess,
@@ -1034,16 +1068,25 @@ function render() {
     document.getElementById("rValue").textContent = "R = " + rStr + "%";
     document.getElementById("rCaption").textContent =
         "Preventing a " + fmtMoney(c.L, c.sym) + " loss costs " + rStr +
-        " cents per dollar of exposure. Liability exposure indicated when the window mass P(W) exceeds this ratio.";
+        " cents per dollar of exposure. Liability exposure indicated when the composed Hand probability P(W) exceeds this ratio.";
 
     // D counter (frozen vs accruing). When the anchor predates FIPS
     // finalization, partition D into notice-and-preparation delay and
     // migration procrastination proper \u2014 same number, honestly split.
     const dBox = document.getElementById("dBox");
     let dSplit = "";
-    if (state.awareness < FIPS_FINAL) {
-        const dEnd = c.start || c.now;
-        const post = Math.max(0, (dEnd - FIPS_FINAL) / MS_YEAR);
+    if (c.G) {
+        // Governance documented: D = Dg + Df, runway excluded by definition
+        dSplit = " (governance delay " + c.Dg.toFixed(2) + "y + feasibility delay " + c.Df.toFixed(2) + "y)";
+        if (c.runway > 0.005)
+            dSplit += "; " + c.runway.toFixed(2) + "y of diligent preparation excluded from procrastination.";
+        else if (c.G > FIPS_FINAL)
+            dSplit += ". Governance began after standards finalization \u2014 no preparation preceded feasibility, so D excludes nothing.";
+        else dSplit += ".";
+        if (!c.start && c.runway > 0.005)
+            dSplit += " Preparation incomplete at finalization spills into feasibility delay \u2014 measured from Aug. 13, 2024, it already captures any unfinished runway; the credit does not cap it.";
+    } else if (state.awareness < FIPS_FINAL) {
+        const post = c.Df;
         const pre = Math.max(0, c.D - post);
         dSplit = post > 0.005
             ? " Of this, " + post.toFixed(2) + "y postdates standards finalization (Aug. 13, 2024) \u2014 migration to the finalized standards could not have commenced earlier; the remainder (" + pre.toFixed(2) + "y) measures notice and preparation delay."
@@ -1081,26 +1124,26 @@ function render() {
     document.getElementById("pwSub").textContent =
         (c.beyond ? "Right edge beyond survey horizon (clamped) \u00b7 " : "") +
         (Math.abs(c.mOpt - c.mPess) < 0.05 ? "point estimate, " : "pessimistic\u2013optimistic, ") + c.rpt.label +
-        (attn ? " \u00b7 effective " + fmtBand(c.effPess, c.effOpt, 0) + " at T = " + c.T.toFixed(2) : "");
+        (attn ? " \u00b7 P(W) " + fmtBand(c.effPess, c.effOpt, 0) + " at Ph\u00b7Pd = " + c.T.toFixed(2) : "");
     document.getElementById("rReadout").textContent = rStr + "%";
     const pStrPrem = v => (v >= 0 ? "+" : "") + v.toFixed(1);
     document.getElementById("premiumValue").textContent =
-        pStrPrem(c.effPremPess) + " to " + pStrPrem(c.effPremOpt) + " pts" + (attn ? " (T-scaled)" : "");
+        pStrPrem(c.effPremPess) + " to " + pStrPrem(c.effPremOpt) + " pts" + (attn ? " (scaled by Ph\u00b7Pd)" : "");
 
     // Advanced panel readout + rationale reveal
-    document.getElementById("tValue").textContent = "T = " + c.T.toFixed(2) + " \u2014 " + tAnchorLabel(c.T);
+    document.getElementById("tValue").textContent = "Ph\u00b7Pd = " + c.T.toFixed(2) + " \u2014 " + tAnchorLabel(c.T);
     document.getElementById("tReadout").style.display = attn ? "block" : "none";
     if (attn) document.getElementById("tReadout").textContent =
-        "P(W) " + fmtBand(c.mPess, c.mOpt, 0) + " \u2192 effective " +
-        fmtBand(c.effPess, c.effOpt, 0) + " at T = " + c.T.toFixed(2);
+        "Pc(W) " + fmtBand(c.mPess, c.mOpt, 0) + " \u2192 P(W) " +
+        fmtBand(c.effPess, c.effOpt, 0) + " at Ph\u00b7Pd = " + c.T.toFixed(2);
     document.getElementById("tRationaleWrap").style.display = attn ? "block" : "none";
 
     const tstarEl = document.getElementById("tstarValue");
     const tstarSub = document.getElementById("tstarSub");
-    const tstarAt = attn ? " at T = " + c.T.toFixed(2) : "";
+    const tstarAt = attn ? " at Ph\u00b7Pd = " + c.T.toFixed(2) : "";
     if (!c.crossOpt) {
         tstarEl.textContent = "Beyond horizon";
-        tstarSub.textContent = "Window mass never reaches R" + (attn ? "/T" : "") + " within the survey range";
+        tstarSub.textContent = "Capability mass never reaches R" + (attn ? "/(Ph\u00b7Pd)" : "") + " within the survey range";
     } else {
         const fmt = ci => ci.atPub ? "at or before publication" : fmtMonthYear(ci.date);
         if (c.crossPess && (c.crossPess.atPub || c.crossPess.date < c.now)) {
@@ -1123,42 +1166,42 @@ function render() {
 function renderVerdict(c, rStr) {
     const v = document.getElementById("verdict");
     const attn = c.T < 1;
-    const atT = attn ? " (at T = " + c.T.toFixed(2) + ")" : "";
+    const atT = attn ? " (at Ph\u00b7Pd = " + c.T.toFixed(2) + ")" : "";
     // The upper-bound reading must always accompany an attenuated verdict:
-    // the user never sees an attenuated DEFENSIBLE without the T = 1.0 answer.
+    // the user never sees an attenuated DEFENSIBLE without the 1.00 answer.
     const upperWord = c.windowClosed ? "WINDOW CLOSED"
         : c.R < c.mPess ? "THRESHOLD CROSSED" : c.R < c.mOpt ? "CONTESTED" : "DEFENSIBLE";
     const upperLine = attn && !c.windowClosed
-        ? "<p style='font-size:12.5px;font-weight:600;color:var(--text-muted);border-top:1px solid rgba(0,0,0,0.08);padding-top:8px;margin-top:4px'>At the upper bound (T = 1.0): " + upperWord + ".</p>" : "";
+        ? "<p style='font-size:12.5px;font-weight:600;color:var(--text-muted);border-top:1px solid rgba(0,0,0,0.08);padding-top:8px;margin-top:4px'>At the upper bound (Ph\u00b7Pd = 1.00): " + upperWord + ".</p>" : "";
     const pl = c.L * c.effPess / 100, pl2 = c.L * c.effOpt / 100;
-    const equiv = "Equivalent multiplicative form: " + (attn ? "T\u00d7P(W)\u00d7L" : "P(W)\u00d7L") + " = " +
+    const equiv = "Equivalent multiplicative form: P(W)\u00d7L = " +
         fmtMoney(pl, c.sym) + "\u2013" + fmtMoney(pl2, c.sym) +
         " against B = " + fmtMoney(c.B, c.sym) + ".";
 
     if (c.windowClosed) {
         v.className = "verdict closed";
         v.innerHTML = "<h3>Window closed</h3>" +
-            "<p>Migration completed long enough ago that all data harvested under breakable encryption has exceeded its shelf life. No remaining HNDL exposure on these inputs at any targeting factor.</p>";
+            "<p>Migration completed long enough ago that all data harvested under breakable encryption has exceeded its shelf life. No remaining HNDL exposure on these inputs at any harvest-and-prioritization factor.</p>";
         return;
     }
 
     if (c.R < c.effPess) {
         v.className = "verdict crossed";
         v.innerHTML = "<h3>\u26a0\ufe0f Threshold crossed \u2014 on both interpretations" + atT + "</h3>" +
-            "<p>Your risk ratio <span class='mono'>R = " + rStr + "%</span> sits below even the <em>pessimistic</em> " + (attn ? "effective mass <span class='mono'>T \u00d7 P(W) = " + c.effPess.toFixed(0) + "%</span>" : "window mass <span class='mono'>P(W) = " + c.mPess.toFixed(0) + "%</span>") + ". The probability that a CRQC arrives inside your vulnerability window" + (attn ? ", even attenuated by your documented target profile," : "") + " exceeds your cost of prevention per dollar of exposure, no matter how conservatively the survey is interpreted." +
+            "<p>Your risk ratio <span class='mono'>R = " + rStr + "%</span> sits below even the <em>pessimistic</em> " + (attn ? "composed <span class='mono'>P(W) = " + c.effPess.toFixed(0) + "%</span> (= Pc(W) " + c.mPess.toFixed(0) + "% \u00d7 Ph\u00b7Pd " + c.T.toFixed(2) + ")" : "window mass <span class='mono'>P(W) = " + c.mPess.toFixed(0) + "%</span>") + ". The probability that a CRQC arrives inside your vulnerability window" + (attn ? ", even attenuated by your documented target profile," : "") + " exceeds your cost of prevention per dollar of exposure, no matter how conservatively the survey is interpreted." +
             (!c.start ? " The window is still sliding: of today's mass, <span class='mono'>" + c.effPremPess.toFixed(1) + "</span> points accrued through procrastination alone." : "") +
             " Whichever side of the line your final numbers fall, the protected position is the documented one: record this analysis and its date.</p>" +
             "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>" + upperLine;
     } else if (c.R < c.effOpt) {
         v.className = "verdict contested";
         v.innerHTML = "<h3>\u2696\ufe0f Contested zone" + atT + "</h3>" +
-            "<p>Your ratio <span class='mono'>R = " + rStr + "%</span> falls inside the " + (attn ? "effective interpretation band <span class='mono'>T \u00d7 P(W) = " + c.effPess.toFixed(0) + "\u2013" + c.effOpt.toFixed(0) + "%</span>" : "interpretation band <span class='mono'>" + c.mPess.toFixed(0) + "\u2013" + c.mOpt.toFixed(0) + "%</span>") + ". Reasonable minds can differ \u2014 which is precisely why a documented, contemporaneous analysis is the defensible position. An organization that never ran the numbers cannot claim the burden exceeded expected loss." +
+            "<p>Your ratio <span class='mono'>R = " + rStr + "%</span> falls inside the " + (attn ? "composed band <span class='mono'>P(W) = " + c.effPess.toFixed(0) + "\u2013" + c.effOpt.toFixed(0) + "%</span> (at Ph\u00b7Pd = " + c.T.toFixed(2) + ")" : "interpretation band <span class='mono'>" + c.mPess.toFixed(0) + "\u2013" + c.mOpt.toFixed(0) + "%</span>") + ". Reasonable minds can differ \u2014 which is precisely why a documented, contemporaneous analysis is the defensible position. An organization that never ran the numbers cannot claim the burden exceeded expected loss." +
             (c.crossPess && !c.crossPess.atPub && c.crossPess.date > c.now ? " On current trends the pessimistic mass overtakes your ratio <span class='mono'>" + fmtMonthYear(c.crossPess.date) + "</span>." : "") + "</p>" +
             "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>" + upperLine;
     } else {
         v.className = "verdict defensible";
         v.innerHTML = "<h3>\u2705 Burden currently defensible \u2014 document it now" + atT + "</h3>" +
-            "<p>Your ratio <span class='mono'>R = " + rStr + "%</span> exceeds the optimistic " + (attn ? "effective mass <span class='mono'>T \u00d7 P(W) = " + c.effOpt.toFixed(0) + "%</span>" : "window mass <span class='mono'>" + c.mOpt.toFixed(0) + "%</span>") + ": prevention currently costs more per dollar of exposure than the " + (attn ? "attenuated" : "expert-consensus") + " probability of harm. This position erodes on a schedule \u2014 " +
+            "<p>Your ratio <span class='mono'>R = " + rStr + "%</span> exceeds the optimistic " + (attn ? "composed <span class='mono'>P(W) = " + c.effOpt.toFixed(0) + "%</span> (= Pc(W) " + c.mOpt.toFixed(0) + "% \u00d7 Ph\u00b7Pd " + c.T.toFixed(2) + ")" : "window mass <span class='mono'>" + c.mOpt.toFixed(0) + "%</span>") + ": prevention currently costs more per dollar of exposure than the " + (attn ? "attenuated" : "expert-consensus") + " probability of harm. This position erodes on a schedule \u2014 " +
             (c.crossOpt ? "the sliding window reaches your ratio <span class='mono'>" + (c.crossOpt.atPub ? "at publication" : fmtMonthYear(c.crossOpt.date)) + "</span> on the optimistic read" + (c.crossPess ? ", " + (c.crossPess.atPub ? "at publication" : fmtMonthYear(c.crossPess.date)) + " on the pessimistic" : "") + "." : "no crossing occurs within the 30-year survey horizon.") +
             " The Business Judgment Rule protects the informed decision, not the undocumented one: record this analysis and its date.</p>" +
             "<p style='font-size:12.5px;color:var(--text-muted)'>" + equiv + "</p>" + upperLine;
@@ -1247,9 +1290,9 @@ function renderChart(c) {
     }
 
     // ----- Exposure areas inside W (drawn only over the visible frame) -----
-    // Shaded against the effective threshold Reff = R/T: R < T × mass ⟺
+    // Shaded against the effective threshold Reff = R/(Ph·Pd): R < Ph·Pd × mass ⟺
     // mass > R/T, so the published curves stay untouched and only the
-    // comparison line moves. At T = 1.0, Reff ≡ R (regression-identical).
+    // comparison line moves. At Ph·Pd = 1.00, Reff ≡ R (regression-identical).
     const wbVis = Math.min(wb, tVis);
     if (!c.windowClosed && wbVis > wa && c.Reff < 100) {
         // consensus exposure: Reff..pess where pess > Reff
@@ -1301,7 +1344,7 @@ function renderChart(c) {
     if (c.T < 1 && c.Reff <= 100) {
         const reY = yPix(c.Reff);
         s += `<line x1="${ML}" y1="${reY}" x2="${W-MR}" y2="${reY}" stroke="#a78bfa" stroke-width="2" stroke-dasharray="4 5"/>`;
-        s += `<text x="${W-MR-4}" y="${reY-7}" text-anchor="end" font-size="11.5" font-weight="700" fill="#a78bfa" font-family="JetBrains Mono, monospace">R/T = ${c.Reff.toFixed(1)}% (T = ${c.T.toFixed(2)})</text>`;
+        s += `<text x="${W-MR-4}" y="${reY-7}" text-anchor="end" font-size="11.5" font-weight="700" fill="#a78bfa" font-family="JetBrains Mono, monospace">R/(Ph·Pd) = ${c.Reff.toFixed(1)}% (at ${c.T.toFixed(2)})</text>`;
     }
 
     // Ghost-window label, on a backing plate: painted after the curves and
@@ -1327,7 +1370,7 @@ function renderChart(c) {
         <rect x="${ML+10}" y="${MT+88}" width="28" height="11" fill="#f59e0b" opacity="0.30"/>
         <text x="${ML+44}" y="${MT+98}" fill="#334155">exposure \u2014 contested (optimistic only)</text>
         ${c.T < 1 ? `<line x1="${ML+10}" y1="${MT+114}" x2="${ML+38}" y2="${MT+114}" stroke="#a78bfa" stroke-width="2" stroke-dasharray="4 5"/>
-        <text x="${ML+44}" y="${MT+118}" fill="#334155">effective threshold R/T at T = ${c.T.toFixed(2)}</text>` : ""}
+        <text x="${ML+44}" y="${MT+118}" fill="#334155">effective threshold at Ph·Pd = ${c.T.toFixed(2)}</text>` : ""}
     </g>`;
 
     // ---- Timeline bracket below the axis: D (awareness \u2192 start), Y
@@ -1401,7 +1444,11 @@ function encodeHash() {
     if (state.commenced && state.commenceDate)
         p.set("cm", document.getElementById("commenceDate").value);
     const tv = document.getElementById("tSlider").value;
-    if (+tv < 1) p.set("t", tv); // T appended last, omitted at the 1.0 upper bound
+    // hash key 't' is legacy naming for the Ph\u00b7Pd factor (formerly "targeting
+    // factor T"); kept verbatim so links in the wild survive the rename.
+    if (+tv < 1) p.set("t", tv); // omitted at the 1.00 upper bound
+    if (state.govDate) // 'g' appended after 't'; omitted when unset, never reorders keys
+        p.set("g", document.getElementById("govDate").value);
     return "#" + p.toString();
 }
 function decodeHash() {
@@ -1430,6 +1477,11 @@ function decodeHash() {
             state.commenceDate = new Date(p.get("cm") + "T00:00:00");
         }
         if (p.get("sc") && SCENARIOS[p.get("sc")]) activeScenario = p.get("sc");
+        if (p.get("g")) { // absent in older links -> no governance date, no credit
+            document.getElementById("govDate").value = p.get("g");
+            state.govDate = new Date(p.get("g") + "T00:00:00");
+            document.getElementById("govEvidenceWrap").style.display = "block";
+        }
         if (p.get("t")) { // absent in older links -> slider stays at 1.0
             const tv = +p.get("t");
             if (tv >= 0.1 && tv <= 1)
@@ -1444,7 +1496,7 @@ function generateDocument() {
     const rStr = c.R < 0.1 ? c.R.toFixed(3) : c.R.toFixed(1);
     const rightDate = new Date(c.pub.getTime() + c.b * MS_YEAR);
     const attn = c.T < 1;
-    const effWord = attn ? "T×P(W)" : "P(W)";
+    const effWord = "P(W)"; // composed Hand probability in both modes
     const verdictLine =
         c.windowClosed ? "WINDOW CLOSED - no remaining HNDL exposure on these inputs" :
         c.R < c.effPess ? "THRESHOLD CROSSED - R below " + effWord + " on both interpretations" :
@@ -1455,12 +1507,13 @@ function generateDocument() {
         c.R < c.mPess ? "THRESHOLD CROSSED" :
         c.R < c.mOpt ? "CONTESTED ZONE" : "BURDEN CURRENTLY DEFENSIBLE";
     const rationale = (document.getElementById("tRationale").value || "").trim();
+    const govEvidence = document.getElementById("govEvidence").value.trim();
     const lines = [
         "MOSCA HAND THRESHOLD ANALYSIS - CONTEMPORANEOUS RECORD",
         "Generated: " + c.now.toISOString() + " (" + fmtDate(c.now) + ")",
         "Tool: ProteQC(R) Mosca Hand Threshold Evaluator, Educational Edition",
         "",
-        "FORMULA: R < " + (attn ? "T\u00d7P(W)" : "P(W)") + "   [B < P\u00d7L, Carroll Towing, in threshold form]",
+        "FORMULA: R < P(W)   [P(W) = Pc(W) \u00d7 Ph\u00b7Pd; B < P\u00d7L, Carroll Towing, threshold form]",
         "",
         "INPUTS",
         "  Scenario preset ......... " + SCENARIOS[activeScenario].label,
@@ -1470,12 +1523,27 @@ function generateDocument() {
         "  Y (migration time) ...... " + c.Y + " years",
         "  Awareness date .......... " + fmtDate(state.awareness),
         "  Migration commenced ..... " + (c.start ? fmtDate(c.start) : "NO - window right edge still sliding"),
-        "  D (procrastination) ..... " + c.D.toFixed(2) + " years" + (c.start ? " (frozen at commencement)" : " (accruing)") + (state.awareness < FIPS_FINAL ? " (anchor predates FIPS finalization; see ladder note)" : ""),
-        "  T (targeting factor) .... " + c.T.toFixed(2) + " - " + tAnchorLabel(c.T) +
-            (attn ? "" : " (upper bound; harvest and prioritization assumed)"),
+        "  D (procrastination) ..... " + c.D.toFixed(2) + " years" + (c.start ? " (frozen at commencement)" : " (accruing)") + (c.G ? " = Dg + Df; runway excluded" : (state.awareness < FIPS_FINAL ? " (anchor predates FIPS finalization; see ladder note)" : "")),
+        ...(c.G ? [
+        "  Timeline segments:",
+        "    Governance delay (Dg) . " + fmtDate(state.awareness) + " to " + fmtDate(c.G) + " = " + c.Dg.toFixed(2) + " yrs",
+        "    Preparation runway .... " + (c.runway > 0.005 ? fmtDate(c.G) + " to Aug 13, 2024 = " + c.runway.toFixed(2) + " yrs (diligence - excluded from D)" : "none (governance began after standards finalization)"),
+        "    Feasibility delay (Df)  " + (c.Df > 0.005 ? (c.G > FIPS_FINAL ? fmtDate(c.G) : "Aug 13, 2024") + " to " + (c.start ? fmtDate(c.start) : "today") + " = " + c.Df.toFixed(2) + " yrs" : "none (commenced before finalization)"),
+        "  Governance commenced .... " + fmtDate(c.G),
+        "  Governance evidence ..... " + (govEvidence ? "" : "⚠ NO EVIDENCE RECORDED - a governance date without minuted"),
+        ...(govEvidence
+            ? govEvidence.split("\n").map(l => "    " + l)
+            : ["    support invites the inference that none exists; record the",
+               "    minute date, resolution, and designation"])
+        ] : [
+        "  Governance .............. no governance commencement documented -",
+        "    full pre-standards period reported as governance delay"
+        ]),
+        "  Ph\u00b7Pd factor ............ " + c.T.toFixed(2) + " - " + tAnchorLabel(c.T) +
+            (attn ? " (estimated against " + c.rpt.label + ")" : " (upper bound; harvest and prioritization assumed)"),
         ...(attn ? [
         "  Target-profile rationale " + (rationale
-            ? "" : "\u26a0 NO RATIONALE RECORDED - lowering T is an affirmative"),
+            ? "" : "\u26a0 NO RATIONALE RECORDED - lowering Ph\u00b7Pd is an affirmative"),
         ...(rationale
             ? rationale.split("\n").map((l, i) => (i === 0 ? "    " : "    ") + l)
             : ["    judgment; document the sector profile, plausible adversaries,",
@@ -1503,24 +1571,24 @@ function generateDocument() {
         "",
         "RESULT",
         "  R = B/L ................. " + rStr + "%",
-        "  P(W) mass (raw) ......... " + c.mPess.toFixed(1) + "% (pessimistic) to " + c.mOpt.toFixed(1) + "% (optimistic)",
+        "  Pc(W) capability mass ... " + c.mPess.toFixed(1) + "% (pessimistic) to " + c.mOpt.toFixed(1) + "% (optimistic)",
         ...(attn ? [
-        "  Effective T × P(W) ...... " + c.effPess.toFixed(1) + "% (pessimistic) to " + c.effOpt.toFixed(1) + "% (optimistic) at T = " + c.T.toFixed(2)
+        "  P(W) composed ........... " + c.effPess.toFixed(1) + "% (pessimistic) to " + c.effOpt.toFixed(1) + "% (optimistic) at Ph\u00b7Pd = " + c.T.toFixed(2)
         ] : []),
-        "  Procrastination premium . " + (c.effPremPess>=0?"+":"") + c.effPremPess.toFixed(1) + " to " + (c.effPremOpt>=0?"+":"") + c.effPremOpt.toFixed(1) + " pts" + (attn ? " (T-scaled)" : ""),
-        "  Verdict ................. " + verdictLine + (attn ? " (at T = " + c.T.toFixed(2) + ")" : ""),
+        "  Procrastination premium . " + (c.effPremPess>=0?"+":"") + c.effPremPess.toFixed(1) + " to " + (c.effPremOpt>=0?"+":"") + c.effPremOpt.toFixed(1) + " pts" + (attn ? " (scaled by Ph\u00b7Pd)" : ""),
+        "  Verdict ................. " + verdictLine + (attn ? " (at Ph\u00b7Pd = " + c.T.toFixed(2) + ")" : ""),
         ...(attn ? [
-        "  At the upper bound ...... T = 1.00: " + upperVerdict
+        "  At the upper bound ...... Ph\u00b7Pd = 1.00: " + upperVerdict
         ] : []),
         "",
         "Scenario link: " + location.origin + location.pathname + encodeHash(),
         "",
-        "Methodology: window mass P(W) = P(right) - P(left) on the report's cumulative",
+        "Methodology: capability mass Pc(W) = Pc(right) - Pc(left) on the report's cumulative",
         "curve (Fritsch-Carlson monotone interpolation of Appendix A.4 anchors).",
         ...(attn ? [
-        "The probability term is the capability probability P(W) attenuated by a",
-        "documented targeting factor T per the decomposition in Post-Quantum",
-        "Negligence sec. III.E (T collapses the harvest and prioritization factors)."
+        "The probability term is the composed Hand probability P(W) = Pc(W) x Ph\u00b7Pd",
+        "per the decomposition in Post-Quantum Negligence sec. III.E (Ph\u00b7Pd jointly",
+        "estimates the harvest and prioritization components)."
         ] : []),
         "Mosca's Theorem (x+y>z) per Mosca, 16 IEEE Sec. & Priv. 38 (2018); procrastination",
         "variable per the Mosca-Gomez formulation (Jaime Gomez Garcia, Europol Quantum",
@@ -1688,11 +1756,13 @@ function updateTimelineSel() {
         row.classList.toggle("sel", row.dataset.idx === v));
 }
 
-/* ---------- Targeting factor T (Advanced: Target Profile) ----------
-   T collapses the harvest and prioritization probabilities into one
-   multiplier on P(W). Anchor positions are illustrative pedagogy, not
-   threat-intelligence estimates. T is a probability multiplier, never
-   a time; 1.00 is the documented upper bound and the default. */
+/* ---------- Ph·Pd factor (Advanced: Target Profile) ----------
+   The harvest-and-prioritization component of the Hand probability:
+   P(W) = Pc(W) × Ph·Pd, estimated jointly as one knob (harvest and
+   prioritization are correlated). Anchor positions are illustrative
+   pedagogy, not threat-intelligence estimates. Ph·Pd is a probability
+   multiplier, never a time; 1.00 is the documented upper bound and the
+   default. Internal identifiers keep the legacy T naming (hash compat). */
 const T_ANCHORS = [
     { v: 1.00, name: "Upper bound", desc: "assume harvested and prioritized; the §III.C reading (default)" },
     { v: 0.75, name: "High-value target", desc: "defense-industrial, critical infrastructure, systemically important financial, diplomatic/government" },
@@ -1732,7 +1802,12 @@ document.getElementById("tSlider").addEventListener("input", render);
 function renderNoticeStrip() {
     const svg = document.getElementById("noticeStrip");
     const W = 920, padL = 12, padR = 12;
-    const top = 20, bot = 74, capY = 92;
+    // With a governance date the strip grows 20px to host the three-segment
+    // bar (Dg / runway / Df) below the baseline; without one, geometry is
+    // regression-identical to the two-clock build.
+    const gv = state.govDate;
+    svg.setAttribute("viewBox", gv ? "0 0 920 116" : "0 0 920 96");
+    const top = 20, bot = 74, capY = gv ? 112 : 92, segY = 82, segLabY = 95;
     const maxDay = +document.getElementById("awSlider").max;
     const xDay = d => padL + (Math.max(0, Math.min(d, maxDay)) / maxDay) * (W - padL - padR);
     const selDate = document.getElementById("awarenessDate").value;
@@ -1782,6 +1857,32 @@ function renderNoticeStrip() {
             const selEv = dt.ev.date === selDate;
             s += `<circle cx="${dt.x.toFixed(1)}" cy="${dt.y.toFixed(1)}" r="${selEv ? 5 : 3}" fill="${selEv ? "#7C3AED" : "white"}" stroke="#7C3AED" stroke-width="1.4"><title>${evWhen(dt.ev)} — ${dt.ev.label}</title></circle>`;
         }
+    }
+    // Governance segmentation: three labeled spans between the anchor and
+    // today — governance delay (warning) / preparation runway (credit) /
+    // feasibility delay (warning) — with a G marker in the event-dot idiom.
+    if (gv) {
+        const dayOf = d => (d - AW0) / DAY_MS;
+        const M = (state.commenced && state.commenceDate) ? state.commenceDate : new Date();
+        const dN = dayOf(state.awareness), dG = dayOf(gv), dF = awDayOf("2024-08-13"), dM = dayOf(M);
+        const segs = [
+            { d0: dN, d1: Math.min(dG, dM), name: "governance delay", short: "Dg", color: "#dc2626" },
+            { d0: Math.max(dG, dN), d1: Math.min(dF, dM), name: "preparation runway", short: "runway", color: "#14B8A6" },
+            { d0: Math.max(dF, dG), d1: dM, name: "feasibility delay", short: "Df", color: "#dc2626" }
+        ];
+        for (const sg of segs) {
+            if (sg.d1 - sg.d0 < 1) continue; // clamped away; never negative
+            const x0 = xDay(sg.d0), x1 = xDay(sg.d1), wSeg = x1 - x0;
+            const yrs = ((sg.d1 - sg.d0) / 365.25).toFixed(2) + "y";
+            s += `<g><title>${sg.name} — ${yrs}</title>`;
+            s += `<line x1="${x0.toFixed(1)}" y1="${segY}" x2="${x1.toFixed(1)}" y2="${segY}" stroke="${sg.color}" stroke-width="3" opacity="0.75"/>`;
+            s += `<line x1="${x0.toFixed(1)}" y1="${segY-4}" x2="${x0.toFixed(1)}" y2="${segY+4}" stroke="${sg.color}" stroke-width="1.3"/>`;
+            s += `<line x1="${x1.toFixed(1)}" y1="${segY-4}" x2="${x1.toFixed(1)}" y2="${segY+4}" stroke="${sg.color}" stroke-width="1.3"/>`;
+            const lab = wSeg > 160 ? `${sg.name} ${yrs}` : wSeg > 55 ? `${sg.short} ${yrs}` : wSeg > 18 ? sg.short : "";
+            if (lab) s += `<text x="${((x0+x1)/2).toFixed(1)}" y="${segLabY}" text-anchor="middle" font-size="9.5" font-weight="600" fill="${sg.color}" font-family="DM Sans, sans-serif">${lab}</text>`;
+            s += `</g>`;
+        }
+        s += `<circle cx="${xDay(dG).toFixed(1)}" cy="${bot}" r="3.5" fill="white" stroke="#14B8A6" stroke-width="1.6"><title>Governance commenced — ${fmtDate(gv)}</title></circle>`;
     }
     if (preFrame.length) {
         s += `<text x="${padL}" y="${capY}" text-anchor="start" font-size="9.5" fill="#94a3b8" font-family="DM Sans, sans-serif">◂ ${preFrame.map(ev => evWhen(ev) + " " + ev.label).join(" · ")} — the issue predates the frame; existence is foreseeability in principle, not chargeable notice</text>`;
@@ -1841,6 +1942,12 @@ document.getElementById("commenceCheck").addEventListener("change", e => {
 
 document.getElementById("commenceDate").addEventListener("change", e => {
     state.commenceDate = e.target.value ? new Date(e.target.value + "T00:00:00") : null;
+    render();
+});
+
+document.getElementById("govDate").addEventListener("change", e => {
+    state.govDate = e.target.value ? new Date(e.target.value + "T00:00:00") : null;
+    document.getElementById("govEvidenceWrap").style.display = state.govDate ? "block" : "none";
     render();
 });
 
