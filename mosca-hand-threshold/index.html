@@ -682,12 +682,12 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
     <div class="card">
         <div class="step-header">Step 3</div>
         <div class="section-title">P(W) and the Exposure Area</div>
-        <div class="section-sub">The QTTR band with your window and risk ratio overlaid. The shaded exposure area is where expert consensus exceeds your ratio inside your window &mdash; darker where both interpretations agree, lighter where only the optimistic read does.</div>
+        <div class="section-sub">The Quantum Threat Timeline Report (QTTR) band with your window and risk ratio overlaid. The shaded exposure area is where expert consensus exceeds your ratio inside your window &mdash; darker where both interpretations agree, lighter where only the optimistic read does.</div>
 
         <div class="report-selector" id="reportSelector"></div>
 
         <div class="chart-wrap"><svg id="chart" viewBox="0 0 920 580" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="QTTR band with vulnerability window, risk ratio line, exposure area, and a D/Y/X timeline bracket from awareness to window close"></svg></div>
-        <div class="chart-footnote">Cumulative probability of a CRQC (RSA-2048 in &lt;24h) by calendar date, monotone-interpolated between the report's five survey anchors. The time axis is fixed at 2015&ndash;2045 across all reports, so each survey's curve plots at its true calendar position; survey years beyond 2045 lie off-frame, and values beyond the 30-year survey horizon are clamped. The cumulative public notice record is charted in Step 2, directly above the awareness slider it feeds.</div>
+        <div class="chart-footnote">Cumulative probability of a CRQC (RSA-2048 in &lt;24h) by calendar date, monotone-interpolated between the report's five survey anchors. Each surveyed expert answers in qualitative likelihood bins; the <em>optimistic</em> curve converts every answer to the top of its bin's cumulative probability range, the <em>pessimistic</em> curve to the bottom &mdash; the band between them is the survey's own interpretation range, not disagreement among experts. The time axis is fixed at 2015&ndash;2045 across all reports, so each survey's curve plots at its true calendar position; survey years beyond 2045 lie off-frame, and values beyond the 30-year survey horizon are clamped. The cumulative public notice record is charted in Step 2, directly above the awareness slider it feeds.</div>
 
         <div class="readout-grid">
             <div class="readout-cell">
@@ -706,7 +706,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
                 <div class="rc-sub">Mass added since the window began sliding at awareness</div>
             </div>
             <div class="readout-cell">
-                <div class="rc-label">Crossing date t*</div>
+                <div class="rc-label">Crossing date <span style="text-transform:none">t*</span></div>
                 <div class="rc-value" id="tstarValue">&mdash;</div>
                 <div class="rc-sub" id="tstarSub"></div>
             </div>
@@ -717,7 +717,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
             <div class="method-body">
                 <p>The survey band above is the <strong>capability</strong> probability: the chance a CRQC exists inside your window. The Hand probability is the chance of harm <em>to you</em>, which the accompanying article's &sect;III.E decomposes as P = P<sub>c</sub> &times; P<sub>h</sub> &times; P<sub>d</sub> &mdash; capability, harvest, decryption prioritization. This panel supplies the latter two as a single factor <strong>P<sub>h</sub>&times;P<sub>d</sub></strong>; the survey band above is P<sub>c</sub>(W), and the headline threshold R &lt; P(W) reads the composed Hand probability, <span style="font-family:'JetBrains Mono',monospace">P(W) = P<sub>c</sub>(W) &times; P<sub>h</sub>&times;P<sub>d</sub></span>. The two are collapsed deliberately: harvest and prioritization are not independent &mdash; no adversary warehouses ciphertext it never expects to read, so data worth harvesting is data worth decrypting. <strong>P<sub>h</sub>&times;P<sub>d</sub> = 1.00 is the documented upper bound and the default</strong>; the anchor positions below are illustrative pedagogy, not threat-intelligence estimates.</p>
                 <div class="variable-section" style="margin:14px 0 6px">
-                    <div class="variable-label">P<sub>h</sub>&times;P<sub>d</sub> = Harvest-and-Prioritization Factor <span class="value-display purple" id="tValue">Ph&times;Pd = 1.00 &mdash; Upper bound</span></div>
+                    <div class="variable-label"><span>P<sub>h</sub>&times;P<sub>d</sub> = Harvest-and-Prioritization Factor</span> <span class="value-display purple" id="tValue">P<sub>h</sub>&times;P<sub>d</sub> = 1.00 &mdash; Upper bound</span></div>
                     <input type="range" id="tSlider" min="0.10" max="1.00" step="0.05" value="1.00" aria-label="Targeting factor T">
                     <div class="aw-ticks" id="tTicks" aria-hidden="true"></div>
                     <div class="range-ticks"><span>0.10</span><span>1.00</span></div>
@@ -728,7 +728,7 @@ details.method code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
                     <div class="variable-label" style="font-size:13.5px">Target-profile rationale <span style="font-weight:400; color:var(--text-light); font-size:11.5px">(sector profile, plausible adversaries, data value &mdash; recorded in the documentation block)</span></div>
                     <textarea id="tRationale" style="width:100%; min-height:64px; resize:vertical; font-family:'DM Sans',sans-serif; font-size:13px; padding:10px 12px; border:1px solid var(--border-light); border-radius:8px; background:#f8fafc; color:var(--text-dark)" placeholder="Why is this organization's ciphertext less likely to be harvested or prioritized? Leaving this empty flags the documented analysis."></textarea>
                 </div>
-                <p style="margin-top:12px; font-size:12.5px"><strong>This factor cuts both ways.</strong> Defense counsel will argue your T is low; plaintiffs will answer that harvesting is cheap and indiscriminate, that no adversary warehouses ciphertext it never expects to read, and that prioritization climbs over your data's whole confidentiality horizon as decryption capability spreads and cheapens. Lowering P<sub>h</sub>&times;P<sub>d</sub> is an affirmative judgment &mdash; document it. (Scenario links carry the factor but not your rationale; the documentation block is the record.)</p>
+                <p style="margin-top:12px; font-size:12.5px"><strong>This factor cuts both ways.</strong> Defense counsel will argue your P<sub>h</sub>&times;P<sub>d</sub> is low; plaintiffs will answer that harvesting is cheap and indiscriminate, that no adversary warehouses ciphertext it never expects to read, and that prioritization climbs over your data's whole confidentiality horizon as decryption capability spreads and cheapens. Lowering P<sub>h</sub>&times;P<sub>d</sub> is an affirmative judgment &mdash; document it. (Scenario links carry the factor but not your rationale; the documentation block is the record.)</p>
                 <p style="margin-top:10px; font-size:12.5px"><strong>Fast and slow variables.</strong> P<sub>c</sub> is the fast variable &mdash; resurveyed annually, it swings with each QTTR edition. P<sub>h</sub>&times;P<sub>d</sub> is the slow variable &mdash; a target-profile judgment, stable quarter to quarter &mdash; but it ratchets upward: harvest is an absorbing state (collected ciphertext never becomes uncollected; migration protects future traffic, not the warehouse), decryption capacity compounds (Gidney 2019&ndash;2025: a ~20&times; resource reduction), reaching progressively less attractive targets, and data accumulation grows the target itself. Re-estimate annually on the QTTR cadence; downward revisions demand extraordinary justification &mdash; a documented 0.60 that becomes 0.40 two years later reads as motivated reasoning. The documentation block timestamps your estimate against the survey edition in force.</p>
             </div>
         </details>
@@ -1131,7 +1131,7 @@ function render() {
         pStrPrem(c.effPremPess) + " to " + pStrPrem(c.effPremOpt) + " pts" + (attn ? " (scaled by Ph\u00d7Pd)" : "");
 
     // Advanced panel readout + rationale reveal
-    document.getElementById("tValue").textContent = "Ph\u00d7Pd = " + c.T.toFixed(2) + " \u2014 " + tAnchorLabel(c.T);
+    document.getElementById("tValue").innerHTML = "P<sub>h</sub>\u00d7P<sub>d</sub> = " + c.T.toFixed(2) + " \u2014 " + tAnchorLabel(c.T);
     document.getElementById("tReadout").style.display = attn ? "block" : "none";
     if (attn) document.getElementById("tReadout").textContent =
         "Pc(W) " + fmtBand(c.mPess, c.mOpt, 0) + " \u2192 P(W) " +
@@ -1356,22 +1356,26 @@ function renderChart(c) {
 
     // Legend, on a semi-opaque backing plate: W's left edge is always "today"
     // (the plot's left edge), so the legend always sits inside the window
-    // shading and needs the plate to stay readable.
+    // shading and needs the plate to stay readable. Rows are built
+    // dynamically: the ghost-window and effective-threshold entries appear
+    // only when their chart elements do.
+    const legendRows = [
+        { swatch: `<line x1="${ML+10}" y1="__LY__" x2="${ML+38}" y2="__LY__" stroke="#10B981" stroke-width="2.5"/>`, label: "optimistic interpretation" },
+        { swatch: `<line x1="${ML+10}" y1="__LY__" x2="${ML+38}" y2="__LY__" stroke="#14B8A6" stroke-width="2.5" stroke-dasharray="7 4"/>`, label: "pessimistic interpretation" },
+        { swatch: `<rect x="${ML+10}" y="__RY__" width="28" height="11" fill="#8B5CF6" opacity="0.15"/>`, label: "vulnerability window W" },
+        ...(showGhost ? [{ swatch: `<rect x="${ML+10}" y="__RY__" width="28" height="11" fill="none" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="5 5" rx="2"/>`, label: "W at awareness (but for D)" }] : []),
+        { swatch: `<rect x="${ML+10}" y="__RY__" width="28" height="11" fill="#dc2626" opacity="0.32"/>`, label: "exposure \u2014 both interpretations" },
+        { swatch: `<rect x="${ML+10}" y="__RY__" width="28" height="11" fill="#f59e0b" opacity="0.30"/>`, label: "exposure \u2014 contested (optimistic only)" },
+        ...(c.T < 1 ? [{ swatch: `<line x1="${ML+10}" y1="__LY__" x2="${ML+38}" y2="__LY__" stroke="#a78bfa" stroke-width="2" stroke-dasharray="4 5"/>`, label: `effective threshold at Ph\u00d7Pd = ${c.T.toFixed(2)}` }] : [])
+    ];
     s += `<g font-family="DM Sans, sans-serif" font-size="11.5">
-        <rect x="${ML+2}" y="${MT+2}" width="266" height="${c.T < 1 ? 126 : 106}" rx="8" fill="white" opacity="0.88" stroke="#e2e8f0"/>
-        <line x1="${ML+10}" y1="${MT+14}" x2="${ML+38}" y2="${MT+14}" stroke="#10B981" stroke-width="2.5"/>
-        <text x="${ML+44}" y="${MT+18}" fill="#334155">optimistic interpretation</text>
-        <line x1="${ML+10}" y1="${MT+34}" x2="${ML+38}" y2="${MT+34}" stroke="#14B8A6" stroke-width="2.5" stroke-dasharray="7 4"/>
-        <text x="${ML+44}" y="${MT+38}" fill="#334155">pessimistic interpretation</text>
-        <rect x="${ML+10}" y="${MT+48}" width="28" height="11" fill="#8B5CF6" opacity="0.15"/>
-        <text x="${ML+44}" y="${MT+58}" fill="#334155">vulnerability window W</text>
-        <rect x="${ML+10}" y="${MT+68}" width="28" height="11" fill="#dc2626" opacity="0.32"/>
-        <text x="${ML+44}" y="${MT+78}" fill="#334155">exposure \u2014 both interpretations</text>
-        <rect x="${ML+10}" y="${MT+88}" width="28" height="11" fill="#f59e0b" opacity="0.30"/>
-        <text x="${ML+44}" y="${MT+98}" fill="#334155">exposure \u2014 contested (optimistic only)</text>
-        ${c.T < 1 ? `<line x1="${ML+10}" y1="${MT+114}" x2="${ML+38}" y2="${MT+114}" stroke="#a78bfa" stroke-width="2" stroke-dasharray="4 5"/>
-        <text x="${ML+44}" y="${MT+118}" fill="#334155">effective threshold at Ph×Pd = ${c.T.toFixed(2)}</text>` : ""}
-    </g>`;
+        <rect x="${ML+2}" y="${MT+2}" width="266" height="${legendRows.length * 20 + 12}" rx="8" fill="white" opacity="0.88" stroke="#e2e8f0"/>`;
+    legendRows.forEach((row, k) => {
+        const yText = MT + 18 + k * 20;
+        s += row.swatch.replace(/__LY__/g, (yText - 4).toFixed(0)).replace(/__RY__/g, (yText - 10).toFixed(0));
+        s += `<text x="${ML+44}" y="${yText}" fill="#334155">${row.label}</text>`;
+    });
+    s += `</g>`;
 
     // ---- Timeline bracket below the axis: D (awareness \u2192 start), Y
     // (migrating), X (harvested data ages out). D lies behind W's left edge;
